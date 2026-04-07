@@ -1,0 +1,19 @@
+Category,Předmět,Cena,Dostupnost,Váha,Suroviny,Čas,Talent,Nářadí,Ruce,Bonus,Zranění,Vlastnosti
+Střelné zbraně,Vrhací nůž,1,běžné,lehké,"1/2 železa, 1/2 dřeva",jeden čtvrtden,Kovář,kovárna,1,+1,1,max krátká vzdálenost
+Střelné zbraně,Vrhací sekera,2,běžné,normální,"1/2 železa, 1 dřevo",jeden čtvrtden,Kovář,kovárna,1,+1,2,max krátká vzdálenost
+Střelné zbraně,Oštěp,2,běžné,normální,"1/2 železa, 1 dřevo",jeden čtvrtden,Kovář,kovárna,1,+1,1,max střední vzdálenost
+Střelné zbraně,Prak,1,běžné,lehké,1/2 usně,jeden čtvrtden,Lukař,nůž,1,+1,1,max střední vzdálenost
+Střelné zbraně,Krátký luk,6,běžné,lehké,"1 dřevo, 1/4 látky",jeden den,Lukař,nůž,2,+2,1,max střední vzdálenost
+Střelné zbraně,Dlouhý luk,12,neobvyklé,normální,"2 dřeva, 1/4 látky",dva dny,Lukař,nůž,2,+2,1,
+Střelné zbraně,Lehká kuše,24,neobvyklé,normální,"1/2 železa, 1 dřevo, 1 useň",jeden týden,"Kovář, Lukař",kovárna,2,+2,2,nabíjení je dlouhá akce
+Střelné zbraně,Těžká kuše,40,vzácné,těžké,"1 železo, 2 dřeva, 1 usně",dva týdny,"Kovář, Lukař",kovárna,2,+1,3,nabíjení je dlouhá akce
+Střelné zbraně,*Foukačka,3,neobvyklé,lehké,"1 dřevo, 1 kožešina",jeden den,Lukař,"nůž, oheň",1,+1,1,zbroj se počítá za dvojnásobek
+Střelné zbraně,*Válečný luk,dvojnásobná,vzácné,normální,dvojnásobné,+1 den,Lukař 2.,nůž,2,+X,X+1,Házíš maximálně tolika OBRATNOSTI kolik máš SÍLU a tolika STŘELBY kolik máš SVALY
+Střelné zbraně,*Kompozitní luk,40,vzácné,normální,"dřevo, 1/4 látky, lepidlo, roh",1 týden,Lukař 3.,nůž,2,+3,1,max střední vzdálenost
+Střelné zbraně,*Kompozitní kuše,24,neobvyklé,normální,"1/2 Rohu, 1/2 lepidla, 1,5 dřeva, 1 useň",jeden týden,Lukař,-,2,+1,2,nabíjení je dlouhá akce
+Střelné zbraně,"Šípy, železný hrot","1,2",běžné,normální,"1/2 železa, 1 dřevo",čtvrtden,"Kovář, Lukař","kovárna, nůž",,,,
+Střelné zbraně,Šípy dřevěný hrot,"0,6",běžné,normální,1 dřevo,čtvrtden,"Kovář, Lukař",nůž,,,,Zbroj se počítá za dvojnásobek.
+Střelné zbraně,"*Šípy, pazourkový hrot",2,vzácné,normální,"1 Pazourek/sklo/obsidian, 1 dřevo",čtvrtden,Lukař 2.,nůž,,,+1 zranění,
+Střelné zbraně,"*Šipky, železný hrot",1,běžné,normální,"1/2 železa, 1 dřevo",čtvrtden,"Kovář, Lukař","kovárna, nůž",,,,
+Střelné zbraně,*Šipky dřevěný hrot,"0,4",běžné,normální,1 dřevo,čtvrtden,Lukař,nůž,,,,Zbroj se počítá za dvojnásobek.
+Střelné zbraně,*Šipky s jedem,1,neobvyklé,normální,"1 dřevo, jed",čtvrtden,"Lukař, travič",nůž,,,Nedává zranění,Při zásahu otráví cíl

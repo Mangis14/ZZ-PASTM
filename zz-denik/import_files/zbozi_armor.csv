@@ -1,0 +1,17 @@
+Category,Předmět,Cena,Dostupnost,Váha,Suroviny,Čas,Talent,Nářadí,Vlastnosti,Zbroj
+Zbroj,Malý štít,6,běžné,lehké,"1/2 železa, 1/2 dřeva, 1 useň",jeden čtvrtden,"Kovář, Koželuh",kovárna,,1
+Zbroj,Velký štít,15,neobvyklé,normální,"1 železo, 1 dřevo, 2 usně",jeden den,"Kovář, Koželuh",kovárna,,2
+Zbroj,Kožená zbroj,4,běžné,lehké,2 usně,jeden den,Koželuh,"nůž, jehla a nit",,2
+Zbroj,Pokovaná kožená zbroj,6,neobvyklé,normální,"1/2 železa, 2 usně",dva dny,"Kovář, Koželuh","kovárna, nůž, jehla a nit",,3
+Zbroj,*Lamelová kožená zbroj,6,neobvyklé,normální,"1/2 železa, 4 usně",dva dny,Koželuh,jehla a nit,,3
+Zbroj,*Tvrzená kožená zbroj,12,neobvyklé,normální,4 usně,dva dny,Koželuh,jehla a nit,MRŠTNOST -1,4
+Zbroj,*Šupinová kožená zbroj,24,neobvyklé,normální,4 usně,dva dny,Koželuh,jehla a nit,1/2 třída zbroje proti  bodnutí (ne šípům),4
+Zbroj,*Prošívanice,10,běžné,normánlí,6 látky,2 dny,Krejčí,jehla a nit,Zimní oblečení,3
+Zbroj,*Lehká brigantina,20,neobvyklé,normální,"5 plátky, železo",týden,"Krejčí, kovář","kovárka, jehla a nit",Zimní oblečení,4
+Zbroj,Kroužková košile,24,neobvyklé,těžké,3 železa,jeden týden,Kovář,kovárna,Třída zbroje 3 proti šípům a bodnutí,6
+Zbroj,Plátová zbroj,80,vzácné,těžké,6 železa,dva týdny,Kovář,kovárna,MRŠTNOST -2,8
+Zbroj,Pokovaná kožená čapka,3,neobvyklé,lehké,"1/2 železa, 1 usně",jeden den,"Kovář, Koželuh","kovárna, nůž, jehla a nit",,1
+Zbroj,*Balvát (prošívaná čapka),3,běžné,normánlí,1 látka,jeden den,Krejčí,jehla a nit,Zimní oblečení,1
+Zbroj,Otevřená přilbice,8,neobvyklé,lehké,"1 železo, 1 useň",dva dny,"Kovář, Koželuh","kovárna, nůž, jehla a nit",,2
+Zbroj,Uzavřená přilbice,18,neobvyklé,normální,2 železa,dva dny,Kovář,kovárna,,3
+Zbroj,Těžká přilbice,30,vzácné,normální,3 železa,jeden týden,Kovář,kovárna,OSTRAŽITOST -2,4

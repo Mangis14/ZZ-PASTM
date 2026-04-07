@@ -1,0 +1,345 @@
+[
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "Vrhací nůž",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1/2 železa, 1/2 dřeva",
+    "Čas": "jeden čtvrtden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+1",
+    "Zranění": "1",
+    "Vlastnosti": "max krátká vzdálenost"
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "Vrhací sekera",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1/2 železa, 1 dřevo",
+    "Čas": "jeden čtvrtden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+1",
+    "Zranění": "2",
+    "Vlastnosti": "max krátká vzdálenost"
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "Oštěp",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1/2 železa, 1 dřevo",
+    "Čas": "jeden čtvrtden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+1",
+    "Zranění": "1",
+    "Vlastnosti": "max střední vzdálenost"
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "Prak",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1/2 usně",
+    "Čas": "jeden čtvrtden",
+    "Talent": "Lukař",
+    "Nářadí": "nůž",
+    "Ruce": "1",
+    "Bonus": "+1",
+    "Zranění": "1",
+    "Vlastnosti": "max střední vzdálenost"
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "Krátký luk",
+    "Cena": "6",
+    "price": {
+      "value": 6,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1 dřevo, 1/4 látky",
+    "Čas": "jeden den",
+    "Talent": "Lukař",
+    "Nářadí": "nůž",
+    "Ruce": "2",
+    "Bonus": "+2",
+    "Zranění": "1",
+    "Vlastnosti": "max střední vzdálenost"
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "Dlouhý luk",
+    "Cena": "12",
+    "price": {
+      "value": 1.2,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "2 dřeva, 1/4 látky",
+    "Čas": "dva dny",
+    "Talent": "Lukař",
+    "Nářadí": "nůž",
+    "Ruce": "2",
+    "Bonus": "+2",
+    "Zranění": "1",
+    "Vlastnosti": ""
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "Lehká kuše",
+    "Cena": "24",
+    "price": {
+      "value": 2.4,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "1/2 železa, 1 dřevo, 1 useň",
+    "Čas": "jeden týden",
+    "Talent": "Kovář, Lukař",
+    "Nářadí": "kovárna",
+    "Ruce": "2",
+    "Bonus": "+2",
+    "Zranění": "2",
+    "Vlastnosti": "nabíjení je dlouhá akce"
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "Těžká kuše",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "těžké",
+    "Suroviny": "1 železo, 2 dřeva, 1 usně",
+    "Čas": "dva týdny",
+    "Talent": "Kovář, Lukař",
+    "Nářadí": "kovárna",
+    "Ruce": "2",
+    "Bonus": "+1",
+    "Zranění": "3",
+    "Vlastnosti": "nabíjení je dlouhá akce"
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "*Foukačka",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "lehké",
+    "Suroviny": "1 dřevo, 1 kožešina",
+    "Čas": "jeden den",
+    "Talent": "Lukař",
+    "Nářadí": "nůž, oheň",
+    "Ruce": "1",
+    "Bonus": "+1",
+    "Zranění": "1",
+    "Vlastnosti": "zbroj se počítá za dvojnásobek"
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "*Válečný luk",
+    "Cena": "dvojnásobná",
+    "price": {
+      "value": 0,
+      "currency": "silver",
+      "original": "dvojnásobná"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "normální",
+    "Suroviny": "dvojnásobné",
+    "Čas": "+1 den",
+    "Talent": "Lukař 2.",
+    "Nářadí": "nůž",
+    "Ruce": "2",
+    "Bonus": "+X",
+    "Zranění": "X+1",
+    "Vlastnosti": "Házíš maximálně tolika OBRATNOSTI kolik máš SÍLU a tolika STŘELBY kolik máš SVALY"
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "*Kompozitní luk",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "normální",
+    "Suroviny": "dřevo, 1/4 látky, lepidlo, roh",
+    "Čas": "1 týden",
+    "Talent": "Lukař 3.",
+    "Nářadí": "nůž",
+    "Ruce": "2",
+    "Bonus": "+3",
+    "Zranění": "1",
+    "Vlastnosti": "max střední vzdálenost"
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "*Kompozitní kuše",
+    "Cena": "24",
+    "price": {
+      "value": 2.4,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "1/2 Rohu, 1/2 lepidla, 1,5 dřeva, 1 useň",
+    "Čas": "jeden týden",
+    "Talent": "Lukař",
+    "Nářadí": "-",
+    "Ruce": "2",
+    "Bonus": "+1",
+    "Zranění": "2",
+    "Vlastnosti": "nabíjení je dlouhá akce"
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "Šípy, železný hrot",
+    "Cena": "1,2",
+    "price": {
+      "value": 1.2,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1/2 železa, 1 dřevo",
+    "Čas": "čtvrtden",
+    "Talent": "Kovář, Lukař",
+    "Nářadí": "kovárna, nůž",
+    "Ruce": "",
+    "Bonus": "",
+    "Zranění": "",
+    "Vlastnosti": ""
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "Šípy dřevěný hrot",
+    "Cena": "0,6",
+    "price": {
+      "value": 6,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 dřevo",
+    "Čas": "čtvrtden",
+    "Talent": "Kovář, Lukař",
+    "Nářadí": "nůž",
+    "Ruce": "",
+    "Bonus": "",
+    "Zranění": "",
+    "Vlastnosti": "Zbroj se počítá za dvojnásobek."
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "*Šípy, pazourkový hrot",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "normální",
+    "Suroviny": "1 Pazourek/sklo/obsidian, 1 dřevo",
+    "Čas": "čtvrtden",
+    "Talent": "Lukař 2.",
+    "Nářadí": "nůž",
+    "Ruce": "",
+    "Bonus": "",
+    "Zranění": "+1 zranění",
+    "Vlastnosti": ""
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "*Šipky, železný hrot",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1/2 železa, 1 dřevo",
+    "Čas": "čtvrtden",
+    "Talent": "Kovář, Lukař",
+    "Nářadí": "kovárna, nůž",
+    "Ruce": "",
+    "Bonus": "",
+    "Zranění": "",
+    "Vlastnosti": ""
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "*Šipky dřevěný hrot",
+    "Cena": "0,4",
+    "price": {
+      "value": 4,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 dřevo",
+    "Čas": "čtvrtden",
+    "Talent": "Lukař",
+    "Nářadí": "nůž",
+    "Ruce": "",
+    "Bonus": "",
+    "Zranění": "",
+    "Vlastnosti": "Zbroj se počítá za dvojnásobek."
+  },
+  {
+    "Category": "Střelné zbraně",
+    "Předmět": "*Šipky s jedem",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "1 dřevo, jed",
+    "Čas": "čtvrtden",
+    "Talent": "Lukař, travič",
+    "Nářadí": "nůž",
+    "Ruce": "",
+    "Bonus": "",
+    "Zranění": "Nedává zranění",
+    "Vlastnosti": "Při zásahu otráví cíl"
+  }
+]

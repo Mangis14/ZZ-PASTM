@@ -1,0 +1,1729 @@
+[
+  {
+    "Category": "Suroviny",
+    "Předmět": "Železná ruda",
+    "Cena": "0,4",
+    "price": {
+      "value": 4,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "Důl",
+    "Trvanlivost": "–",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Železo",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "Kovář",
+    "Nářadí": "Kovárna",
+    "Trvanlivost": "–",
+    "Zdroj": "železná ruda",
+    "Poznámky": "Železo se dá vyprodukovat i bez kovárny, ale jen tempem 1 jednotky za čtvrtden. Vyžaduje jednotku železné rudy a hod na Řemesla.",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Stříbro",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "–",
+    "Trvanlivost": "–",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Zlato",
+    "Cena": "100",
+    "price": {
+      "value": 10,
+      "currency": "gold"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "–",
+    "Trvanlivost": "–",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Kámen",
+    "Cena": "0,2",
+    "price": {
+      "value": 2,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "Lom",
+    "Trvanlivost": "–",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Sklo",
+    "Cena": "8",
+    "price": {
+      "value": 8,
+      "currency": "silver"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "Kovář",
+    "Nářadí": "Kovárna",
+    "Trvanlivost": "–",
+    "Zdroj": "kámen",
+    "Poznámky": "Za jeden čtvrtden je možné vytvořit jednu jednotku skla. Vyžaduje obtížný hod (úprava –2) na Řemesla.",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Dřevo",
+    "Cena": "0,3",
+    "price": {
+      "value": 3,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "Sekera",
+    "Trvanlivost": "–",
+    "Zdroj": "–",
+    "Poznámky": "Jeden čtvrtden práce v lese nebo temném hvozdu, spolu s úspěšným hodem na Řemesla, vytvoří tolik jednotek dřeva, kolik ti padne x, vynásobeno dvěma.",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Useň",
+    "Cena": "1,2",
+    "price": {
+      "value": 1.2,
+      "currency": "silver"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "Koželuh",
+    "Nářadí": "Koželužna",
+    "Trvanlivost": "–",
+    "Zdroj": "kožešina",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Látka, vlněná",
+    "Cena": "0,8",
+    "price": {
+      "value": 8,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "Krejčí",
+    "Nářadí": "Krejčovská dílna",
+    "Trvanlivost": "–",
+    "Zdroj": "vlna",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Látka, lněná",
+    "Cena": "2,5",
+    "price": {
+      "value": 2.5,
+      "currency": "silver"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "Krejčí II.",
+    "Nářadí": "Krejčovská dílna",
+    "Trvanlivost": "–",
+    "Zdroj": "5x Len",
+    "Poznámky": "Nahrazuje látku, -2 při výrobě (snižuje se s úrovní talentu), přidá +1 k předmětu",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Látka, hedvábná",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "Krejčí",
+    "Nářadí": "Krejčovská dílna",
+    "Trvanlivost": "–",
+    "Zdroj": "V Zapovězených zemích se nevyrábí.",
+    "Poznámky": "Nahrazuje látku, -4 při výrobě (snižuje se s úrovní talentu), přidá +1 k předmětu, a bonus +1 k MANIPULACI, snižuje váhu o ½. Lze použít 2x surovin a přidat další +1 k předmětu.",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Vlna",
+    "Cena": "0,4",
+    "price": {
+      "value": 4,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "Ovčín",
+    "Trvanlivost": "jeden měsíc",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Len",
+    "Cena": "0,3",
+    "price": {
+      "value": 3,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "-",
+    "Nářadí": "Pole",
+    "Trvanlivost": "-",
+    "Zdroj": "-",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Obilí",
+    "Cena": "0,3",
+    "price": {
+      "value": 3,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "Pole",
+    "Trvanlivost": "jeden měsíc",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Maso",
+    "Cena": "0,6",
+    "price": {
+      "value": 6,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "Pastvina, vepřín nebo ovčín",
+    "Trvanlivost": "jeden den",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Kožešina",
+    "Cena": "0,8",
+    "price": {
+      "value": 8,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "–",
+    "Trvanlivost": "jeden týden",
+    "Zdroj": "–",
+    "Poznámky": "Víc o lovu se dočteš na straně 151.",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Mouka",
+    "Cena": "0,6",
+    "price": {
+      "value": 6,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "Mlýn",
+    "Trvanlivost": "jeden měsíc",
+    "Zdroj": "obilí",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Plodiny",
+    "Cena": "0,4",
+    "price": {
+      "value": 4,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "Zahrada",
+    "Trvanlivost": "jeden den",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Ryby",
+    "Cena": "0,5",
+    "price": {
+      "value": 5,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "Síť nebo háček a vlasec. Víc o rybaření se dočteš na straně 153.",
+    "Trvanlivost": "jeden den",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Chleba",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "Pekárna",
+    "Trvanlivost": "jeden týden",
+    "Zdroj": "mouka",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Lůj",
+    "Cena": "0,6",
+    "price": {
+      "value": 6,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "Koželuh",
+    "Nářadí": "",
+    "Trvanlivost": "–",
+    "Zdroj": "–",
+    "Poznámky": "Zabité nebo poražené zvíře poskytne tolik jednotek loje masa vydělený dvěma (zaokrouhleno nahoru).",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Bylinky",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "",
+    "Trvanlivost": "jeden týden",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Mléko",
+    "Cena": "0,2",
+    "price": {
+      "value": 2,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "Krava (Pastvina)",
+    "Trvanlivost": "jeden den",
+    "Zdroj": "",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Sušené jídlo",
+    "Cena": "1,2",
+    "price": {
+      "value": 1.2,
+      "currency": "silver"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "Kuchař",
+    "Nářadí": "Oheň",
+    "Trvanlivost": "-",
+    "Zdroj": "1 Ryba/1 Maso, sůl",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Med",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "",
+    "Nářadí": "Úl (2 jednotky 3x ročně)",
+    "Trvanlivost": "-",
+    "Zdroj": "Pochodeň, Odolnost proti bolesti",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Vosk",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "–",
+    "Nářadí": "",
+    "Trvanlivost": "-",
+    "Zdroj": "Sklízí se spolu s Medem",
+    "Poznámky": "slouží k přídání odolnosti k vodě",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Sůl",
+    "Cena": "0,3",
+    "price": {
+      "value": 3,
+      "currency": "copper"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Čas": "",
+    "Talent": "",
+    "Nářadí": "Důl na sůl/Solivar",
+    "Trvanlivost": "-",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Lepená tvrzená useň",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "Neobvyklá",
+    "Váha": "Normální",
+    "Čas": "1/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "kožešina, lepidlo",
+    "Poznámky": "",
+    "Talent/nářadí": "Koželuh (úroveň 2), Koželužna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje useň, -2 při výrobě (snižuje se s úrovní talentu), přidá +1 k předmětu"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Skleněná kompozitní useň",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "kožešina, lepidlo, ½ sklo",
+    "Poznámky": "",
+    "Talent/nářadí": "Koželuh (úroveň 3), Koželužna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje useň, -4 při výrobě (snižuje se s úrovní talentu), přidá +2 k předmětu"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Palivové dřevo",
+    "Cena": "0,2",
+    "price": {
+      "value": 2,
+      "currency": "copper"
+    },
+    "Dostupnost": "Běžná",
+    "Váha": "Normální",
+    "Čas": "",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "1/čtvrtden",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Pouze na pálení, lze nalézt 3 kusy palivového místo 2 klasického"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Dřevěné uhlí",
+    "Cena": "0,8",
+    "price": {
+      "value": 8,
+      "currency": "copper"
+    },
+    "Dostupnost": "Běžná",
+    "Váha": "Normální",
+    "Čas": "",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "4× dřevo nebo palivové dřevo",
+    "Poznámky": "",
+    "Talent/nářadí": "Oheň / Pec",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Bonus +1 při hodu na ŘEMESLA"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Černé uhlí",
+    "Cena": "0,8",
+    "price": {
+      "value": 8,
+      "currency": "copper"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "1/Uhelný důl",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Bonus +1 při hodu na ŘEMESLA"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Koks",
+    "Cena": "1,6",
+    "price": {
+      "value": 1.6,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "2× černé uhlí",
+    "Poznámky": "",
+    "Talent/nářadí": "Oheň / Pec",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Bonus +2 při hodu na ŘEMESLA"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Železná ruda",
+    "Cena": "0,4",
+    "price": {
+      "value": 4,
+      "currency": "copper"
+    },
+    "Dostupnost": "–",
+    "Váha": "–",
+    "Čas": "Důl",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Železo",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "–",
+    "Váha": "",
+    "Čas": "1-12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "železná ruda",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář/Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Železo se dá vyprodukovat i bez kovárny, ale jen tempem 1 jednotky za čtvrtden. Vyžaduje jednotku železné rudy a hod na Řemesla."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Stříbro",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "–",
+    "Váha": "–",
+    "Čas": "–",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, +1 při výrobě. Lze použít pro pokování za 1/10 ceny železa, výroba trvá 2x déle,  přidá bonus +1 MANIPULACE"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Zlato",
+    "Cena": "100",
+    "price": {
+      "value": 10,
+      "currency": "gold"
+    },
+    "Dostupnost": "–",
+    "Váha": "–",
+    "Čas": "–",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, +2 při výrobě. Nelze vytvořit zbraň a zbroj. Lze použít pro pokování za 1/10 ceny železa, výroba trvá 2x déle,  přidá bonus +1 MANIPULACE"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Olovo",
+    "Cena": "0,3",
+    "price": {
+      "value": 3,
+      "currency": "copper"
+    },
+    "Dostupnost": "Neobvyklá",
+    "Váha": "Normální",
+    "Čas": "1-12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář/ Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, +1 při výrobě, nelze použít pro zbraně, zbroj, nářadí. Je 2x těžší a u ohně taje."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Měď",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "Běžná",
+    "Váha": "Normální",
+    "Čas": "1-12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Měděná ruda",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář, Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, +1 při výrobě, nelze použít pro zbraně, zbroj a příbory"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Bronz / Mosaz",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "Neobvyklá",
+    "Váha": "Normální",
+    "Čas": "1-12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "1/5 cín / zinek, 4/5 měď",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář, Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Může nahradit železo při výrobě"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Cín / Zinek",
+    "Cena": "5",
+    "price": {
+      "value": 5,
+      "currency": "silver"
+    },
+    "Dostupnost": "Neobvyklá",
+    "Váha": "Normální",
+    "Čas": "1-12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Ruda cínu / zinku",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář, Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Chrání kovy před rezí"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Kované železo",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "Neobvyklá",
+    "Váha": "Normální",
+    "Čas": "1-12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Železo, dřevěné uhlí",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář (úroveň 2), Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, -2 při výrobě (snižuje se s úrovní talentu), přidá +1 k předmětu"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Ocel",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "1-12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Kované železo, černé uhlí",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář (úroveň 3), Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, -4 při výrobě (snižuje se s úrovní talentu), přidá +2 k předmětu"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Vzácné minerály",
+    "Cena": "1,5",
+    "price": {
+      "value": 1.5,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Drobná",
+    "Čas": "1-12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "(Různé)",
+    "Poznámky": "",
+    "Talent/nářadí": "–",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Surovina"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Kelímková ocel",
+    "Cena": "20",
+    "price": {
+      "value": 2,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1-12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "1/2 železo, 3/4 kované železo, vzácné minerály, sklo",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář (úroveň 4), Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Stejně jako ocel, ale přidává bonus +1 k MANIPULACI"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Trpasličí ocel",
+    "Cena": "30",
+    "price": {
+      "value": 3,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1-12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Ocel, 2× koks, 3× vzácné minerály",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář (úroveň 4), Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, -6 při výrobě (snižuje se s úrovní talentu), přidá +3 k předmětu. Imunní vůči rzi."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Poskvrněné maso",
+    "Cena": "",
+    "price": null,
+    "Dostupnost": "",
+    "Váha": "Lehká",
+    "Čas": "1/směna",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "",
+    "Poznámky": "",
+    "Talent/nářadí": "Nůž",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Trvanlivost 1 den (Hal. Jed 3)"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Mog z démona",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Lehká",
+    "Čas": "1-12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "4 Poskvrněná masa",
+    "Poznámky": "",
+    "Talent/nářadí": "Alchymista, Destilerie",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Kouzelník může použít jako bod vůle při kouzlení, každá jednotka přidává kostku."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Kůže monstra",
+    "Cena": "2,4",
+    "price": {
+      "value": 2.4,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "1/směna",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Trvanlivost 1 týden"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Useň z monstra",
+    "Cena": "3,6",
+    "price": {
+      "value": 3.6,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "1–12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Kůže monstra",
+    "Poznámky": "",
+    "Talent/nářadí": "Koželuh, Koželužna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje useň, -2 při výrobě (snižuje se s úrovní talentu), přidá +1 k předmětu"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Trolí kůže",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "1/směna",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Trvanlivost 1 týden"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Trolí useň",
+    "Cena": "3,6",
+    "price": {
+      "value": 3.6,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "1–12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Trolí kůže",
+    "Poznámky": "",
+    "Talent/nářadí": "Koželuh, Koželužna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, -2 při výrobě (snižuje se s úrovní talentu), přidá +1 ke zbroji"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Kamenná kůže",
+    "Cena": "3,6",
+    "price": {
+      "value": 3.6,
+      "currency": "silver"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1–12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Trolí kůže",
+    "Poznámky": "",
+    "Talent/nářadí": "Koželuh, Koželužna, Slunce",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, -2 při výrobě (snižuje se s úrovní talentu), znižuje čas na ¼"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Dračí kůže",
+    "Cena": "15",
+    "price": {
+      "value": 1.5,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1 směna",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Nůž",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Dračí useň",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1-12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Dračí kůže",
+    "Poznámky": "",
+    "Talent/nářadí": "Koželuh, Koželužna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje useň, -6 při výrobě (snižuje se s úrovní talentu), přidá +k8 k předmětu"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Dračí šupiny",
+    "Cena": "30",
+    "price": {
+      "value": 3,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1/směna",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "–",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Šupiny drakoještěra",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1/směna",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "–",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje useň, -4 při výrobě (snižuje se s úrovní talentu), přidá +1 k předmětu, +2 k manipulaci"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Hrubý chitin",
+    "Cena": "–",
+    "price": {
+      "value": 0,
+      "currency": "silver",
+      "original": "–"
+    },
+    "Dostupnost": "–",
+    "Váha": "Těžká",
+    "Čas": "1/směna",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Nůž",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Trvanlivost 1 týden"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Chitinový plát",
+    "Cena": "8",
+    "price": {
+      "value": 8,
+      "currency": "silver"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1–12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Hrubý chitin + 1/4 vápenec",
+    "Poznámky": "",
+    "Talent/nářadí": "Koželuh, Koželužna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje useň u tvrzené kůže, -4 při výrobě (snižuje se s úrovní talentu), přidá +2 ke zbroji"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Pavoučí žláza",
+    "Cena": "15",
+    "price": {
+      "value": 1.5,
+      "currency": "gold"
+    },
+    "Dostupnost": "–",
+    "Váha": "Normální",
+    "Čas": "1 týden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Nůž",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Pavoučí hedvábí",
+    "Cena": "50",
+    "price": {
+      "value": 5,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Lehká",
+    "Čas": "1–12/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Pavoučí žláza + Alkohol",
+    "Poznámky": "",
+    "Talent/nářadí": "Krejčí, Krejčovství",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje látku, -6 při výrobě (snižuje se s úrovní talentu), sníží zbroj o 1, ale přidá k8, sníží váhu o 1, manipulace +1.Při použití 2x pavoučího hedvábí, nesnižuj hmotnost ani zbroj."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Meteoritové železo",
+    "Cena": "100",
+    "price": {
+      "value": 10,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Těžká",
+    "Čas": "1–12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Ruda meteoru",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář, Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, žádný postih při výrobě. přidá +1 k bonusu a +1 k zranění, 2x větší váha"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Meteoritová ocel",
+    "Cena": "75",
+    "price": {
+      "value": 7.5,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1–12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "1/4 meteorit. železo + 3/4 ocel",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář (úroveň 4), Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, -8 při výrobě (snižuje se s úrovní talentu), přidá +4 k předmětu;"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Meteoritový bronzHvězdný bronz",
+    "Cena": "75",
+    "price": {
+      "value": 7.5,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1–12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "1/4 meteorit. železo + 3/4 bronz",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář (úroveň 4), Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, -4 při výrobě (snižuje se s úrovní talentu), přidá smrt. Jed 6 k zásahu. Šance na otravu při výrobě a opravě."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Meteoritové stříbroPravostříbro",
+    "Cena": "75",
+    "price": {
+      "value": 7.5,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Lehká",
+    "Čas": "1–12/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "1/4 meteorit. železo + 3/4 stříbro",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář (úroveň 4), Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo u zbraní, -6 při výrobě (snižuje se s úrovní talentu), přidá +k8 k předmětu.Nahrazuje železo u zbroje na 1/2, -6 při výrobě (snižuje se s úrovní talentu), sníží váhu o ½ a odebere 1 postih MRŠTNOSTI"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Meteoritové zlatoElyrium",
+    "Cena": "150",
+    "price": {
+      "value": 15,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Těžká",
+    "Čas": "1–12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "1/4 meteorit. železo + 3/4 zlato",
+    "Poznámky": "",
+    "Talent/nářadí": "Kovář (úroveň 4), Kovárna",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje železo, žádný postih při výrobě. Přidá bonus předmětu +2, 2x větší váha; +2 k manipulaci; Při sesílání nebo obdržení kouzla hoď na bonus, sniž úroveň kouzla o 1 za úspěch."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Ruda cinabaritu",
+    "Cena": "0,4",
+    "price": {
+      "value": 4,
+      "currency": "copper"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Krumpáč",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Rtuť",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "1–12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Ruda cinabaritu",
+    "Poznámky": "",
+    "Talent/nářadí": "Alchymista, Destilerie",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Získává také síru, dá se použít pro získání více zlata ze zlaté rudy pomocí mlýnu. (1:1 místo 1:1 až 1:2)"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Roh",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "Neobvyklá",
+    "Váha": "Normální",
+    "Čas": "1/směna",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Používá se u kompozitních luků"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Roh monstra",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "–",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "–",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje roh, -2 při výrobě (snižuje se s úrovní talentu), přidá +1 bonus k předmětu"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Obří vlas",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "–",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Nůž / Sekera",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "-2 při výrobě luku (snižuje se s úrovní talentu), přidá +1 k předmětu;"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Kost",
+    "Cena": "0,1",
+    "price": {
+      "value": 1,
+      "currency": "copper"
+    },
+    "Dostupnost": "Neobvyklá",
+    "Váha": "Normální",
+    "Čas": "–",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "–",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Surovina, lukař dokáže nahradit ½ železa kostí."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Zkamenělá kost",
+    "Cena": "5",
+    "price": {
+      "value": 5,
+      "currency": "silver"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1/směna",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Nůž / Sekera",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje všechno železo při výrobě zbraně, žádný postih při výrobě. Můžeš vyřezat detaily do zbraně za postih -2, přidá pak +1 reputaci."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Pazourek",
+    "Cena": "0,6",
+    "price": {
+      "value": 6,
+      "currency": "copper"
+    },
+    "Dostupnost": "Neobvyklá",
+    "Váha": "Normální",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Krumpáč",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Může být použit jako kámen při výrobě. Viz. Lukař. (+1 ke zranění)"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Obsidián",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Krumpáč",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Může být použit jako kámen při výrobě. Viz. Lukař. (+1 ke zranění)"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Zkamenělé dřevo",
+    "Cena": "0,3",
+    "price": {
+      "value": 3,
+      "currency": "copper"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "–",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Alternativně kouzlem zkamenění dřeva",
+    "Poznámky": "",
+    "Talent/nářadí": "Krumpáč",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Surovina, používá se v dolech"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Luxusní zkamenělé dřevo",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "–",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Alt. zkamenění železodřeva",
+    "Poznámky": "",
+    "Talent/nářadí": "Krumpáč",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Surovina"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Živé dřevo",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Dřevorubecká sekera",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje dřevo, -2 při výrobě (snižuje se s úrovní talentu), pokud je předmět na slunci a není zima, opravuje se 1 za den."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Uhlíkaté dřevo",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Dřevorubecká sekera",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje dřevo, žádný postih při výrobě, +2 při hodech na uhašení ohně"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Zlovolné dřevo",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Dřevorubecká sekera",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje dřevo, -4 při výrobě (snižuje se s úrovní talentu), přidá smrt. Jed 3 k zásahu. Šance na otravu při výrobě a opravě.Míza funguje jako jed (3), travič dokáže ŘEMESLY/LÉČENí zvýšit jed o X."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Chladné dřevo",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Dřevorubecká sekera",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje dřevo, žádný postih při výrobě, +2 při hodech na uhašení ohně, chladné na dotek. Při tvorbě sklípku můžou nahradit kamen za bonus +2."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Stříbrné dřevo",
+    "Cena": "1,5",
+    "price": {
+      "value": 1.5,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Lehká",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Dřevorubecká sekera",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje dřevo, -3 při výrobě (snižuje se s úrovní talentu), sníží váhu o ½"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Zlaté dřevo",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Dřevorubecká sekera",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Louče vyrobené ze zlatého dřeva vydrží 2x déle."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Železodřevo",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "Neobvyklá",
+    "Váha": "Normální",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Dřevorubecká sekera",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje dřevo, -3 při výrobě (snižuje se s úrovní talentu), přidá bonus +1 k předmětu"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Starodávné dřevo",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Normální",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "–",
+    "Poznámky": "",
+    "Talent/nářadí": "Dřevorubecká sekera",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje dřevo, -5 při výrobě (snižuje se s úrovní talentu), přidá bonus +2 k předmětu"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Kamenodřevo",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Těžká",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "Alt. zkamenění starodávného dřeva",
+    "Poznámky": "",
+    "Talent/nářadí": "Dřevorubecká sekera (může se zlomit)",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje dřevo, -7 při výrobě (snižuje se s úrovní talentu), přidá bonus +k8 a zvýší váhu na 2x předmětu"
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Dřevo z enta",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "Epická",
+    "Váha": "Normální",
+    "Čas": "1/směna",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "",
+    "Poznámky": "",
+    "Talent/nářadí": "–",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Nahrazuje dřevo, +4 při výrobě a opravě, pokud je dřevo namočené ve vodě."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Pryskyřice / míza",
+    "Cena": "0,3",
+    "price": {
+      "value": 3,
+      "currency": "copper"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Lehká",
+    "Čas": "x/ čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "(1 hliněný džbán na jednotku)",
+    "Poznámky": "",
+    "Talent/nářadí": "Dřevorubecká sekera",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Lze z něj v peci vytvořit dehet, ten slouží jako hydroizolační bonus +1 při stavbě."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Sušená řasa",
+    "Cena": "0,3",
+    "price": {
+      "value": 3,
+      "currency": "copper"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Lehká",
+    "Čas": "2 x/denně",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "",
+    "Poznámky": "",
+    "Talent/nářadí": "Nůž",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Usušená nemá trvanlivost, přidá 1 úrodu při hnojení pole."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "*Svítivá řasa",
+    "Cena": "0,5",
+    "price": {
+      "value": 5,
+      "currency": "copper"
+    },
+    "Dostupnost": "Vzácná",
+    "Váha": "Lehká",
+    "Čas": "x/denně",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "",
+    "Poznámky": "",
+    "Talent/nářadí": "Nůž",
+    "Effekt (Opravy lepších předmětů jsou náročnější": "Zdroj světla při kvetení. V lampě vydrží max týden."
+  },
+  {
+    "Category": "Suroviny",
+    "Předmět": "Cihly",
+    "Cena": "0,7",
+    "price": {
+      "value": 7,
+      "currency": "copper"
+    },
+    "Dostupnost": "Neobvyklá",
+    "Váha": "Lehká",
+    "Čas": "12/čtvrtden",
+    "Talent": "",
+    "Nářadí": "",
+    "Trvanlivost": "",
+    "Zdroj": "",
+    "Poznámky": "",
+    "Talent/nářadí": "",
+    "Effekt (Opravy lepších předmětů jsou náročnější": ""
+  }
+]

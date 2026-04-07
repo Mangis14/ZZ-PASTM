@@ -1,0 +1,8 @@
+{
+  "appId": "com.zz.denik",
+  "appName": "ZZ Deník",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

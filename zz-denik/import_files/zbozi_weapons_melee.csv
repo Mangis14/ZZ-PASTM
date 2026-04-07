@@ -1,0 +1,26 @@
+Category,Předmět,Cena,Dostupnost,Váha,Suroviny,Čas,Talent,Nářadí,Ruce,Bonus,Zranění,Vlastnosti
+Zbraně nablízko,Nůž,1,běžné,lehké,"1/2 železa, 1/2 dřeva",čtvrtden,Kovář,kovárna,1,+1,1,bodná
+Zbraně nablízko,Dýka,2,běžné,lehké,"1/2 železa, 1/2 usně",jeden den,Kovář,kovárna,1,+1,1,"bodná, sečná"
+Zbraně nablízko,Tesák,4,běžné,normální,"1 železo, 1/2 usně",jeden den,Kovář,kovárna,1,+1,2,"bodná, sečná"
+Zbraně nablízko,Krátký meč,6,běžné,normální,"1 železo, 1/2 usně",dva dny,Kovář,kovárna,1,+2,1,"sečná, bodná, odrážecí"
+Zbraně nablízko,Široký meč,10,běžné,normální,"2 železa, 1/2 usně",jeden týden,Kovář,kovárna,1,+2,2,"sečná, bodná, odrážecí"
+Zbraně nablízko,Dlouhý meč,18,neobvyklé,těžké,"3 železa, 1/2 usně",jeden týden,Kovář,kovárna,1,+2,2,"sečná, bodná, odrážecí"
+Zbraně nablízko,Obouruční meč,40,vzácné,těžké,"4 železa, 1 useň",dva týdny,Kovář,kovárna,2,+2,3,"sečná, bodná, odrážecí"
+Zbraně nablízko,Šavle,8,neobvyklé,normální,"1 železa, 1/2 usně",jeden týden,Kovář,kovárna,1,+1,1,"sečná, bodná, zahnutá, odrážecí"
+Zbraně nablízko,Sekyrka,2,běžné,normální,"1/2 železa, 1 dřevo",čtvrtden,Kovář,kovárna,1,+2,2,"sečná, zahnutá"
+Zbraně nablízko,Válečná sekera,6,neobvyklé,těžké,"1 železo, 1 dřevo",jeden den,Kovář,kovárna,1,+2,2,"sečná, zahnutá"
+Zbraně nablízko,Obouruční sekera,24,neobvyklé,těžké,"2 železa, 2 dřeva",jeden týden,Kovář,kovárna,2,+2,3,"sečná, zahnutá"
+Zbraně nablízko,Palcát,4,běžné,normální,"1 železo, 1 dřevo",jeden den,Kovář,kovárna,1,+2,1,tupá
+Zbraně nablízko,Kropáč,8,neobvyklé,normální,"1 železo, 1 dřevo",dva dny,Kovář,kovárna,1,+2,2,tupá
+Zbraně nablízko,Válečné kladivo,12,neobvyklé,normální,"1 železo, 1 dřevo",dva dny,Kovář,kovárna,1,+2,2,"tupá, zahnutá"
+Zbraně nablízko,Řemdih,16,neobvyklé,normální,"2 železa, 1 dřevo",jeden týden,Kovář,kovárna,1 (krátká),+1,2,tupá
+Zbraně nablízko,Dřevěný kyj,1,běžné,normální,1 dřevo,čtvrtden,–,–,1,+1,1,tupá
+Zbraně nablízko,Velký dřevěný kyj,2,běžné,těžké,2 dřeva,čtvrtden,–,–,2,+1,2,"tupá, tupá"
+Zbraně nablízko,Těžké válečné kladivo,22,neobvyklé,těžké,"3 železa, 2 dřeva",jeden týden,Kovář,kovárna,2,+3,3,"tupá, zahnutá"
+Zbraně nablízko,Hůl,1,běžné,normální,2 dřeva,čtvrtden,–,–,2,+1,1,"tupá, zahnutá, odrážecí"
+Zbraně nablízko,Krátké kopí,2,běžné,normální,"1/2 železa, 1 dřevo",čtvrtden,Kovář,kovárna,1 (krátká),+1,1,bodná
+Zbraně nablízko,Dlouhé kopí,4,běžné,normální,"1/2 železa, 2 dřevo",jeden den,Kovář,kovárna,2 (krátká),+2,1,bodná
+Zbraně nablízko,Píka,12,neobvyklé,těžké,"1/2 železa, 2 dřevo",dva dny,Kovář,kovárna,2 (krátká),+2,2,bodná
+Zbraně nablízko,Halapartna,30,vzácné,těžké,"1 železo, 2 dřeva",jeden týden,Kovář,kovárna,2 (krátká),+2,2,"bodná, sečná, zahnutá"
+Zbraně nablízko,Trojzubec,6,vzácné,normální,"1 železo, 1 dřeva",dva dny,Kovář,kovárna,2 (krátká),+1,1,"bodná, zahnutá"
+Zbraně nablízko,*Odrážecí dýka,8,vzácné,lehké,"1 železo, 1/2 usně",dva dny,Kovář,"kovárna, (kovář 3)",1,+1,1,"odrážecí, bodná"

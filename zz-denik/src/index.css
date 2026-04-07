@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --fl-bg: #1a1816;
+  --fl-surface: #2c2925;
+  --fl-surface-hover: #4a453e;
+  --fl-text-muted: #5c554b;
+  --fl-primary: #8b7355;
+  --fl-primary-hover: #a08665;
+  --fl-border: #d4c5a9;
+  --fl-paper: #e6dfcc;
+  --fl-paper-light: #f5f2e9;
+  --fl-paper-bright: #fdfbf7;
+  --fl-card: #ffffff;
+}
+
+.dark {
+  --fl-bg: #000000;
+  --fl-surface: #ffffff; /* Ultra contrast pre texty */
+  --fl-surface-hover: #e0d5c1;
+  --fl-text-muted: #a3917a; /* Svetlejsia pre lepsiu citatelnost textov */
+  --fl-primary: #d6b685; /* Žiarivejšia primárna v tme */
+  --fl-primary-hover: #eed3a6;
+  --fl-border: #332d26;
+  --fl-paper: #1c1a17;
+  --fl-paper-light: #0f0d0c;
+  --fl-paper-bright: #000000; /* OLED black background */
+  --fl-card: #100f0e; /* Tmavá karta na čiernom pozadí */
+}
+
+body {
+    background-color: var(--fl-paper-bright);
+    color: var(--fl-surface);
+    /* Podpora pre bezpečné zóny na iPhone X a novších */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+}

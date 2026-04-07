@@ -1,0 +1,899 @@
+[
+  {
+    "Category": "Zboží",
+    "Předmět": "Toulec",
+    "Cena": "0,8",
+    "price": {
+      "value": 8,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "–",
+    "Suroviny": "1/2 usně",
+    "Čas": "čtvrtden",
+    "Talent": "Koželuh",
+    "Nářadí": "nůž",
+    "Účinek": "Při nošení nijak nezatěžuje."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Hák na lano",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "1 železo",
+    "Čas": "čtvrtden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "Bonus vybavení +1 při lezení."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Lano, 10 metrů",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 látka",
+    "Čas": "čtvrtden",
+    "Talent": "Krejčí",
+    "Nářadí": "nůž",
+    "Účinek": "Bonus vybavení +1 při lezení."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Svíčka, lojová",
+    "Cena": "0,6",
+    "price": {
+      "value": 6,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "drobné",
+    "Suroviny": "1/10 látky, 1/4 loje",
+    "Čas": "čtvrtden",
+    "Talent": "–",
+    "Nářadí": "oheň",
+    "Účinek": "Po dobu jednoho čtvrtdne svítí na délku paže."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Lampička, olejová",
+    "Cena": "0,5",
+    "price": {
+      "value": 5,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1 kámen",
+    "Čas": "jeden den",
+    "Talent": "–",
+    "Nářadí": "oheň",
+    "Účinek": "Svítí čtvrtden na krátkou vzdálenost. Dá se použít jen uvnitř. Vyžaduje lampový olej."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Lucerna",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1 železo",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "Svítí čtvrtden na krátkou vzdálenost. Vyžaduje lampový olej."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Pochodně",
+    "Cena": "0,5",
+    "price": {
+      "value": 5,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 dřevo",
+    "Čas": "čtvrtden",
+    "Talent": "–",
+    "Nářadí": "nůž nebo sekera",
+    "Účinek": "Zvýší kostku zdroje pochodní o jeden stupeň. Svítí na krátkou vzdálenost. Každou směnu (15 minut) házej kostkou zdroje."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Pytel",
+    "Cena": "0,8",
+    "price": {
+      "value": 8,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "–",
+    "Suroviny": "1 látka",
+    "Čas": "čtvrtden",
+    "Talent": "Krejčí",
+    "Nářadí": "nůž",
+    "Účinek": "Při nošení nijak nezatěžuje."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Batoh",
+    "Cena": "4",
+    "price": {
+      "value": 4,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "–",
+    "Suroviny": "2 látky",
+    "Čas": "čtvrtden",
+    "Talent": "Krejčí",
+    "Nářadí": "nůž, jehla a nit",
+    "Účinek": "Při nošení nijak nezatěžuje."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Měch na vodu",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "–",
+    "Suroviny": "1 usně",
+    "Čas": "čtvrtden",
+    "Talent": "Koželuh",
+    "Nářadí": "jehla a nit",
+    "Účinek": "Je potřeba k nošení vody. Nijak nezatěžuje."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Obvazy",
+    "Cena": "0,6",
+    "price": {
+      "value": 6,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1/2 látky",
+    "Čas": "čtvrtden",
+    "Talent": "Krejčí",
+    "Nářadí": "nůž",
+    "Účinek": "Bonus vybavení +1 na Léčení."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Olej, lampový",
+    "Cena": "0,2",
+    "price": {
+      "value": 2,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1/4 loje nebo 2 Lnu",
+    "Čas": "čtvrtden",
+    "Talent": "Koželuh",
+    "Nářadí": "oheň",
+    "Účinek": "Vydrží čtvrtden."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Inkoust a brk",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "drobné",
+    "Suroviny": "pero, 1/10 železa",
+    "Čas": "čtvrtden",
+    "Talent": "Koželuh",
+    "Nářadí": "nůž, oheň",
+    "Účinek": "Dá se použít k zapisování kouzel."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Pergamen",
+    "Cena": "0,6",
+    "price": {
+      "value": 6,
+      "currency": "copper"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "drobné",
+    "Suroviny": "1/4 usně",
+    "Čas": "čtvrtden",
+    "Talent": "Koželuh",
+    "Nářadí": "nůž",
+    "Účinek": "Dá se použít k zapisování kouzel."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Deka",
+    "Cena": "0,7",
+    "price": {
+      "value": 7,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1/2 látky",
+    "Čas": "čtvrtden",
+    "Talent": "Krejčí",
+    "Nářadí": "nůž",
+    "Účinek": "Bonus vybavení +1 proti podchlazení."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Kožešiny na spaní",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "2 kožešiny",
+    "Čas": "čtvrtden",
+    "Talent": "Koželuh",
+    "Nářadí": "nůž",
+    "Účinek": "Bonus vybavení +2 proti podchlazení."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Křesadlo",
+    "Cena": "0,2",
+    "price": {
+      "value": 2,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "drobné",
+    "Suroviny": "1/10 železa, 1/4 kamene",
+    "Čas": "čtvrtden",
+    "Talent": "–",
+    "Nářadí": "–",
+    "Účinek": "Bonus vybavení +1 při táboření na cestách."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Šperháky",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "drobné",
+    "Suroviny": "1/4 železa",
+    "Čas": "jeden den",
+    "Talent": "Kovář, Zámečník",
+    "Nářadí": "kovárna",
+    "Účinek": "Bonus vybavení +1 na dovednost Zlodějina při odemykání zámků."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Cestovní zásoby",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 maso, ryba nebo plodiny",
+    "Čas": "čtvrtden",
+    "Talent": "Kuchař",
+    "Nářadí": "oheň",
+    "Účinek": "Jedna jednotka jídla. Zvyšuje kostku zdroje jídla o jeden stupeň."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Polní kuchyně",
+    "Cena": "4",
+    "price": {
+      "value": 4,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "těžké",
+    "Suroviny": "2 železa",
+    "Čas": "jeden den",
+    "Talent": "Kuchař, Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "Umožňuje postavě s talentem Kuchař uvařit za čtvrtden 2k6 jednotek jídla."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Kotlík",
+    "Cena": "1,8",
+    "price": {
+      "value": 1.8,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 železo",
+    "Čas": "jeden den",
+    "Talent": "Kuchař, Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "Umožňuje postavě s talentem Kuchař uvařit za čtvrtden k6+2 jednotek jídla."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Kovový kalich",
+    "Cena": "0,7",
+    "price": {
+      "value": 7,
+      "currency": "copper"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "lehké",
+    "Suroviny": "1/2 železa",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "–"
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Žejdlík",
+    "Cena": "0,2",
+    "price": {
+      "value": 2,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1/2 dřeva",
+    "Čas": "čtvrtden",
+    "Talent": "–",
+    "Nářadí": "–",
+    "Účinek": "–"
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Kovový talíř",
+    "Cena": "0,8",
+    "price": {
+      "value": 8,
+      "currency": "copper"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "lehké",
+    "Suroviny": "1/2 železa",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "–"
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Nůž na jídlo",
+    "Cena": "0,6",
+    "price": {
+      "value": 6,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "drobné",
+    "Suroviny": "1/4 železa",
+    "Čas": "čtvrtden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "–"
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Lžíce",
+    "Cena": "0,8",
+    "price": {
+      "value": 8,
+      "currency": "copper"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "drobné",
+    "Suroviny": "1/4 železa",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "–"
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Past na medvěda",
+    "Cena": "5",
+    "price": {
+      "value": 5,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 železo",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "Bonus vybavení +2 při lovu na cestách."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Lovecká oka",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1/2 látky nebo usně",
+    "Čas": "čtvrtden",
+    "Talent": "Stopař",
+    "Nářadí": "nůž",
+    "Účinek": "Bonus vybavení +1 při lovu na cestách."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Sud",
+    "Cena": "0,8",
+    "price": {
+      "value": 8,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "těžké",
+    "Suroviny": "2 dřeva",
+    "Čas": "jeden den",
+    "Talent": "–",
+    "Nářadí": "pila, kladivo",
+    "Účinek": "Pojme 10 jednotek vody nebo jiné tekutiny."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Předmět",
+    "Cena": "Cena",
+    "price": {
+      "value": 0,
+      "currency": "silver",
+      "original": "Cena"
+    },
+    "Dostupnost": "Dostupnost",
+    "Váha": "Váha",
+    "Suroviny": "Suroviny",
+    "Čas": "Čas",
+    "Talent": "Talent",
+    "Nářadí": "Nářadí",
+    "Účinek": "Účinek"
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Hliněný džbán",
+    "Cena": "0,5",
+    "price": {
+      "value": 5,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1 kámen",
+    "Čas": "jeden den",
+    "Talent": "–",
+    "Nářadí": "oheň",
+    "Účinek": "Pojme 1 jednotku vody nebo jiné tekutiny."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Stan, malý",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 látka nebo useň",
+    "Čas": "čtvrtden",
+    "Talent": "Krejčí nebo Koželuh",
+    "Nářadí": "nůž, jehla a nit",
+    "Účinek": "Místo pro dva. Bonus vybavení +2 při táboření na cestách."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Stan, velký",
+    "Cena": "5",
+    "price": {
+      "value": 5,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "těžké",
+    "Suroviny": "2 látky nebo usně",
+    "Čas": "jeden den",
+    "Talent": "Krejčí nebo Koželuh",
+    "Nářadí": "nůž, jehla a nit",
+    "Účinek": "Místo pro šest. Bonus vybavení +2 při táboření na cestách."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Rybářský prut a háček",
+    "Cena": "0,4",
+    "price": {
+      "value": 4,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1/10 železa, 1/10 látky",
+    "Čas": "čtvrtden",
+    "Talent": "Kovář, Krejčí",
+    "Nářadí": "kladivo, kovárna",
+    "Účinek": "Bonus vybavení +1 při rybaření na cestách."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Rybářská síť",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 látka",
+    "Čas": "jeden den",
+    "Talent": "Krejčí",
+    "Nářadí": "nůž",
+    "Účinek": "Bonus vybavení +2 při rybaření na cestách."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Zvětšovací sklo",
+    "Cena": "30",
+    "price": {
+      "value": 3,
+      "currency": "gold"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "drobné",
+    "Suroviny": "1/4 železa, 1/2 skla",
+    "Čas": "jeden týden",
+    "Talent": "Kovář, Stavitel",
+    "Nářadí": "kovárna",
+    "Účinek": "Dá se použít jako pomůcka při kouzlení."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Svatý symbol",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "drobné",
+    "Suroviny": "1/2 železa",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "Dá se použít jako pomůcka při kouzlení."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Křída",
+    "Cena": "0,2",
+    "price": {
+      "value": 2,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "drobné",
+    "Suroviny": "1/4 kamene",
+    "Čas": "čtvrtden",
+    "Talent": "–",
+    "Nářadí": "–",
+    "Účinek": "Využívá se v nauce Symbolika."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Mapa",
+    "Cena": "4",
+    "price": {
+      "value": 4,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "drobné",
+    "Suroviny": "pergamen",
+    "Čas": "jeden den",
+    "Talent": "Průzkumník",
+    "Nářadí": "inkoust a brk",
+    "Účinek": "Dá se použít jako pomůcka při kouzlení."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Dalekohled",
+    "Cena": "30",
+    "price": {
+      "value": 3,
+      "currency": "gold"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "normální",
+    "Suroviny": "1 železo, 1 sklo",
+    "Čas": "dva týdny",
+    "Talent": "Kovář, Stavitel",
+    "Nářadí": "kovárna",
+    "Účinek": "Bonus vybavení +2 na Ostražitost na dlouhou vzdálenost."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Křišťálová koule",
+    "Cena": "6",
+    "price": {
+      "value": 6,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "lehké",
+    "Suroviny": "1 sklo",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "Dá se použít jako pomůcka při kouzlení."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Přesýpací hodiny",
+    "Cena": "12",
+    "price": {
+      "value": 1.2,
+      "currency": "gold"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "lehké",
+    "Suroviny": "1 kámen",
+    "Čas": "jeden týden",
+    "Talent": "Stavitel",
+    "Nářadí": "kovárna",
+    "Účinek": "Dá se použít jako pomůcka při kouzlení."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Váhy",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "1/2 železa",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "Dá se použít jako pomůcka při kouzlení."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Flétna",
+    "Cena": "1,5",
+    "price": {
+      "value": 1.5,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1/2 dřeva",
+    "Čas": "jeden den",
+    "Talent": "Cesta písně",
+    "Nářadí": "nůž",
+    "Účinek": "Bonus vybavení +1 na Vystupování."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Hudební roh",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 dřevo nebo zvířecí roh",
+    "Čas": "jeden den",
+    "Talent": "Cesta písně",
+    "Nářadí": "nůž",
+    "Účinek": "Bonus vybavení +1 na Vystupování."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Loutna",
+    "Cena": "5",
+    "price": {
+      "value": 5,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "1 dřevo, 1/4 látky",
+    "Čas": "jeden týden",
+    "Talent": "Cesta písně",
+    "Nářadí": "nůž",
+    "Účinek": "Bonus vybavení +1 na Vystupování."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Harfa",
+    "Cena": "8",
+    "price": {
+      "value": 8,
+      "currency": "silver"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "těžké",
+    "Suroviny": "2 dřeva, 1/2 látky",
+    "Čas": "dva týdny",
+    "Talent": "Cesta písně",
+    "Nářadí": "nůž",
+    "Účinek": "Bonus vybavení +2 na Vystupování."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Buben",
+    "Cena": "1,8",
+    "price": {
+      "value": 1.8,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 dřevo, 1/2 látky",
+    "Čas": "jeden den",
+    "Talent": "Cesta písně",
+    "Nářadí": "nůž",
+    "Účinek": "Bonus vybavení +1 na Vystupování."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Smrtelný jed / protijed",
+    "Cena": "5",
+    "price": {
+      "value": 5,
+      "currency": "silver"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "drobné",
+    "Suroviny": "1 bylinky",
+    "Čas": "čtvrtden",
+    "Talent": "Travič",
+    "Nářadí": "kotlík, oheň",
+    "Účinek": "Účinnost 3. Navýšení účinnosti o každý další bod zdvojnásobí cenu. Protijed stojí základní cenu."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Ochromující jed / protijed",
+    "Cena": "4",
+    "price": {
+      "value": 4,
+      "currency": "silver"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "drobné",
+    "Suroviny": "1 bylinky",
+    "Čas": "čtvrtden",
+    "Talent": "Travič",
+    "Nářadí": "kotlík, oheň",
+    "Účinek": "Účinnost 3. Navýšení účinnosti o každý další bod zdvojnásobí cenu. Protijed stojí základní cenu."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Uspávací jed / protijed",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "drobné",
+    "Suroviny": "1 bylinky",
+    "Čas": "čtvrtden",
+    "Talent": "Travič",
+    "Nářadí": "kotlík, oheň",
+    "Účinek": "Účinnost 3. Navýšení účinnosti o každý další bod zdvojnásobí cenu. Protijed stojí základní cenu."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "Halucinogenní jed / protijed",
+    "Cena": "4",
+    "price": {
+      "value": 4,
+      "currency": "silver"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "drobné",
+    "Suroviny": "1 bylinky",
+    "Čas": "čtvrtden",
+    "Talent": "Travič",
+    "Nářadí": "kotlík, oheň",
+    "Účinek": "Účinnost 3. Navýšení účinnosti o každý další bod zdvojnásobí cenu. Protijed stojí základní cenu."
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "*Lepidlo",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžké",
+    "Váha": "drobné",
+    "Suroviny": "kožešina",
+    "Čas": "čtvrtden",
+    "Talent": "Koželuh",
+    "Nářadí": "kotlík, oheň",
+    "Účinek": ""
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "*Kniha",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "lehké",
+    "Suroviny": "50 pergamenů, 1/2 kůže|dřeva",
+    "Čas": "čtvrtden",
+    "Talent": "Koželuh",
+    "Nářadí": "jehla a nit",
+    "Účinek": ""
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "*Brousek",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1 kámen",
+    "Čas": "čtvrtden",
+    "Talent": "Kovář",
+    "Nářadí": "",
+    "Účinek": "Pro kovové zbraně může být použit opravě, pokud chybí přesně 1 bod"
+  },
+  {
+    "Category": "Zboží",
+    "Předmět": "*Páčidlo",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "",
+    "Váha": "",
+    "Suroviny": "",
+    "Čas": "",
+    "Talent": "",
+    "Nářadí": "",
+    "Účinek": "Bonus +2 při hodu na SVALY při páčení."
+  }
+]

@@ -1,0 +1,477 @@
+[
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Nůž",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1/2 železa, 1/2 dřeva",
+    "Čas": "čtvrtden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+1",
+    "Zranění": "1",
+    "Vlastnosti": "bodná"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Dýka",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1/2 železa, 1/2 usně",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+1",
+    "Zranění": "1",
+    "Vlastnosti": "bodná, sečná"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Tesák",
+    "Cena": "4",
+    "price": {
+      "value": 4,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 železo, 1/2 usně",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+1",
+    "Zranění": "2",
+    "Vlastnosti": "bodná, sečná"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Krátký meč",
+    "Cena": "6",
+    "price": {
+      "value": 6,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 železo, 1/2 usně",
+    "Čas": "dva dny",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+2",
+    "Zranění": "1",
+    "Vlastnosti": "sečná, bodná, odrážecí"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Široký meč",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "2 železa, 1/2 usně",
+    "Čas": "jeden týden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+2",
+    "Zranění": "2",
+    "Vlastnosti": "sečná, bodná, odrážecí"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Dlouhý meč",
+    "Cena": "18",
+    "price": {
+      "value": 1.8,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "těžké",
+    "Suroviny": "3 železa, 1/2 usně",
+    "Čas": "jeden týden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+2",
+    "Zranění": "2",
+    "Vlastnosti": "sečná, bodná, odrážecí"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Obouruční meč",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "těžké",
+    "Suroviny": "4 železa, 1 useň",
+    "Čas": "dva týdny",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "2",
+    "Bonus": "+2",
+    "Zranění": "3",
+    "Vlastnosti": "sečná, bodná, odrážecí"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Šavle",
+    "Cena": "8",
+    "price": {
+      "value": 8,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "1 železa, 1/2 usně",
+    "Čas": "jeden týden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+1",
+    "Zranění": "1",
+    "Vlastnosti": "sečná, bodná, zahnutá, odrážecí"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Sekyrka",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1/2 železa, 1 dřevo",
+    "Čas": "čtvrtden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+2",
+    "Zranění": "2",
+    "Vlastnosti": "sečná, zahnutá"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Válečná sekera",
+    "Cena": "6",
+    "price": {
+      "value": 6,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "těžké",
+    "Suroviny": "1 železo, 1 dřevo",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+2",
+    "Zranění": "2",
+    "Vlastnosti": "sečná, zahnutá"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Obouruční sekera",
+    "Cena": "24",
+    "price": {
+      "value": 2.4,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "těžké",
+    "Suroviny": "2 železa, 2 dřeva",
+    "Čas": "jeden týden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "2",
+    "Bonus": "+2",
+    "Zranění": "3",
+    "Vlastnosti": "sečná, zahnutá"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Palcát",
+    "Cena": "4",
+    "price": {
+      "value": 4,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 železo, 1 dřevo",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+2",
+    "Zranění": "1",
+    "Vlastnosti": "tupá"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Kropáč",
+    "Cena": "8",
+    "price": {
+      "value": 8,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "1 železo, 1 dřevo",
+    "Čas": "dva dny",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+2",
+    "Zranění": "2",
+    "Vlastnosti": "tupá"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Válečné kladivo",
+    "Cena": "12",
+    "price": {
+      "value": 1.2,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "1 železo, 1 dřevo",
+    "Čas": "dva dny",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1",
+    "Bonus": "+2",
+    "Zranění": "2",
+    "Vlastnosti": "tupá, zahnutá"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Řemdih",
+    "Cena": "16",
+    "price": {
+      "value": 1.6,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "2 železa, 1 dřevo",
+    "Čas": "jeden týden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1 (krátká)",
+    "Bonus": "+1",
+    "Zranění": "2",
+    "Vlastnosti": "tupá"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Dřevěný kyj",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1 dřevo",
+    "Čas": "čtvrtden",
+    "Talent": "–",
+    "Nářadí": "–",
+    "Ruce": "1",
+    "Bonus": "+1",
+    "Zranění": "1",
+    "Vlastnosti": "tupá"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Velký dřevěný kyj",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "těžké",
+    "Suroviny": "2 dřeva",
+    "Čas": "čtvrtden",
+    "Talent": "–",
+    "Nářadí": "–",
+    "Ruce": "2",
+    "Bonus": "+1",
+    "Zranění": "2",
+    "Vlastnosti": "tupá, tupá"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Těžké válečné kladivo",
+    "Cena": "22",
+    "price": {
+      "value": 2.2,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "těžké",
+    "Suroviny": "3 železa, 2 dřeva",
+    "Čas": "jeden týden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "2",
+    "Bonus": "+3",
+    "Zranění": "3",
+    "Vlastnosti": "tupá, zahnutá"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Hůl",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "2 dřeva",
+    "Čas": "čtvrtden",
+    "Talent": "–",
+    "Nářadí": "–",
+    "Ruce": "2",
+    "Bonus": "+1",
+    "Zranění": "1",
+    "Vlastnosti": "tupá, zahnutá, odrážecí"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Krátké kopí",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1/2 železa, 1 dřevo",
+    "Čas": "čtvrtden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "1 (krátká)",
+    "Bonus": "+1",
+    "Zranění": "1",
+    "Vlastnosti": "bodná"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Dlouhé kopí",
+    "Cena": "4",
+    "price": {
+      "value": 4,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normální",
+    "Suroviny": "1/2 železa, 2 dřevo",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "2 (krátká)",
+    "Bonus": "+2",
+    "Zranění": "1",
+    "Vlastnosti": "bodná"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Píka",
+    "Cena": "12",
+    "price": {
+      "value": 1.2,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "těžké",
+    "Suroviny": "1/2 železa, 2 dřevo",
+    "Čas": "dva dny",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "2 (krátká)",
+    "Bonus": "+2",
+    "Zranění": "2",
+    "Vlastnosti": "bodná"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Halapartna",
+    "Cena": "30",
+    "price": {
+      "value": 3,
+      "currency": "gold"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "těžké",
+    "Suroviny": "1 železo, 2 dřeva",
+    "Čas": "jeden týden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "2 (krátká)",
+    "Bonus": "+2",
+    "Zranění": "2",
+    "Vlastnosti": "bodná, sečná, zahnutá"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "Trojzubec",
+    "Cena": "6",
+    "price": {
+      "value": 6,
+      "currency": "silver"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "normální",
+    "Suroviny": "1 železo, 1 dřeva",
+    "Čas": "dva dny",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Ruce": "2 (krátká)",
+    "Bonus": "+1",
+    "Zranění": "1",
+    "Vlastnosti": "bodná, zahnutá"
+  },
+  {
+    "Category": "Zbraně nablízko",
+    "Předmět": "*Odrážecí dýka",
+    "Cena": "8",
+    "price": {
+      "value": 8,
+      "currency": "silver"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "lehké",
+    "Suroviny": "1 železo, 1/2 usně",
+    "Čas": "dva dny",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna, (kovář 3)",
+    "Ruce": "1",
+    "Bonus": "+1",
+    "Zranění": "1",
+    "Vlastnosti": "odrážecí, bodná"
+  }
+]

@@ -1,0 +1,254 @@
+[
+  {
+    "Category": "Lektvary",
+    "Předmět": "Elixír síly",
+    "Cena": "50",
+    "price": {
+      "value": 5,
+      "currency": "gold"
+    },
+    "Účinek": "SÍLA +1 na jeden čtvrtden",
+    "speciální bonusy jsou záporné kostky": "Srdce humanoida se silou 18 +",
+    "pokud nepoužiješ vzácné suroviny)": "obr, troll"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Elixír moudrosti",
+    "Cena": "50",
+    "price": {
+      "value": 5,
+      "currency": "gold"
+    },
+    "Účinek": "OSOBNOST +1 na jeden čtvrtden",
+    "speciální bonusy jsou záporné kostky": "Zuby monstra, které se dokáže měnit fyzicky nebo mentálně",
+    "pokud nepoužiješ vzácné suroviny)": "Stínovlk, obří přízrak mara, krvesaj"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Elixír mazanosti",
+    "Cena": "50",
+    "price": {
+      "value": 5,
+      "currency": "gold"
+    },
+    "Účinek": "BYSTROST +1 na jeden čtvrtden",
+    "speciální bonusy jsou záporné kostky": "Esence démona se silou 18+",
+    "pokud nepoužiješ vzácné suroviny)": "démon, harpyje, krvesaj"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Elixír rychlosti",
+    "Cena": "50",
+    "price": {
+      "value": 5,
+      "currency": "gold"
+    },
+    "Účinek": "OBRATNOST +1 na jeden čtvrtden",
+    "speciální bonusy jsou záporné kostky": "Gryfí peří nebo peří z jiného monstra",
+    "pokud nepoužiješ vzácné suroviny)": "gryj, harpyje"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Léčivá voda",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Účinek": "Snižuje dobu potřebnou k léčení kritických zranění o polovinu",
+    "speciální bonusy jsou záporné kostky": "Krev monstra, které umí regenerovat",
+    "pokud nepoužiješ vzácné suroviny)": "hydra, troll"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Dlouhochod",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Účinek": "Léčí OSPALOST",
+    "speciální bonusy jsou záporné kostky": "Drcené kosti ghoula nebo jiného mocného nemrtvého",
+    "pokud nepoužiješ vzácné suroviny)": "ghoul, záhrobní rytíř"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Žízněhnal",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Účinek": "Léčí ŽÍZEŇ",
+    "speciální bonusy jsou záporné kostky": "žluč mořského monstra",
+    "pokud nepoužiješ vzácné suroviny)": "mořský had, oliheň"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Břichopln",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Účinek": "Léčí HLAD",
+    "speciální bonusy jsou záporné kostky": "žaludek monstra se silným žaludkem",
+    "pokud nepoužiješ vzácné suroviny)": "červ, drak, troll"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Medové uhlí",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Účinek": "Léčí PROCHLADNUTÍ",
+    "speciální bonusy jsou záporné kostky": "Krev monstra s exoskeletem",
+    "pokud nepoužiješ vzácné suroviny)": "hmyzáci, červ"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Nektar života",
+    "Cena": "100",
+    "price": {
+      "value": 10,
+      "currency": "gold"
+    },
+    "Účinek": "Na rok pozastaví stárnutí",
+    "speciální bonusy jsou záporné kostky": "Dračí krev se silou 24+",
+    "pokud nepoužiješ vzácné suroviny)": "drak"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Železná šťáva",
+    "Cena": "30",
+    "price": {
+      "value": 3,
+      "currency": "gold"
+    },
+    "Účinek": "Při aplikaci na zbroj +1 ke zbroji",
+    "speciální bonusy jsou záporné kostky": "Šupiny monstra nebo drť golema",
+    "pokud nepoužiješ vzácné suroviny)": "had, drakoještěr, vyverna"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Lektvar léčení",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Účinek": "Léčí D3 SÍLY",
+    "speciální bonusy jsou záporné kostky": "Míza z rostlinných monster",
+    "pokud nepoužiješ vzácné suroviny)": "ent, réva"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Lektvar vzpružení",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Účinek": "Léčí D3 OBRATNOSTI",
+    "speciální bonusy jsou záporné kostky": "Sliz monstra nebo měkkýše",
+    "pokud nepoužiješ vzácné suroviny)": "améba oliheň"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Uklidňující lektvar",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Účinek": "Léčí D3 BYSTROSTI",
+    "speciální bonusy jsou záporné kostky": "Krev nějakého hybrida",
+    "pokud nepoužiješ vzácné suroviny)": "gryf, mantikora"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Opojný lektvar",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Účinek": "Léčí D3 OSOBNOSTI",
+    "speciální bonusy jsou záporné kostky": "Kyselina z monstra",
+    "pokud nepoužiješ vzácné suroviny)": "drakoještěr, hydra"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Kapky proroctví",
+    "Cena": "20",
+    "price": {
+      "value": 2,
+      "currency": "gold"
+    },
+    "Účinek": "Sníží bystrost na 0, ale dostane vizi, kde mu vypravěč kripticky odpoví na otázku.",
+    "speciální bonusy jsou záporné kostky": "Jed monstra s jedovatým útokem",
+    "pokud nepoužiješ vzácné suroviny)": "hmyzáci, mantikora"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Smrtiklam",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Účinek": "Na čtvrtden dostaneš talent II. berserker",
+    "speciální bonusy jsou záporné kostky": "Srdce monstrózních zvířat 14+",
+    "pokud nepoužiješ vzácné suroviny)": "šedý medvěd"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Odvar noci",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Účinek": "Na čtvrtden vidíš v noci, ale během dne -2 na držení hlídky.",
+    "speciální bonusy jsou záporné kostky": "Popel inteligentních nemrtvých",
+    "pokud nepoužiješ vzácné suroviny)": "Záhrobní rytíř"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Lektvar nelhářů",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Účinek": "Na čtvrtden musíš mluvit pravdu, bonus +1 k manipulaci",
+    "speciální bonusy jsou záporné kostky": "Jazyk mluvícího monstra",
+    "pokud nepoužiješ vzácné suroviny)": "Harpyje, drakoještěr"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Bolezdar",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Účinek": "Na čtvrtden dostaneš talent II. ODOLNÝ PROTI BOLESTI",
+    "speciální bonusy jsou záporné kostky": "Esence démona",
+    "pokud nepoužiješ vzácné suroviny)": "Démon"
+  },
+  {
+    "Category": "Lektvary",
+    "Předmět": "Dušežár",
+    "Cena": "50",
+    "price": {
+      "value": 5,
+      "currency": "gold"
+    },
+    "Účinek": "Dočasně na jednu směnu přidá D3 VŮLE",
+    "speciální bonusy jsou záporné kostky": "Ichor z alespoň částečně nehmotného nemrtvého.",
+    "pokud nepoužiješ vzácné suroviny)": "Duch, bog man"
+  }
+]

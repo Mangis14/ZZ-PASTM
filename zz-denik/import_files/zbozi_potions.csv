@@ -1,0 +1,22 @@
+Category,Předmět,Cena,Účinek, speciální bonusy jsou záporné kostky, pokud nepoužiješ vzácné suroviny)"
+Lektvary,Elixír síly,50,SÍLA +1 na jeden čtvrtden,Srdce humanoida se silou 18 +,"obr, troll"
+Lektvary,Elixír moudrosti,50,OSOBNOST +1 na jeden čtvrtden,"Zuby monstra, které se dokáže měnit fyzicky nebo mentálně","Stínovlk, obří přízrak mara, krvesaj"
+Lektvary,Elixír mazanosti,50,BYSTROST +1 na jeden čtvrtden,Esence démona se silou 18+,"démon, harpyje, krvesaj"
+Lektvary,Elixír rychlosti,50,OBRATNOST +1 na jeden čtvrtden,Gryfí peří nebo peří z jiného monstra,"gryj, harpyje"
+Lektvary,Léčivá voda,40,Snižuje dobu potřebnou k léčení kritických zranění o polovinu,"Krev monstra, které umí regenerovat","hydra, troll"
+Lektvary,Dlouhochod,10,Léčí OSPALOST,Drcené kosti ghoula nebo jiného mocného nemrtvého,"ghoul, záhrobní rytíř"
+Lektvary,Žízněhnal,10,Léčí ŽÍZEŇ,žluč mořského monstra,"mořský had, oliheň"
+Lektvary,Břichopln,10,Léčí HLAD,žaludek monstra se silným žaludkem,"červ, drak, troll"
+Lektvary,Medové uhlí,10,Léčí PROCHLADNUTÍ,Krev monstra s exoskeletem,"hmyzáci, červ"
+Lektvary,Nektar života,100,Na rok pozastaví stárnutí,Dračí krev se silou 24+,drak
+Lektvary,Železná šťáva,30,Při aplikaci na zbroj +1 ke zbroji,Šupiny monstra nebo drť golema,"had, drakoještěr, vyverna"
+Lektvary,Lektvar léčení,40,Léčí D3 SÍLY,Míza z rostlinných monster,"ent, réva"
+Lektvary,Lektvar vzpružení,40,Léčí D3 OBRATNOSTI,Sliz monstra nebo měkkýše,améba oliheň
+Lektvary,Uklidňující lektvar,40,Léčí D3 BYSTROSTI,Krev nějakého hybrida,"gryf, mantikora"
+Lektvary,Opojný lektvar,40,Léčí D3 OSOBNOSTI,Kyselina z monstra,"drakoještěr, hydra"
+Lektvary,Kapky proroctví,20,"Sníží bystrost na 0, ale dostane vizi, kde mu vypravěč kripticky odpoví na otázku.",Jed monstra s jedovatým útokem,"hmyzáci, mantikora"
+Lektvary,Smrtiklam,40,Na čtvrtden dostaneš talent II. berserker,Srdce monstrózních zvířat 14+,šedý medvěd
+Lektvary,Odvar noci,40,"Na čtvrtden vidíš v noci, ale během dne -2 na držení hlídky.",Popel inteligentních nemrtvých,Záhrobní rytíř
+Lektvary,Lektvar nelhářů,40,"Na čtvrtden musíš mluvit pravdu, bonus +1 k manipulaci",Jazyk mluvícího monstra,"Harpyje, drakoještěr"
+Lektvary,Bolezdar,40,Na čtvrtden dostaneš talent II. ODOLNÝ PROTI BOLESTI,Esence démona,Démon
+Lektvary,Dušežár,50,Dočasně na jednu směnu přidá D3 VŮLE,Ichor z alespoň částečně nehmotného nemrtvého.,"Duch, bog man"

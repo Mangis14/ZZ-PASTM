@@ -1,0 +1,9 @@
+Category,Předmět,Cena,Dostupnost,Suroviny,Čas,Talent,Nářadí,Účinek
+Oblečení,Hadry,"0,5",běžné,1/2 látky (vlněné),jeden čtvrtden,–,–,Postih –2 na Manipulaci.
+Oblečení,Prostý oděv,"1,5",běžné,1 látka (vlněná),jeden den,Krejčí,jehla a nit,
+Oblečení,Pěkné oblečení,40,vzácné,2 látky (vlněné),jeden týden,Krejčí,jehla a nit,Bonus vybavení +2 na Manipulaci.
+Oblečení,Kožich,3,neobvyklé,2 kožešiny,jeden čtvrtden,Krejčí,jehla a nit,Bonus vybavení +2 proti podchlazení (Zimní oblečení 2).
+Oblečení,Tunika,1,běžné,1 látka (vlněná),jeden čtvrtden,Krejčí,jehla a nit,
+Oblečení,Plášť,2,neobvyklé,2 látky (vlněné),jeden čtvrtden,Krejčí,jehla a nit,
+Oblečení,Pevné boty,3,neobvyklé,2 usně,jeden den,Koželuh,jehla a nit,Bonus vybavení +1 při nuceném pochodu (str. 146).
+Oblečení,Stříbrná přezka,8,neobvyklé,1/2 stříbra,jeden den,Kovář,kovárna,Bonus vybavení +1 na Manipulaci.

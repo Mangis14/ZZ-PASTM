@@ -1,0 +1,156 @@
+[
+  {
+    "Category": "Služby",
+    "Předmět": "Koupel v hostinci",
+    "Cena": "3 měďáky",
+    "price": {
+      "value": 3,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Poznámky": ""
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Ostříhání vlasů",
+    "Cena": "5 měďáků",
+    "price": {
+      "value": 5,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Poznámky": ""
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Léčení",
+    "Cena": "5",
+    "price": {
+      "value": 5,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Poznámky": "Typický vesnický ranhojič má osobnost 4 a dovednost Léčení na 2. stupni."
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Tělesný strážce",
+    "Cena": "1  denně",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Poznámky": ""
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Vyprání šatů",
+    "Cena": "5 měďáků",
+    "price": {
+      "value": 5,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Poznámky": ""
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Posel",
+    "Cena": "1  za hex",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Poznámky": ""
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Mýto",
+    "Cena": "2 měďáky",
+    "price": {
+      "value": 2,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Poznámky": ""
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Ubytování v hostinci, společná místnost",
+    "Cena": "2 měďáky",
+    "price": {
+      "value": 2,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Poznámky": ""
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Ubytování v hostinci, samostatný pokoj",
+    "Cena": "5 měďáků",
+    "price": {
+      "value": 5,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Poznámky": ""
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Pěkné ubytování",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Poznámky": ""
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Miska dušeného masa",
+    "Cena": "3 měďáky",
+    "price": {
+      "value": 3,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Poznámky": "Pokryje denní potřebu jídla."
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Vydatné jídlo",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Poznámky": "Pokryje denní potřebu jídla a vody."
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Hostina",
+    "Cena": "1 zlaťák",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Poznámky": "Pokryje denní potřebu jídla a vody. Jednou za sezení doplní 1 bod vůle. Nutno zakončit odpočinkem."
+  },
+  {
+    "Category": "Služby",
+    "Předmět": "Žejdlík piva",
+    "Cena": "2 měďáky",
+    "price": {
+      "value": 2,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Poznámky": "Pokryje denní potřebu vody."
+  }
+]

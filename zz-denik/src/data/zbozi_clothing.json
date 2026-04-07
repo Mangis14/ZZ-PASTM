@@ -1,0 +1,122 @@
+[
+  {
+    "Category": "Oblečení",
+    "Předmět": "Hadry",
+    "Cena": "0,5",
+    "price": {
+      "value": 5,
+      "currency": "copper"
+    },
+    "Dostupnost": "běžné",
+    "Suroviny": "1/2 látky (vlněné)",
+    "Čas": "jeden čtvrtden",
+    "Talent": "–",
+    "Nářadí": "–",
+    "Účinek": "Postih –2 na Manipulaci."
+  },
+  {
+    "Category": "Oblečení",
+    "Předmět": "Prostý oděv",
+    "Cena": "1,5",
+    "price": {
+      "value": 1.5,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Suroviny": "1 látka (vlněná)",
+    "Čas": "jeden den",
+    "Talent": "Krejčí",
+    "Nářadí": "jehla a nit",
+    "Účinek": ""
+  },
+  {
+    "Category": "Oblečení",
+    "Předmět": "Pěkné oblečení",
+    "Cena": "40",
+    "price": {
+      "value": 4,
+      "currency": "gold"
+    },
+    "Dostupnost": "vzácné",
+    "Suroviny": "2 látky (vlněné)",
+    "Čas": "jeden týden",
+    "Talent": "Krejčí",
+    "Nářadí": "jehla a nit",
+    "Účinek": "Bonus vybavení +2 na Manipulaci."
+  },
+  {
+    "Category": "Oblečení",
+    "Předmět": "Kožich",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Suroviny": "2 kožešiny",
+    "Čas": "jeden čtvrtden",
+    "Talent": "Krejčí",
+    "Nářadí": "jehla a nit",
+    "Účinek": "Bonus vybavení +2 proti podchlazení (Zimní oblečení 2)."
+  },
+  {
+    "Category": "Oblečení",
+    "Předmět": "Tunika",
+    "Cena": "1",
+    "price": {
+      "value": 1,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Suroviny": "1 látka (vlněná)",
+    "Čas": "jeden čtvrtden",
+    "Talent": "Krejčí",
+    "Nářadí": "jehla a nit",
+    "Účinek": ""
+  },
+  {
+    "Category": "Oblečení",
+    "Předmět": "Plášť",
+    "Cena": "2",
+    "price": {
+      "value": 2,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Suroviny": "2 látky (vlněné)",
+    "Čas": "jeden čtvrtden",
+    "Talent": "Krejčí",
+    "Nářadí": "jehla a nit",
+    "Účinek": ""
+  },
+  {
+    "Category": "Oblečení",
+    "Předmět": "Pevné boty",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Suroviny": "2 usně",
+    "Čas": "jeden den",
+    "Talent": "Koželuh",
+    "Nářadí": "jehla a nit",
+    "Účinek": "Bonus vybavení +1 při nuceném pochodu (str. 146)."
+  },
+  {
+    "Category": "Oblečení",
+    "Předmět": "Stříbrná přezka",
+    "Cena": "8",
+    "price": {
+      "value": 8,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Suroviny": "1/2 stříbra",
+    "Čas": "jeden den",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Účinek": "Bonus vybavení +1 na Manipulaci."
+  }
+]

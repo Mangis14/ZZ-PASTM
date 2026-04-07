@@ -1,0 +1,57 @@
+Category,Předmět,Cena,Dostupnost,Váha,Suroviny,Čas,Talent,Nářadí,Účinek
+Zboží,Toulec,"0,8",běžné,–,1/2 usně,čtvrtden,Koželuh,nůž,Při nošení nijak nezatěžuje.
+Zboží,Hák na lano,3,neobvyklé,normální,1 železo,čtvrtden,Kovář,kovárna,Bonus vybavení +1 při lezení.
+Zboží,"Lano, 10 metrů",2,běžné,normální,1 látka,čtvrtden,Krejčí,nůž,Bonus vybavení +1 při lezení.
+Zboží,"Svíčka, lojová","0,6",běžné,drobné,"1/10 látky, 1/4 loje",čtvrtden,–,oheň,Po dobu jednoho čtvrtdne svítí na délku paže.
+Zboží,"Lampička, olejová","0,5",běžné,lehké,1 kámen,jeden den,–,oheň,Svítí čtvrtden na krátkou vzdálenost. Dá se použít jen uvnitř. Vyžaduje lampový olej.
+Zboží,Lucerna,2,běžné,lehké,1 železo,jeden den,Kovář,kovárna,Svítí čtvrtden na krátkou vzdálenost. Vyžaduje lampový olej.
+Zboží,Pochodně,"0,5",běžné,normální,1 dřevo,čtvrtden,–,nůž nebo sekera,Zvýší kostku zdroje pochodní o jeden stupeň. Svítí na krátkou vzdálenost. Každou směnu (15 minut) házej kostkou zdroje.
+Zboží,Pytel,"0,8",běžné,–,1 látka,čtvrtden,Krejčí,nůž,Při nošení nijak nezatěžuje.
+Zboží,Batoh,4,běžné,–,2 látky,čtvrtden,Krejčí,"nůž, jehla a nit",Při nošení nijak nezatěžuje.
+Zboží,Měch na vodu,3,běžné,–,1 usně,čtvrtden,Koželuh,jehla a nit,Je potřeba k nošení vody. Nijak nezatěžuje.
+Zboží,Obvazy,"0,6",běžné,lehké,1/2 látky,čtvrtden,Krejčí,nůž,Bonus vybavení +1 na Léčení.
+Zboží,"Olej, lampový","0,2",běžné,lehké,1/4 loje nebo 2 Lnu,čtvrtden,Koželuh,oheň,Vydrží čtvrtden.
+Zboží,Inkoust a brk,2,neobvyklé,drobné,"pero, 1/10 železa",čtvrtden,Koželuh,"nůž, oheň",Dá se použít k zapisování kouzel.
+Zboží,Pergamen,"0,6",neobvyklé,drobné,1/4 usně,čtvrtden,Koželuh,nůž,Dá se použít k zapisování kouzel.
+Zboží,Deka,"0,7",běžné,lehké,1/2 látky,čtvrtden,Krejčí,nůž,Bonus vybavení +1 proti podchlazení.
+Zboží,Kožešiny na spaní,3,běžné,normální,2 kožešiny,čtvrtden,Koželuh,nůž,Bonus vybavení +2 proti podchlazení.
+Zboží,Křesadlo,"0,2",běžné,drobné,"1/10 železa, 1/4 kamene",čtvrtden,–,–,Bonus vybavení +1 při táboření na cestách.
+Zboží,Šperháky,10,neobvyklé,drobné,1/4 železa,jeden den,"Kovář, Zámečník",kovárna,Bonus vybavení +1 na dovednost Zlodějina při odemykání zámků.
+Zboží,Cestovní zásoby,1,běžné,normální,"1 maso, ryba nebo plodiny",čtvrtden,Kuchař,oheň,Jedna jednotka jídla. Zvyšuje kostku zdroje jídla o jeden stupeň.
+Zboží,Polní kuchyně,4,neobvyklé,těžké,2 železa,jeden den,"Kuchař, Kovář",kovárna,Umožňuje postavě s talentem Kuchař uvařit za čtvrtden 2k6 jednotek jídla.
+Zboží,Kotlík,"1,8",běžné,normální,1 železo,jeden den,"Kuchař, Kovář",kovárna,Umožňuje postavě s talentem Kuchař uvařit za čtvrtden k6+2 jednotek jídla.
+Zboží,Kovový kalich,"0,7",neobvyklé,lehké,1/2 železa,jeden den,Kovář,kovárna,–
+Zboží,Žejdlík,"0,2",běžné,lehké,1/2 dřeva,čtvrtden,–,–,–
+Zboží,Kovový talíř,"0,8",neobvyklé,lehké,1/2 železa,jeden den,Kovář,kovárna,–
+Zboží,Nůž na jídlo,"0,6",běžné,drobné,1/4 železa,čtvrtden,Kovář,kovárna,–
+Zboží,Lžíce,"0,8",neobvyklé,drobné,1/4 železa,jeden den,Kovář,kovárna,–
+Zboží,Past na medvěda,5,běžné,normální,1 železo,jeden den,Kovář,kovárna,Bonus vybavení +2 při lovu na cestách.
+Zboží,Lovecká oka,1,běžné,lehké,1/2 látky nebo usně,čtvrtden,Stopař,nůž,Bonus vybavení +1 při lovu na cestách.
+Zboží,Sud,"0,8",běžné,těžké,2 dřeva,jeden den,–,"pila, kladivo",Pojme 10 jednotek vody nebo jiné tekutiny.
+Zboží,Předmět,Cena,Dostupnost,Váha,Suroviny,Čas,Talent,Nářadí,Účinek
+Zboží,Hliněný džbán,"0,5",běžné,lehké,1 kámen,jeden den,–,oheň,Pojme 1 jednotku vody nebo jiné tekutiny.
+Zboží,"Stan, malý",2,běžné,normální,1 látka nebo useň,čtvrtden,Krejčí nebo Koželuh,"nůž, jehla a nit",Místo pro dva. Bonus vybavení +2 při táboření na cestách.
+Zboží,"Stan, velký",5,neobvyklé,těžké,2 látky nebo usně,jeden den,Krejčí nebo Koželuh,"nůž, jehla a nit",Místo pro šest. Bonus vybavení +2 při táboření na cestách.
+Zboží,Rybářský prut a háček,"0,4",běžné,lehké,"1/10 železa, 1/10 látky",čtvrtden,"Kovář, Krejčí","kladivo, kovárna",Bonus vybavení +1 při rybaření na cestách.
+Zboží,Rybářská síť,1,běžné,normální,1 látka,jeden den,Krejčí,nůž,Bonus vybavení +2 při rybaření na cestách.
+Zboží,Zvětšovací sklo,30,vzácné,drobné,"1/4 železa, 1/2 skla",jeden týden,"Kovář, Stavitel",kovárna,Dá se použít jako pomůcka při kouzlení.
+Zboží,Svatý symbol,1,neobvyklé,drobné,1/2 železa,jeden den,Kovář,kovárna,Dá se použít jako pomůcka při kouzlení.
+Zboží,Křída,"0,2",běžné,drobné,1/4 kamene,čtvrtden,–,–,Využívá se v nauce Symbolika.
+Zboží,Mapa,4,neobvyklé,drobné,pergamen,jeden den,Průzkumník,inkoust a brk,Dá se použít jako pomůcka při kouzlení.
+Zboží,Dalekohled,30,vzácné,normální,"1 železo, 1 sklo",dva týdny,"Kovář, Stavitel",kovárna,Bonus vybavení +2 na Ostražitost na dlouhou vzdálenost.
+Zboží,Křišťálová koule,6,neobvyklé,lehké,1 sklo,jeden den,Kovář,kovárna,Dá se použít jako pomůcka při kouzlení.
+Zboží,Přesýpací hodiny,12,vzácné,lehké,1 kámen,jeden týden,Stavitel,kovárna,Dá se použít jako pomůcka při kouzlení.
+Zboží,Váhy,3,neobvyklé,normální,1/2 železa,jeden den,Kovář,kovárna,Dá se použít jako pomůcka při kouzlení.
+Zboží,Flétna,"1,5",běžné,lehké,1/2 dřeva,jeden den,Cesta písně,nůž,Bonus vybavení +1 na Vystupování.
+Zboží,Hudební roh,3,běžné,normální,1 dřevo nebo zvířecí roh,jeden den,Cesta písně,nůž,Bonus vybavení +1 na Vystupování.
+Zboží,Loutna,5,neobvyklé,normální,"1 dřevo, 1/4 látky",jeden týden,Cesta písně,nůž,Bonus vybavení +1 na Vystupování.
+Zboží,Harfa,8,vzácné,těžké,"2 dřeva, 1/2 látky",dva týdny,Cesta písně,nůž,Bonus vybavení +2 na Vystupování.
+Zboží,Buben,"1,8",běžné,normální,"1 dřevo, 1/2 látky",jeden den,Cesta písně,nůž,Bonus vybavení +1 na Vystupování.
+Zboží,Smrtelný jed / protijed,5,vzácné,drobné,1 bylinky,čtvrtden,Travič,"kotlík, oheň",Účinnost 3. Navýšení účinnosti o každý další bod zdvojnásobí cenu. Protijed stojí základní cenu.
+Zboží,Ochromující jed / protijed,4,vzácné,drobné,1 bylinky,čtvrtden,Travič,"kotlík, oheň",Účinnost 3. Navýšení účinnosti o každý další bod zdvojnásobí cenu. Protijed stojí základní cenu.
+Zboží,Uspávací jed / protijed,3,vzácné,drobné,1 bylinky,čtvrtden,Travič,"kotlík, oheň",Účinnost 3. Navýšení účinnosti o každý další bod zdvojnásobí cenu. Protijed stojí základní cenu.
+Zboží,Halucinogenní jed / protijed,4,vzácné,drobné,1 bylinky,čtvrtden,Travič,"kotlík, oheň",Účinnost 3. Navýšení účinnosti o každý další bod zdvojnásobí cenu. Protijed stojí základní cenu.
+Zboží,*Lepidlo,1,běžké,drobné,kožešina,čtvrtden,Koželuh,"kotlík, oheň",
+Zboží,*Kniha,10,neobvyklé,lehké,"50 pergamenů, 1/2 kůže|dřeva",čtvrtden,Koželuh,jehla a nit,
+Zboží,*Brousek,1,běžné,lehké,1 kámen,čtvrtden,Kovář,,"Pro kovové zbraně může být použit opravě, pokud chybí přesně 1 bod"
+Zboží,*Páčidlo,3,,,,,,,Bonus +2 při hodu na SVALY při páčení.

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ZZ Deník</string>
+    <string name="title_activity_main">ZZ Deník</string>
+    <string name="package_name">com.zz.denik</string>
+    <string name="custom_url_scheme">com.zz.denik</string>
+</resources>

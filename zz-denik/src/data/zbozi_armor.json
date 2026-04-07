@@ -1,0 +1,274 @@
+[
+  {
+    "Category": "Zbroj",
+    "Předmět": "Malý štít",
+    "Cena": "6",
+    "price": {
+      "value": 6,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "1/2 železa, 1/2 dřeva, 1 useň",
+    "Čas": "jeden čtvrtden",
+    "Talent": "Kovář, Koželuh",
+    "Nářadí": "kovárna",
+    "Vlastnosti": "",
+    "Zbroj": "1"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "Velký štít",
+    "Cena": "15",
+    "price": {
+      "value": 1.5,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "1 železo, 1 dřevo, 2 usně",
+    "Čas": "jeden den",
+    "Talent": "Kovář, Koželuh",
+    "Nářadí": "kovárna",
+    "Vlastnosti": "",
+    "Zbroj": "2"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "Kožená zbroj",
+    "Cena": "4",
+    "price": {
+      "value": 4,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "lehké",
+    "Suroviny": "2 usně",
+    "Čas": "jeden den",
+    "Talent": "Koželuh",
+    "Nářadí": "nůž, jehla a nit",
+    "Vlastnosti": "",
+    "Zbroj": "2"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "Pokovaná kožená zbroj",
+    "Cena": "6",
+    "price": {
+      "value": 6,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "1/2 železa, 2 usně",
+    "Čas": "dva dny",
+    "Talent": "Kovář, Koželuh",
+    "Nářadí": "kovárna, nůž, jehla a nit",
+    "Vlastnosti": "",
+    "Zbroj": "3"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "*Lamelová kožená zbroj",
+    "Cena": "6",
+    "price": {
+      "value": 6,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "1/2 železa, 4 usně",
+    "Čas": "dva dny",
+    "Talent": "Koželuh",
+    "Nářadí": "jehla a nit",
+    "Vlastnosti": "",
+    "Zbroj": "3"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "*Tvrzená kožená zbroj",
+    "Cena": "12",
+    "price": {
+      "value": 1.2,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "4 usně",
+    "Čas": "dva dny",
+    "Talent": "Koželuh",
+    "Nářadí": "jehla a nit",
+    "Vlastnosti": "MRŠTNOST -1",
+    "Zbroj": "4"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "*Šupinová kožená zbroj",
+    "Cena": "24",
+    "price": {
+      "value": 2.4,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "4 usně",
+    "Čas": "dva dny",
+    "Talent": "Koželuh",
+    "Nářadí": "jehla a nit",
+    "Vlastnosti": "1/2 třída zbroje proti  bodnutí (ne šípům)",
+    "Zbroj": "4"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "*Prošívanice",
+    "Cena": "10",
+    "price": {
+      "value": 1,
+      "currency": "gold"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normánlí",
+    "Suroviny": "6 látky",
+    "Čas": "2 dny",
+    "Talent": "Krejčí",
+    "Nářadí": "jehla a nit",
+    "Vlastnosti": "Zimní oblečení",
+    "Zbroj": "3"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "*Lehká brigantina",
+    "Cena": "20",
+    "price": {
+      "value": 2,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "5 plátky, železo",
+    "Čas": "týden",
+    "Talent": "Krejčí, kovář",
+    "Nářadí": "kovárka, jehla a nit",
+    "Vlastnosti": "Zimní oblečení",
+    "Zbroj": "4"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "Kroužková košile",
+    "Cena": "24",
+    "price": {
+      "value": 2.4,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "těžké",
+    "Suroviny": "3 železa",
+    "Čas": "jeden týden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Vlastnosti": "Třída zbroje 3 proti šípům a bodnutí",
+    "Zbroj": "6"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "Plátová zbroj",
+    "Cena": "80",
+    "price": {
+      "value": 8,
+      "currency": "gold"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "těžké",
+    "Suroviny": "6 železa",
+    "Čas": "dva týdny",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Vlastnosti": "MRŠTNOST -2",
+    "Zbroj": "8"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "Pokovaná kožená čapka",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "lehké",
+    "Suroviny": "1/2 železa, 1 usně",
+    "Čas": "jeden den",
+    "Talent": "Kovář, Koželuh",
+    "Nářadí": "kovárna, nůž, jehla a nit",
+    "Vlastnosti": "",
+    "Zbroj": "1"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "*Balvát (prošívaná čapka)",
+    "Cena": "3",
+    "price": {
+      "value": 3,
+      "currency": "silver"
+    },
+    "Dostupnost": "běžné",
+    "Váha": "normánlí",
+    "Suroviny": "1 látka",
+    "Čas": "jeden den",
+    "Talent": "Krejčí",
+    "Nářadí": "jehla a nit",
+    "Vlastnosti": "Zimní oblečení",
+    "Zbroj": "1"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "Otevřená přilbice",
+    "Cena": "8",
+    "price": {
+      "value": 8,
+      "currency": "silver"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "lehké",
+    "Suroviny": "1 železo, 1 useň",
+    "Čas": "dva dny",
+    "Talent": "Kovář, Koželuh",
+    "Nářadí": "kovárna, nůž, jehla a nit",
+    "Vlastnosti": "",
+    "Zbroj": "2"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "Uzavřená přilbice",
+    "Cena": "18",
+    "price": {
+      "value": 1.8,
+      "currency": "gold"
+    },
+    "Dostupnost": "neobvyklé",
+    "Váha": "normální",
+    "Suroviny": "2 železa",
+    "Čas": "dva dny",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Vlastnosti": "",
+    "Zbroj": "3"
+  },
+  {
+    "Category": "Zbroj",
+    "Předmět": "Těžká přilbice",
+    "Cena": "30",
+    "price": {
+      "value": 3,
+      "currency": "gold"
+    },
+    "Dostupnost": "vzácné",
+    "Váha": "normální",
+    "Suroviny": "3 železa",
+    "Čas": "jeden týden",
+    "Talent": "Kovář",
+    "Nářadí": "kovárna",
+    "Vlastnosti": "OSTRAŽITOST -2",
+    "Zbroj": "4"
+  }
+]
