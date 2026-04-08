@@ -36,9 +36,9 @@ const SpellPicker = ({ char, onAdd, onClose }) => {
 
     return (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-fl-surface w-full max-w-2xl h-[85vh] rounded-lg shadow-2xl border border-fl-primary flex flex-col">
+            <div className="bg-fl-card w-full max-w-2xl h-[85vh] rounded-lg shadow-2xl border border-fl-primary flex flex-col">
                 {/* Header */}
-                <div className="p-4 border-b border-fl-border flex justify-between items-center bg-fl-paper-bright rounded-t-lg">
+                <div className="p-4 border-b border-fl-border flex justify-between items-center bg-fl-card rounded-t-lg">
                     <h2 className="text-xl font-serif font-bold text-fl-primary flex items-center gap-2">
                         <Flame size={24} /> Vybrat Kouzlo
                     </h2>
@@ -48,7 +48,7 @@ const SpellPicker = ({ char, onAdd, onClose }) => {
                 </div>
 
                 {/* School tabs */}
-                <div className="p-3 border-b border-fl-border bg-fl-paper overflow-x-auto">
+                <div className="p-3 border-b border-fl-border bg-fl-paper-light overflow-x-auto">
                     <div className="flex gap-1 min-w-max">
                         {schools.map(school => (
                             <button
@@ -64,7 +64,7 @@ const SpellPicker = ({ char, onAdd, onClose }) => {
                 </div>
 
                 {/* Search */}
-                <div className="p-3 border-b border-fl-border bg-fl-paper">
+                <div className="p-3 border-b border-fl-border bg-fl-paper-light">
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fl-primary" size={18} />
                         <input
@@ -78,7 +78,7 @@ const SpellPicker = ({ char, onAdd, onClose }) => {
                 </div>
 
                 {/* Spell list */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-fl-bg">
+                <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-fl-paper-bright">
                     {filteredSpells.map(spell => {
                         const known = isKnown(spell.id);
                         return (

@@ -66,7 +66,7 @@ const ItemAutocomplete = ({ value, onChange, onSelect, placeholder, className })
                 onFocus={() => value.length > 1 && setShowSuggestions(true)}
             />
             {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute left-0 right-0 top-full mt-1 bg-[var(--fl-card)] border border-fl-primary/50 rounded shadow-lg z-[9999] max-h-48 overflow-y-auto w-full min-w-[200px]">
+                <div className="absolute left-0 right-0 top-full mt-1 bg-fl-card border border-fl-primary/50 rounded shadow-lg z-[9999] max-h-48 overflow-y-auto w-full min-w-[200px]">
                     {suggestions.map((item, idx) => (
                         <div
                             key={idx}

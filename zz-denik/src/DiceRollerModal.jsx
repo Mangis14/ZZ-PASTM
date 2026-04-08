@@ -127,7 +127,7 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-fl-surface/90 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
             {/* Style pre animáciu trasenia */}
             <style>{`
             @keyframes shake {
@@ -149,7 +149,7 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
             }
         `}</style>
 
-            <div className="bg-fl-paper-light w-full max-w-md rounded shadow-2xl border-4 border-fl-primary p-6 relative max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="bg-fl-card w-full max-w-md rounded shadow-2xl border-4 border-fl-primary p-6 relative max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
                 <button onClick={onClose} className="absolute top-2 right-2 text-fl-primary hover:text-red-600"><X size={24} /></button>
                 <h3 className="font-serif text-2xl font-bold uppercase text-center mb-4 text-fl-surface border-b-2 border-fl-primary pb-2 flex items-center justify-center gap-2">
                     <Dices /> Hod Kostkami
@@ -165,7 +165,7 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
                             <label className={`block text-[10px] font-bold uppercase ${d.color} mb-1`}>{d.label}</label>
                             <div className="flex items-center justify-center gap-2">
                                 <button onClick={() => setCounts(p => ({ ...p, [d.key]: Math.max(0, p[d.key] - 1) }))} className="w-8 h-8 bg-fl-paper border border-fl-border text-fl-primary rounded hover:bg-fl-paper-light font-bold text-xl pb-1">-</button>
-                                <span className="font-mono font-bold text-2xl w-8 text-[var(--fl-surface)]">{counts[d.key]}</span>
+                                <span className="font-mono font-bold text-2xl w-8 text-fl-surface">{counts[d.key]}</span>
                                 <button onClick={() => setCounts(p => ({ ...p, [d.key]: p[d.key] + 1 }))} className="w-8 h-8 bg-fl-paper border border-fl-border text-fl-primary rounded hover:bg-fl-paper-light font-bold text-xl pb-1">+</button>
                             </div>
                         </div>
@@ -178,7 +178,7 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
                             <span className="text-[9px] font-bold uppercase text-amber-700 mb-1">{k}</span>
                             <div className="flex gap-1 items-center">
                                 <button onClick={() => setCounts(p => ({ ...p, [k]: Math.max(0, p[k] - 1) }))} className="w-6 h-6 bg-fl-paper border border-fl-border text-fl-primary rounded hover:bg-fl-paper-light">-</button>
-                                <span className="font-bold text-lg w-4 text-center text-[var(--fl-surface)]">{counts[k]}</span>
+                                <span className="font-bold text-lg w-4 text-center text-fl-surface">{counts[k]}</span>
                                 <button onClick={() => setCounts(p => ({ ...p, [k]: p[k] + 1 }))} className="w-6 h-6 bg-fl-paper border border-fl-border text-fl-primary rounded hover:bg-fl-paper-light">+</button>
                             </div>
                         </div>
@@ -186,7 +186,7 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
                 </div>
 
                 <div className="flex gap-2 mb-6">
-                    <button onClick={handleRoll} disabled={isRolling} className="flex-1 py-4 bg-fl-surface text-fl-paper-light font-bold uppercase tracking-wider hover:bg-fl-surface-hover transition-colors rounded-sm flex items-center justify-center gap-2 shadow-lg">
+                    <button onClick={handleRoll} disabled={isRolling} className="flex-1 py-4 bg-fl-nav text-white font-bold uppercase tracking-wider hover:bg-fl-nav-hover transition-colors rounded-sm flex items-center justify-center gap-2 shadow-lg">
                         {isRolling ? 'Házím...' : <><RefreshCw size={18} /> Hodit</>}
                     </button>
                     {canPush && !isRolling && (
@@ -207,15 +207,15 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
                     ) : results ? (
                         <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
                             <div className="flex justify-center gap-8 text-2xl font-black border-b-2 border-fl-border pb-3">
-                                <div className="flex flex-col items-center text-green-800" title="Úspěchy">
+                                <div className="flex flex-col items-center text-green-800 dark:text-green-400" title="Úspěchy">
                                     <Sword className="mb-1" />
                                     <span>{countSuccesses()}</span>
                                 </div>
-                                <div className="flex flex-col items-center text-stone-600" title="Zranění (Vlastnost)">
+                                <div className="flex flex-col items-center text-stone-600 dark:text-stone-400" title="Zranění (Vlastnost)">
                                     <Skull className="mb-1" />
                                     <span>{countBanes('base')}</span>
                                 </div>
-                                <div className="flex flex-col items-center text-stone-900" title="Poškození (Vybavení)">
+                                <div className="flex flex-col items-center text-stone-900 dark:text-stone-300" title="Poškození (Vybavení)">
                                     <Hammer className="mb-1" />
                                     <span>{countBanes('gear')}</span>
                                 </div>
@@ -229,7 +229,7 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
                             </div>
                         </div>
                     ) : (
-                        <div className="text-center text-stone-400 italic pt-8">
+                        <div className="text-center text-fl-text-muted italic pt-8">
                             Zvolte počet kostek a hoďte...
                         </div>
                     )}

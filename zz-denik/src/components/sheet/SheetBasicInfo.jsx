@@ -1,6 +1,8 @@
 import React from 'react';
-import { Coins } from 'lucide-react';
+import { User, Coins } from 'lucide-react';
 import Card from '../common/Card';
+import SectionHeader from '../common/SectionHeader';
+import MoneyInput from '../common/MoneyInput';
 
 const SheetBasicInfo = ({ char, updateField }) => {
     return (
@@ -39,37 +41,14 @@ const SheetBasicInfo = ({ char, updateField }) => {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col justify-center gap-2 bg-fl-paper-bright p-3 rounded border border-fl-border">
-                <div className="flex justify-between items-center border-b border-fl-border pb-2">
-                    <span className="text-xs font-bold uppercase text-fl-primary">Peníze</span>
-                    <Coins size={16} className="text-fl-border" />
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-center">
-                    {['gold', 'silver', 'copper'].map(c => (
-                        <div key={c} className="flex flex-col items-center">
-                            <div className="flex items-center gap-1 w-full">
-                                <button
-                                    onClick={() => updateField(`money.${c}`, Math.max(0, (char.money[c] || 0) - 1))}
-                                    className="text-fl-primary hover:text-fl-surface px-1 font-bold"
-                                >-</button>
-                                <input
-                                    type="number"
-                                    value={char.money[c]}
-                                    onChange={e => updateField(`money.${c}`, parseInt(e.target.value) || 0)}
-                                    className="w-full text-center font-bold bg-transparent border-b border-transparent focus:border-fl-primary focus:outline-none"
-                                />
-                                <button
-                                    onClick={() => updateField(`money.${c}`, (char.money[c] || 0) + 1)}
-                                    className="text-fl-primary hover:text-fl-surface px-1 font-bold"
-                                >+</button>
-                            </div>
-                            <span className="text-[9px] uppercase font-bold text-fl-border">
-                                {c === 'gold' ? 'ZL' : c === 'silver' ? 'ST' : 'MĚ'}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            </div>
+            <MoneyInput 
+                money={char.money} 
+                onChange={(newMoney) => {
+                    updateField('money.gold', newMoney.gold);
+                    updateField('money.silver', newMoney.silver);
+                    updateField('money.copper', newMoney.copper);
+                }} 
+            />
         </Card>
     );
 };

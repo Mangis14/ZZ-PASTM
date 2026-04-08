@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Search, ChevronDown, ChevronUp, Star, Shield, Zap } from 'lucide-react';
 import { TALENTS_DATA } from './data/talents_data';
 
@@ -24,17 +24,24 @@ const TalentCard = ({ talent, isExpanded, onToggle }) => {
             </div>
 
             {isExpanded && (
-                <div className="p-4 bg-[var(--fl-card)]">
-                    <div className="space-y-3">
-                        {talent.ranks.map((rank, i) => (
-                            <div key={i} className="flex gap-3 text-sm">
-                                <div className="min-w-[24px] h-6 flex items-center justify-center bg-fl-paper text-fl-primary font-bold rounded-full text-xs">
-                                    {rank.rank}
+                <div className="p-4 bg-fl-card">
+                    {talent.description && (
+                        <p className="text-sm text-fl-surface-hover leading-relaxed font-serif italic mb-3 pb-3 border-b border-fl-paper">
+                            {talent.description}
+                        </p>
+                    )}
+                    {talent.ranks.length > 0 && (
+                        <div className="space-y-3">
+                            {talent.ranks.map((rank, i) => (
+                                <div key={i} className="flex gap-3 text-sm">
+                                    <div className="min-w-[24px] h-6 flex items-center justify-center bg-fl-paper text-fl-primary font-bold rounded-full text-xs">
+                                        {rank.rank}
+                                    </div>
+                                    <p className="text-fl-surface-hover leading-relaxed">{rank.description}</p>
                                 </div>
-                                <p className="text-fl-surface-hover leading-relaxed">{rank.description}</p>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
         </div>
@@ -50,44 +57,69 @@ const TalentsSection = () => {
         setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
     };
 
-    const filterTalents = (list) => {
-        return list.filter(t => t.name.toLowerCase().includes(search.toLowerCase()));
-    };
+    // Fulltext search across ALL categories when search is active
+    const filteredList = useMemo(() => {
+        const lowerSearch = search.toLowerCase().trim();
 
-    const currentList = activeTab === 'profession' ? TALENTS_DATA.profession : TALENTS_DATA.general;
-    const filteredList = filterTalents(currentList);
+        if (!lowerSearch) {
+            // No search — show only the selected tab
+            return activeTab === 'profession' ? TALENTS_DATA.profession : TALENTS_DATA.general;
+        }
+
+        // Search active — search across BOTH profession and general
+        const allTalents = [
+            ...TALENTS_DATA.profession.map(t => ({ ...t, _source: 'profession' })),
+            ...TALENTS_DATA.general.map(t => ({ ...t, _source: 'general' }))
+        ];
+
+        return allTalents.filter(t =>
+            t.name.toLowerCase().includes(lowerSearch) ||
+            (t.profession && t.profession.toLowerCase().includes(lowerSearch)) ||
+            t.ranks.some(r => r.description.toLowerCase().includes(lowerSearch))
+        );
+    }, [activeTab, search]);
+
+    const isSearching = search.trim().length > 0;
 
     return (
         <div className="pb-20">
             {/* Search & Tabs */}
-            <div className="sticky top-16 bg-fl-bg pt-4 pb-2 z-30 px-1">
+            <div className="bg-fl-paper-bright pb-3 pt-4 border-b border-fl-border mb-4 -mx-1 px-1">
                 <div className="relative mb-4">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fl-primary" size={18} />
                     <input
                         type="text"
-                        placeholder="Hledat talent..."
+                        placeholder="Hledat talent ve všech kategoriích..."
                         value={search}
                         onChange={e => setSearch(e.target.value)}
-                        className="w-full w-full pl-10 pr-4 py-2 bg-[var(--fl-card)] border border-fl-paper rounded text-[var(--fl-surface)] placeholder:text-fl-border focus:border-fl-primary focus:outline-none"
+                        className="w-full w-full pl-10 pr-4 py-2 bg-fl-card border border-fl-paper rounded text-fl-surface placeholder:text-fl-border focus:border-fl-primary focus:outline-none"
                     />
                 </div>
 
-                <div className="flex p-1 bg-fl-surface rounded border border-fl-surface-hover">
+                {/* Tabs — dimmed when searching */}
+                <div className={`flex p-1 bg-fl-nav rounded border border-fl-nav-hover transition-opacity ${isSearching ? 'opacity-40 pointer-events-none' : ''}`}>
                     <button
                         onClick={() => setActiveTab('profession')}
                         className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded transition-all flex items-center justify-center gap-2
-                        ${activeTab === 'profession' ? 'bg-fl-primary text-white shadow-md' : 'text-fl-primary hover:text-fl-paper'}`}
+                        ${activeTab === 'profession' ? 'bg-fl-primary text-white shadow-md' : 'text-fl-text-muted dark:text-fl-border hover:text-white'}`}
                     >
                         <Shield size={14} /> Povolání
                     </button>
                     <button
                         onClick={() => setActiveTab('general')}
                         className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded transition-all flex items-center justify-center gap-2
-                        ${activeTab === 'general' ? 'bg-fl-border text-fl-surface shadow-md' : 'text-fl-primary hover:text-fl-paper'}`}
+                        ${activeTab === 'general' ? 'bg-fl-primary text-white shadow-md' : 'text-fl-text-muted dark:text-fl-border hover:text-white'}`}
                     >
                         <Star size={14} /> Obecné
                     </button>
                 </div>
+
+                {/* Search result count */}
+                {isSearching && (
+                    <div className="mt-2 text-xs text-fl-text-muted text-center">
+                        Nalezeno <span className="font-bold text-fl-primary">{filteredList.length}</span> talentů ve všech kategoriích
+                    </div>
+                )}
             </div>
 
             {/* Content */}

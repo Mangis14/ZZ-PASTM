@@ -1,28 +1,39 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Brain, Zap, Sword, Backpack, Flame, Star, Scroll } from 'lucide-react';
 
-export const NavButton = ({ label, onClick, icon: Icon, active }) => (
+export const NavButton = ({ label, onClick, icon: Icon, active, compact }) => (
     <button
         onClick={onClick}
-        className={`flex flex-col items-center min-w-[60px] p-2 rounded transition-colors ${active ? 'text-white bg-fl-surface-hover' : 'text-fl-paper hover:text-white hover:bg-fl-surface-hover'}`}
+        className={`flex items-center justify-center gap-1.5 rounded transition-all flex-shrink-0 ${compact ? 'flex-row py-1.5 px-3 min-w-0' : 'flex-col py-2 px-1 min-w-[60px]'} ${active ? 'text-white bg-fl-nav-hover shadow-sm' : 'text-fl-border dark:text-fl-text-muted hover:text-white hover:bg-fl-nav-hover'}`}
     >
-        <Icon size={18} className="mb-1" />
-        <span className="text-[9px] uppercase font-bold tracking-wider">{label}</span>
+        <Icon size={compact ? 14 : 18} className={compact ? "" : "mb-1"} />
+        <span className={`${compact ? 'text-[10px]' : 'text-[9px]'} uppercase font-bold tracking-wider whitespace-nowrap`}>{label}</span>
     </button>
 );
 
 const Navigation = ({ scrollToSection }) => {
+    const [isCompact, setIsCompact] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsCompact(window.scrollY > 40);
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
-        <nav className="max-w-3xl mx-auto px-2 overflow-x-auto flex gap-1 py-2 scrollbar-hide bg-fl-surface border-b border-fl-primary sticky z-30 shadow-md" style={{ top: 'calc(env(safe-area-inset-top) + 136px)' }}>
-            <NavButton label="Vlastnosti" onClick={() => scrollToSection('attributes')} icon={Brain} />
-            <NavButton label="Dovednosti" onClick={() => scrollToSection('skills')} icon={Zap} />
-            <NavButton label="Boj" onClick={() => scrollToSection('combat')} icon={Sword} />
-            <NavButton label="Vybavení" onClick={() => scrollToSection('inventory')} icon={Backpack} />
-            <NavButton label="Zdroje" onClick={() => scrollToSection('consumables')} icon={Flame} />
-            <NavButton label="Talenty" onClick={() => scrollToSection('talents')} icon={Star} />
-            <NavButton label="Poznámky" onClick={() => scrollToSection('notes')} icon={Scroll} />
-        </nav>
+        <div className="sticky z-40 -mx-4 px-4 bg-fl-nav border-b border-fl-primary shadow-md transition-all duration-300" style={{ top: 'calc(env(safe-area-inset-top) + 144px)' }}>
+            <nav className={`max-w-3xl mx-auto overflow-x-auto flex gap-1 ${isCompact ? 'py-1' : 'py-2'} scrollbar-hide`}>
+                <NavButton compact={isCompact} label="Vlastnosti" onClick={() => scrollToSection('attributes')} icon={Brain} />
+                <NavButton compact={isCompact} label="Dovednosti" onClick={() => scrollToSection('skills')} icon={Zap} />
+                <NavButton compact={isCompact} label="Boj" onClick={() => scrollToSection('combat')} icon={Sword} />
+                <NavButton compact={isCompact} label="Vybavení" onClick={() => scrollToSection('inventory')} icon={Backpack} />
+                <NavButton compact={isCompact} label="Zdroje" onClick={() => scrollToSection('consumables')} icon={Flame} />
+                <NavButton compact={isCompact} label="Talenty" onClick={() => scrollToSection('talents')} icon={Star} />
+                <NavButton compact={isCompact} label="Poznámky" onClick={() => scrollToSection('notes')} icon={Scroll} />
+            </nav>
+        </div>
     );
 };
 

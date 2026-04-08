@@ -33,7 +33,7 @@ const Header = ({
 
     return (
         <header
-            className="fixed top-0 left-0 right-0 bg-[var(--fl-card)] text-[var(--fl-surface)] z-40 shadow-xl border-b border-fl-primary transition-all duration-200"
+            className="fixed top-0 left-0 right-0 bg-fl-card text-fl-surface z-40 shadow-xl border-b border-fl-primary transition-all duration-200"
             style={{ paddingTop: 'calc(env(safe-area-inset-top) + 24px)' }}
         >
             <div className="max-w-3xl mx-auto px-4 min-h-16 h-auto py-2 flex items-center justify-between">
@@ -43,7 +43,7 @@ const Header = ({
                     </button>
 
                     <div>
-                        <h1 className="font-serif text-xl font-bold tracking-widest text-[var(--fl-surface)] uppercase leading-none">{char.name || 'Bezejmenný'}</h1>
+                        <h1 className="font-serif text-xl font-bold tracking-widest text-fl-surface uppercase leading-none">{char.name || 'Bezejmenný'}</h1>
                         <div className="flex items-center gap-2 text-xs text-fl-primary font-mono mt-1">
                             <span>{char.kin || 'Rasa'}</span>
                             <span>•</span>
@@ -57,7 +57,7 @@ const Header = ({
                     {/* Time Tracker */}
                     <button 
                         onClick={cycleTime}
-                        className="flex flex-col items-center justify-center p-1 w-12 h-10 border rounded bg-fl-bg hover:bg-fl-surface-hover border-fl-surface-hover text-fl-primary transition-colors"
+                        className="flex flex-col items-center justify-center p-1 w-12 h-10 border rounded bg-fl-paper hover:bg-fl-border border-fl-border text-fl-primary transition-colors"
                         title="Kliknutím posunete část dne"
                     >
                         <CurrentTimeIcon size={18} />
@@ -67,7 +67,7 @@ const Header = ({
                     </button>
 
                     {/* Weight Tracker */}
-                    <div className={`flex flex-col items-end text-xs font-mono px-3 py-1 rounded border min-w-[70px] ${isOverencumbered ? 'bg-red-900/20 border-red-800 text-red-400' : 'bg-fl-bg border-fl-surface-hover text-fl-primary'}`}>
+                    <div className={`flex flex-col items-end text-xs font-mono px-3 py-1 rounded border min-w-[70px] ${isOverencumbered ? 'bg-red-900/20 border-red-800 text-red-400' : 'bg-fl-paper border-fl-border text-fl-primary'}`}>
                         <span className="uppercase text-[9px] font-bold opacity-70">Zátěž</span>
                         <span className="font-bold text-sm tracking-wider">{totalWeight} / {encumbranceLimit}</span>
                     </div>
@@ -75,7 +75,7 @@ const Header = ({
             </div>
 
             {/* TOP NAVIGATION */}
-            <div className="max-w-3xl mx-auto flex border-t border-fl-surface-hover bg-fl-bg">
+            <div className="max-w-3xl mx-auto flex border-t border-fl-border bg-fl-paper-light">
                 <TabButton label="Deník" icon={Scroll} active={currentView === 'sheet'} onClick={() => setCurrentView('sheet')} />
                 <TabButton label="Zboží" icon={ShoppingBag} active={currentView === 'zbozi'} onClick={() => setCurrentView('zbozi')} />
                 <TabButton label="Talenty" icon={Star} active={currentView === 'talents'} onClick={() => setCurrentView('talents')} />

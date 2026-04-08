@@ -36,8 +36,8 @@ const TalentPicker = ({ char, onAdd, onClose }) => {
 
     return (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-fl-surface w-full max-w-2xl h-[80vh] rounded-lg shadow-2xl border border-fl-primary flex flex-col">
-                <div className="p-4 border-b border-fl-border flex justify-between items-center bg-fl-paper-bright rounded-t-lg">
+            <div className="bg-fl-card w-full max-w-2xl h-[80vh] rounded-lg shadow-2xl border border-fl-primary flex flex-col">
+                <div className="p-4 border-b border-fl-border flex justify-between items-center bg-fl-card rounded-t-lg">
                     <h2 className="text-xl font-serif font-bold text-fl-primary flex items-center gap-2">
                         <Star size={24} /> Vybrat Talent
                     </h2>
@@ -46,7 +46,7 @@ const TalentPicker = ({ char, onAdd, onClose }) => {
                     </button>
                 </div>
 
-                <div className="p-4 border-b border-fl-border bg-fl-paper flex flex-col gap-4">
+                <div className="p-4 border-b border-fl-border bg-fl-paper-light flex flex-col gap-4">
                     <div className="flex gap-2">
                         <button
                             className={`flex-1 py-2 font-bold uppercase text-xs rounded transition-colors ${activeTab === 'profession' ? 'bg-fl-primary text-white' : 'bg-fl-paper-light text-fl-text-muted hover:bg-fl-border'}`}
@@ -73,7 +73,7 @@ const TalentPicker = ({ char, onAdd, onClose }) => {
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-fl-bg">
+                <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-fl-paper-bright">
                     {filteredTalents.map(talent => (
                         <div key={talent.id} className="bg-fl-paper-bright border border-fl-border rounded overflow-hidden">
                             <button

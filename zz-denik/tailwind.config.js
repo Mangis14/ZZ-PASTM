@@ -18,6 +18,9 @@ export default {
         'fl-paper': 'var(--fl-paper)',
         'fl-paper-light': 'var(--fl-paper-light)',
         'fl-paper-bright': 'var(--fl-paper-bright)',
+        'fl-card': 'var(--fl-card)',
+        'fl-nav': 'var(--fl-nav)',
+        'fl-nav-hover': 'var(--fl-nav-hover)',
       },
       fontFamily: {
         serif: ['"Crimson Text"', 'serif'],

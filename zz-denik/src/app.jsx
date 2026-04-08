@@ -68,7 +68,8 @@ const App = () => {
   const [showDiceModal, setShowDiceModal] = useState(false);
   const [initialDice, setInitialDice] = useState(null);
   const [showCritModal, setShowCritModal] = useState(false);
-  const [currentView, setCurrentView] = useState('sheet'); // 'sheet', 'zbozi', 'talents', 'spells', 'weather'
+  const [currentView, setCurrentViewRaw] = useState('sheet');
+  const [viewDirection, setViewDirection] = useState(null); // 'left' | 'right' | null // 'sheet', 'zbozi', 'talents', 'spells', 'weather'
 
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem('fl_theme') === 'dark';
@@ -95,7 +96,19 @@ const App = () => {
   };
 
   const views = ['sheet', 'zbozi', 'talents', 'spells'];
-  const swipeHandlers = useSwipe({
+
+  // Animated view switch — detects direction based on index
+  const setCurrentView = (newView) => {
+    if (newView === currentView) return;
+    const oldIdx = views.indexOf(currentView);
+    const newIdx = views.indexOf(newView);
+    setViewDirection(newIdx > oldIdx ? 'left' : 'right');
+    setCurrentViewRaw(newView);
+    // Clear direction after animation
+    setTimeout(() => setViewDirection(null), 300);
+  };
+
+  const { onTouchStart, onTouchMove, onTouchEnd, swipeOffset, isTransitioning, slideDirection } = useSwipe({
     onSwipedLeft: () => {
       const idx = views.indexOf(currentView);
       if (idx !== -1 && idx < views.length - 1) setCurrentView(views[idx + 1]);
@@ -105,6 +118,8 @@ const App = () => {
       if (idx !== -1 && idx > 0) setCurrentView(views[idx - 1]);
     }
   });
+
+  const swipeHandlers = { onTouchStart, onTouchMove, onTouchEnd };
 
   useEffect(() => {
     const saved = localStorage.getItem('fl_characters');
@@ -304,9 +319,9 @@ const App = () => {
       {/* MENU MODAL */}
       {showMenu && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-start justify-start" onClick={() => setShowMenu(false)}>
-          <div className="w-80 h-full bg-fl-surface border-r border-fl-primary p-6 overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-8 border-b border-fl-surface-hover pb-4">
-              <h2 className="font-serif text-2xl text-fl-paper font-bold">Deník</h2>
+          <div className="w-80 h-full bg-fl-nav border-r border-fl-primary p-6 overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-8 border-b border-fl-nav-hover pb-4">
+              <h2 className="font-serif text-2xl text-fl-paper-bright dark:text-fl-surface font-bold">Deník</h2>
               <button onClick={() => setShowMenu(false)} className="text-fl-primary hover:text-white"><X /></button>
             </div>
 
@@ -318,7 +333,7 @@ const App = () => {
               <Skull size={20} /> Kritické Zranění
             </button>
 
-            <button onClick={() => { setInitialDice(null); setShowDiceModal(true); setShowMenu(false); }} className="w-full flex items-center gap-3 p-4 bg-fl-paper text-fl-surface font-bold rounded hover:bg-[var(--fl-card)] transition-colors mb-4 shadow-lg border border-fl-primary">
+            <button onClick={() => { setInitialDice(null); setShowDiceModal(true); setShowMenu(false); }} className="w-full flex items-center gap-3 p-4 bg-fl-paper text-fl-surface font-bold rounded hover:bg-fl-card transition-colors mb-4 shadow-lg border border-fl-primary">
               <Dices size={20} /> Hod Kostkami
             </button>
 
@@ -326,7 +341,7 @@ const App = () => {
               <CloudRain size={20} /> Počasí
             </button>
 
-            <button onClick={() => setIsDarkMode(!isDarkMode)} className="w-full flex items-center gap-3 p-4 bg-fl-bg text-fl-primary font-bold rounded hover:bg-fl-surface transition-colors mb-6 shadow-lg border border-fl-surface-hover">
+            <button onClick={() => setIsDarkMode(!isDarkMode)} className="w-full flex items-center gap-3 p-4 bg-fl-bg text-fl-primary font-bold rounded hover:bg-fl-nav-hover transition-colors mb-6 shadow-lg border border-fl-border">
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />} 
               {isDarkMode ? "Světlý Režim" : "Temný Režim (Dungeon)"}
             </button>
@@ -334,7 +349,7 @@ const App = () => {
             <div className="space-y-2 mb-8">
               <h3 className="text-xs font-bold uppercase text-fl-text-muted mb-2 tracking-widest">Uložené postavy</h3>
               {Object.values(savedChars).sort((a, b) => b.lastSaved - a.lastSaved).map(c => (
-                <div key={c.id} onClick={() => loadChar(c.id)} className={`p-3 rounded border cursor-pointer flex justify-between items-center group transition-all ${char.id === c.id ? 'bg-fl-surface-hover border-fl-primary text-white' : 'border-fl-surface-hover text-[#a8a29e] hover:bg-[#3a3632]'}`}>
+                <div key={c.id} onClick={() => loadChar(c.id)} className={`p-3 rounded border cursor-pointer flex justify-between items-center group transition-all ${char.id === c.id ? 'bg-fl-nav-hover border-fl-primary text-white' : 'border-fl-border text-fl-border hover:bg-fl-nav-hover hover:text-white'}`}>
                   <div>
                     <div className="font-bold">{c.name || 'Bezejmenný'}</div>
                     <div className="text-xs opacity-60">{c.kin} {c.profession}</div>
@@ -344,11 +359,11 @@ const App = () => {
               ))}
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-6 border-t border-fl-surface-hover">
-              <button onClick={exportData} className="flex flex-col items-center gap-2 p-3 bg-fl-bg rounded border border-fl-surface-hover text-fl-primary hover:text-fl-paper hover:border-fl-primary transition-colors">
+            <div className="grid grid-cols-2 gap-3 pt-6 border-t border-fl-nav-hover">
+              <button onClick={exportData} className="flex flex-col items-center gap-2 p-3 bg-fl-bg rounded border border-fl-border text-fl-primary hover:text-white hover:border-fl-primary transition-colors">
                 <Download size={20} /> <span className="text-xs font-bold uppercase">Export</span>
               </button>
-              <label className="flex flex-col items-center gap-2 p-3 bg-fl-bg rounded border border-fl-surface-hover text-fl-primary hover:text-fl-paper hover:border-fl-primary transition-colors cursor-pointer">
+              <label className="flex flex-col items-center gap-2 p-3 bg-fl-bg rounded border border-fl-border text-fl-primary hover:text-white hover:border-fl-primary transition-colors cursor-pointer">
                 <Upload size={20} /> <span className="text-xs font-bold uppercase">Import</span>
                 <input type="file" className="hidden" accept=".json" onChange={importData} />
               </label>
@@ -358,7 +373,25 @@ const App = () => {
       )}
 
       {/* MAIN CONTENT */}
-      <main {...swipeHandlers} className="max-w-3xl mx-auto px-4 space-y-6 overflow-x-hidden min-h-[80vh]" style={currentView !== 'sheet' ? { paddingTop: 'calc(env(safe-area-inset-top) + 144px)' } : undefined}>
+      <main {...swipeHandlers} className="max-w-3xl mx-auto px-4 space-y-6 min-h-[80vh]" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 144px)' }}>
+        <div
+          key={currentView}
+          className={`${
+            isTransitioning
+              ? slideDirection === 'left' 
+                ? 'animate-slide-in-right' 
+                : 'animate-slide-in-left'
+              : viewDirection === 'left'
+                ? 'animate-slide-in-right'
+                : viewDirection === 'right'
+                  ? 'animate-slide-in-left'
+                  : ''
+          }`}
+          style={{
+            transform: !isTransitioning && swipeOffset ? `translateX(${swipeOffset}px)` : undefined,
+            transition: !isTransitioning && swipeOffset ? 'none' : undefined,
+          }}
+        >
         {currentView === 'sheet' ? (
             <CharacterSheet
             char={char}
@@ -379,6 +412,7 @@ const App = () => {
         ) : (
           <WeatherSection />
         )}
+        </div>
       </main>
     </div>
   );

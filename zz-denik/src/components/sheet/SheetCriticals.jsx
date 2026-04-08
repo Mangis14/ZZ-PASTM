@@ -45,7 +45,7 @@ const SheetCriticals = ({ char, updateField, updateDeep }) => {
             <div className="space-y-3">
                 <div className="grid grid-cols-[1fr_auto_80px_auto] gap-2 text-[9px] font-bold uppercase text-fl-primary px-1 border-b border-fl-paper pb-1">
                     <span>Popis (Účinek)</span>
-                    <span className="text-center w-14 text-red-700">Smrtící</span>
+                    <span className="text-center w-14 text-red-700 dark:text-red-400">Smrtící</span>
                     <span className="text-center">Limit do<br/>Smrti</span>
                     <span className="w-6"></span>
                 </div>

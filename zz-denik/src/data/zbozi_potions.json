@@ -9,7 +9,9 @@
     },
     "Účinek": "SÍLA +1 na jeden čtvrtden",
     "speciální bonusy jsou záporné kostky": "Srdce humanoida se silou 18 +",
-    "pokud nepoužiješ vzácné suroviny)": "obr, troll"
+    "pokud nepoužiješ vzácné suroviny)": "obr, troll",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -21,7 +23,9 @@
     },
     "Účinek": "OSOBNOST +1 na jeden čtvrtden",
     "speciální bonusy jsou záporné kostky": "Zuby monstra, které se dokáže měnit fyzicky nebo mentálně",
-    "pokud nepoužiješ vzácné suroviny)": "Stínovlk, obří přízrak mara, krvesaj"
+    "pokud nepoužiješ vzácné suroviny)": "Stínovlk, obří přízrak mara, krvesaj",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -33,7 +37,9 @@
     },
     "Účinek": "BYSTROST +1 na jeden čtvrtden",
     "speciální bonusy jsou záporné kostky": "Esence démona se silou 18+",
-    "pokud nepoužiješ vzácné suroviny)": "démon, harpyje, krvesaj"
+    "pokud nepoužiješ vzácné suroviny)": "démon, harpyje, krvesaj",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -45,7 +51,9 @@
     },
     "Účinek": "OBRATNOST +1 na jeden čtvrtden",
     "speciální bonusy jsou záporné kostky": "Gryfí peří nebo peří z jiného monstra",
-    "pokud nepoužiješ vzácné suroviny)": "gryj, harpyje"
+    "pokud nepoužiješ vzácné suroviny)": "gryj, harpyje",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -57,7 +65,9 @@
     },
     "Účinek": "Snižuje dobu potřebnou k léčení kritických zranění o polovinu",
     "speciální bonusy jsou záporné kostky": "Krev monstra, které umí regenerovat",
-    "pokud nepoužiješ vzácné suroviny)": "hydra, troll"
+    "pokud nepoužiješ vzácné suroviny)": "hydra, troll",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -69,7 +79,9 @@
     },
     "Účinek": "Léčí OSPALOST",
     "speciální bonusy jsou záporné kostky": "Drcené kosti ghoula nebo jiného mocného nemrtvého",
-    "pokud nepoužiješ vzácné suroviny)": "ghoul, záhrobní rytíř"
+    "pokud nepoužiješ vzácné suroviny)": "ghoul, záhrobní rytíř",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -81,7 +93,9 @@
     },
     "Účinek": "Léčí ŽÍZEŇ",
     "speciální bonusy jsou záporné kostky": "žluč mořského monstra",
-    "pokud nepoužiješ vzácné suroviny)": "mořský had, oliheň"
+    "pokud nepoužiješ vzácné suroviny)": "mořský had, oliheň",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -93,7 +107,9 @@
     },
     "Účinek": "Léčí HLAD",
     "speciální bonusy jsou záporné kostky": "žaludek monstra se silným žaludkem",
-    "pokud nepoužiješ vzácné suroviny)": "červ, drak, troll"
+    "pokud nepoužiješ vzácné suroviny)": "červ, drak, troll",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -105,7 +121,9 @@
     },
     "Účinek": "Léčí PROCHLADNUTÍ",
     "speciální bonusy jsou záporné kostky": "Krev monstra s exoskeletem",
-    "pokud nepoužiješ vzácné suroviny)": "hmyzáci, červ"
+    "pokud nepoužiješ vzácné suroviny)": "hmyzáci, červ",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -117,7 +135,9 @@
     },
     "Účinek": "Na rok pozastaví stárnutí",
     "speciální bonusy jsou záporné kostky": "Dračí krev se silou 24+",
-    "pokud nepoužiješ vzácné suroviny)": "drak"
+    "pokud nepoužiješ vzácné suroviny)": "drak",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -129,7 +149,9 @@
     },
     "Účinek": "Při aplikaci na zbroj +1 ke zbroji",
     "speciální bonusy jsou záporné kostky": "Šupiny monstra nebo drť golema",
-    "pokud nepoužiješ vzácné suroviny)": "had, drakoještěr, vyverna"
+    "pokud nepoužiješ vzácné suroviny)": "had, drakoještěr, vyverna",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -141,7 +163,9 @@
     },
     "Účinek": "Léčí D3 SÍLY",
     "speciální bonusy jsou záporné kostky": "Míza z rostlinných monster",
-    "pokud nepoužiješ vzácné suroviny)": "ent, réva"
+    "pokud nepoužiješ vzácné suroviny)": "ent, réva",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -153,7 +177,9 @@
     },
     "Účinek": "Léčí D3 OBRATNOSTI",
     "speciální bonusy jsou záporné kostky": "Sliz monstra nebo měkkýše",
-    "pokud nepoužiješ vzácné suroviny)": "améba oliheň"
+    "pokud nepoužiješ vzácné suroviny)": "améba oliheň",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -165,7 +191,9 @@
     },
     "Účinek": "Léčí D3 BYSTROSTI",
     "speciální bonusy jsou záporné kostky": "Krev nějakého hybrida",
-    "pokud nepoužiješ vzácné suroviny)": "gryf, mantikora"
+    "pokud nepoužiješ vzácné suroviny)": "gryf, mantikora",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -177,7 +205,9 @@
     },
     "Účinek": "Léčí D3 OSOBNOSTI",
     "speciální bonusy jsou záporné kostky": "Kyselina z monstra",
-    "pokud nepoužiješ vzácné suroviny)": "drakoještěr, hydra"
+    "pokud nepoužiješ vzácné suroviny)": "drakoještěr, hydra",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -189,7 +219,9 @@
     },
     "Účinek": "Sníží bystrost na 0, ale dostane vizi, kde mu vypravěč kripticky odpoví na otázku.",
     "speciální bonusy jsou záporné kostky": "Jed monstra s jedovatým útokem",
-    "pokud nepoužiješ vzácné suroviny)": "hmyzáci, mantikora"
+    "pokud nepoužiješ vzácné suroviny)": "hmyzáci, mantikora",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -201,7 +233,9 @@
     },
     "Účinek": "Na čtvrtden dostaneš talent II. berserker",
     "speciální bonusy jsou záporné kostky": "Srdce monstrózních zvířat 14+",
-    "pokud nepoužiješ vzácné suroviny)": "šedý medvěd"
+    "pokud nepoužiješ vzácné suroviny)": "šedý medvěd",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -213,7 +247,9 @@
     },
     "Účinek": "Na čtvrtden vidíš v noci, ale během dne -2 na držení hlídky.",
     "speciální bonusy jsou záporné kostky": "Popel inteligentních nemrtvých",
-    "pokud nepoužiješ vzácné suroviny)": "Záhrobní rytíř"
+    "pokud nepoužiješ vzácné suroviny)": "Záhrobní rytíř",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -225,7 +261,9 @@
     },
     "Účinek": "Na čtvrtden musíš mluvit pravdu, bonus +1 k manipulaci",
     "speciální bonusy jsou záporné kostky": "Jazyk mluvícího monstra",
-    "pokud nepoužiješ vzácné suroviny)": "Harpyje, drakoještěr"
+    "pokud nepoužiješ vzácné suroviny)": "Harpyje, drakoještěr",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -237,7 +275,9 @@
     },
     "Účinek": "Na čtvrtden dostaneš talent II. ODOLNÝ PROTI BOLESTI",
     "speciální bonusy jsou záporné kostky": "Esence démona",
-    "pokud nepoužiješ vzácné suroviny)": "Démon"
+    "pokud nepoužiješ vzácné suroviny)": "Démon",
+    "Váha": "–",
+    "Dostupnost": "–"
   },
   {
     "Category": "Lektvary",
@@ -249,6 +289,8 @@
     },
     "Účinek": "Dočasně na jednu směnu přidá D3 VŮLE",
     "speciální bonusy jsou záporné kostky": "Ichor z alespoň částečně nehmotného nemrtvého.",
-    "pokud nepoužiješ vzácné suroviny)": "Duch, bog man"
+    "pokud nepoužiješ vzácné suroviny)": "Duch, bog man",
+    "Váha": "–",
+    "Dostupnost": "–"
   }
 ]

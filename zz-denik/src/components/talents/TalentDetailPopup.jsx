@@ -17,13 +17,13 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
             <div className="bg-fl-paper-bright w-full max-w-md rounded-lg shadow-2xl border border-fl-primary overflow-hidden" onClick={e => e.stopPropagation()}>
                 {/* Header */}
-                <div className="p-4 bg-fl-surface border-b border-fl-primary flex justify-between items-center">
+                <div className="p-4 bg-fl-nav border-b border-fl-primary flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <div className="bg-fl-primary text-white w-10 h-10 rounded-full flex items-center justify-center font-serif font-bold text-xl shadow-md">
                             {talent.rank}
                         </div>
                         <div>
-                            <h3 className="font-serif font-bold text-fl-paper-light text-lg leading-tight">{talent.name}</h3>
+                            <h3 className="font-serif font-bold text-white text-lg leading-tight">{talent.name}</h3>
                             {talent.profession && <span className="text-[10px] uppercase text-fl-primary tracking-wider">{talent.profession}</span>}
                         </div>
                     </div>
@@ -36,7 +36,7 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
                 <div className="p-4 space-y-3">
                     <h4 className="text-[10px] uppercase font-bold text-fl-primary tracking-widest mb-2">Naučené úrovně</h4>
                     {fullTalent && fullTalent.ranks.slice(0, talent.rank).map((rank, idx) => (
-                        <div key={rank.rank} className="flex gap-3 text-sm p-3 rounded bg-[var(--fl-card)] border border-fl-paper shadow-sm">
+                        <div key={rank.rank} className="flex gap-3 text-sm p-3 rounded bg-fl-card border border-fl-paper shadow-sm">
                             <div className="min-w-[28px] h-7 flex items-center justify-center bg-fl-primary text-white font-bold rounded-full text-xs shadow-sm">
                                 {rank.rank}
                             </div>

@@ -22,7 +22,7 @@ const AttributeBox = ({ label, value, onChange, onRoll, icon: Icon }) => (
                 <label className="text-[9px] text-fl-primary uppercase block mb-0.5">Teď</label>
                 <input
                     type="number" autoComplete="off"
-                    className="w-full text-center text-xl font-bold border-b border-fl-border focus:border-fl-primary bg-transparent focus:outline-none text-red-800"
+                    className="w-full text-center text-xl font-bold border-b border-fl-border focus:border-fl-primary bg-transparent focus:outline-none text-red-800 dark:text-red-400"
                     value={value.current || ''}
                     onChange={(e) => onChange({ ...value, current: parseInt(e.target.value) || 0 })}
                 />
@@ -51,23 +51,23 @@ const SheetAttributes = ({ char, updateField, onRoll, innerRef }) => {
                         { id: 'sleepy', label: 'Ospalost' }, { id: 'cold', label: 'Chlad' }
                     ].map(cond => (
                         <label key={cond.id} className="flex flex-col items-center cursor-pointer group">
-                            <div className={`w-6 h-6 border-2 rounded-sm flex items-center justify-center mb-1 transition-colors ${char.conditions[cond.id] ? 'border-red-700 bg-red-700 text-white' : 'border-fl-primary bg-[var(--fl-card)]'}`}>
+                            <div className={`w-6 h-6 border-2 rounded-sm flex items-center justify-center mb-1 transition-colors ${char.conditions[cond.id] ? 'border-red-700 bg-red-700 text-white' : 'border-fl-primary bg-fl-card'}`}>
                                 {char.conditions[cond.id] && <CheckCircle size={16} />}
                             </div>
                             <input type="checkbox" className="hidden" checked={char.conditions[cond.id]} onChange={(e) => updateField(`conditions.${cond.id}`, e.target.checked)} />
-                            <span className={`text-[9px] font-bold uppercase ${char.conditions[cond.id] ? 'text-red-700' : 'text-fl-text-muted'}`}>{cond.label}</span>
+                            <span className={`text-[9px] font-bold uppercase ${char.conditions[cond.id] ? 'text-red-700 dark:text-red-400' : 'text-fl-text-muted'}`}>{cond.label}</span>
                         </label>
                     ))}
                 </div>
             </Card>
 
         <section className="grid grid-cols-2 gap-4 mt-4">
-            <div className="border-2 border-fl-surface p-3 bg-[var(--fl-card)] text-center relative rounded-sm shadow-sm">
+            <div className="border-2 border-fl-border p-3 bg-fl-card text-center relative rounded-sm shadow-sm">
                 <div className="absolute top-1 left-1 right-1 h-[1px] bg-fl-surface/10"></div>
                 <label className="block text-[10px] font-bold uppercase text-fl-primary mb-1">Vůle</label>
                 <input type="number" autoComplete="off" value={char.willpower || ''} onChange={e => updateField('willpower', parseInt(e.target.value))} className="w-full text-center text-4xl font-bold bg-transparent outline-none font-serif text-fl-surface" />
             </div>
-            <div className="border-2 border-fl-surface p-3 bg-[var(--fl-card)] text-center relative rounded-sm shadow-sm">
+            <div className="border-2 border-fl-border p-3 bg-fl-card text-center relative rounded-sm shadow-sm">
                 <div className="absolute top-1 left-1 right-1 h-[1px] bg-fl-surface/10"></div>
                 <label className="block text-[10px] font-bold uppercase text-fl-primary mb-1">Zkušenosti</label>
                 <input type="number" autoComplete="off" value={char.experience || ''} onChange={e => updateField('experience', parseInt(e.target.value))} className="w-full text-center text-4xl font-bold bg-transparent outline-none font-serif text-fl-surface" />

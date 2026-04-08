@@ -103,9 +103,9 @@ const WeatherSection = () => {
                     {/* QUARTER DAY */}
                     <div className="flex items-center gap-4">
                         <div className={`flex items-center gap-2 px-4 py-2 rounded border-2 font-bold uppercase tracking-wider text-sm transition-colors
-              ${currentQuarterDay.id === 'day' ? 'bg-yellow-100 border-yellow-300 text-yellow-800' :
-                                currentQuarterDay.id === 'night' ? 'bg-indigo-900 border-indigo-700 text-indigo-100' :
-                                    'bg-orange-100 border-orange-300 text-orange-800'}`}>
+              ${currentQuarterDay.id === 'day' ? 'bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700 text-yellow-800 dark:text-yellow-300' :
+                                currentQuarterDay.id === 'night' ? 'bg-indigo-900 dark:bg-indigo-950 border-indigo-700 text-indigo-100' :
+                                    'bg-orange-100 dark:bg-orange-900/30 border-orange-300 dark:border-orange-700 text-orange-800 dark:text-orange-300'}`}>
                             {currentQuarterDay.id === 'day' ? <Sun size={18} /> :
                                 currentQuarterDay.id === 'night' ? <Moon size={18} /> :
                                     currentQuarterDay.id === 'morning' ? <Sunrise size={18} /> : <Sunset size={18} />}
@@ -114,7 +114,7 @@ const WeatherSection = () => {
 
                         <button
                             onClick={nextQuarterDay}
-                            className="bg-fl-surface text-fl-paper px-3 py-2 rounded hover:bg-fl-surface-hover transition-colors font-bold text-xs uppercase"
+                            className="bg-fl-nav text-white px-3 py-2 rounded hover:bg-fl-nav-hover transition-colors font-bold text-xs uppercase"
                         >
                             Další čtvrt-den
                         </button>
@@ -181,7 +181,7 @@ const WeatherSection = () => {
                 </Card>
 
                 {/* TEMPERATURE */}
-                <Card className={`flex flex-col ${currentTempGrade === 1 ? 'border-blue-200 bg-blue-50/50' : currentTempGrade >= 5 ? 'border-red-200 bg-red-50/50' : ''}`}>
+                <Card className={`flex flex-col ${currentTempGrade === 1 ? 'border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-950/30' : currentTempGrade >= 5 ? 'border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-950/30' : ''}`}>
                     <SectionHeader title="Teplota" icon={Thermometer} />
 
                     <div className="flex-1 flex flex-col justify-center items-center py-6">
@@ -212,7 +212,7 @@ const WeatherSection = () => {
                             </div>
 
                             {tempEffect.effect && (
-                                <div className="mt-4 mx-4 p-3 bg-red-100 border border-red-200 rounded text-red-800 text-sm font-bold flex items-center justify-center text-center">
+                                <div className="mt-4 mx-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded text-red-800 dark:text-red-300 text-sm font-bold flex items-center justify-center text-center">
                                     ⚠️ {tempEffect.effect}
                                 </div>
                             )}

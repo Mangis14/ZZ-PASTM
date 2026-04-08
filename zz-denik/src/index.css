@@ -2,32 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════════
+   LIGHT MODE — "Starý Pergamen"
+   Warm parchment & leather tones
+   ═══════════════════════════════════════════════════ */
 :root {
-  --fl-bg: #1a1816;
-  --fl-surface: #2c2925;
-  --fl-surface-hover: #4a453e;
-  --fl-text-muted: #5c554b;
-  --fl-primary: #8b7355;
-  --fl-primary-hover: #a08665;
-  --fl-border: #d4c5a9;
-  --fl-paper: #e6dfcc;
-  --fl-paper-light: #f5f2e9;
-  --fl-paper-bright: #fdfbf7;
-  --fl-card: #ffffff;
+  --fl-bg: #e8dece;           /* Tan sand — accent areas, tab bars */
+  --fl-surface: #2c2419;      /* Dark espresso — primary text */
+  --fl-surface-hover: #4a3d2e; /* Dark brown — secondary text */
+  --fl-text-muted: #7a6d5e;   /* Medium brown — muted text */
+  --fl-primary: #9c6b3c;      /* Rich amber leather — main accent */
+  --fl-primary-hover: #b38050; /* Warmer amber — hover accent */
+  --fl-border: #cdbfa6;       /* Sandy tan — borders */
+  --fl-paper: #e0d5c2;        /* Medium parchment */
+  --fl-paper-light: #ede5d5;  /* Light parchment */
+  --fl-paper-bright: #f7f1e6; /* Lightest cream — body bg */
+  --fl-card: #fdfaf3;         /* Warm white — card surfaces */
+  --fl-nav: #2e2318;          /* Dark leather — sidebars, nav */
+  --fl-nav-hover: #443628;    /* Lighter leather — hover on nav */
 }
 
+/* ═══════════════════════════════════════════════════
+   DARK MODE — "Mesačná Zrúcanina"
+   Deep midnight blue + golden amber accents
+   ═══════════════════════════════════════════════════ */
 .dark {
-  --fl-bg: #000000;
-  --fl-surface: #ffffff; /* Ultra contrast pre texty */
-  --fl-surface-hover: #e0d5c1;
-  --fl-text-muted: #a3917a; /* Svetlejsia pre lepsiu citatelnost textov */
-  --fl-primary: #d6b685; /* Žiarivejšia primárna v tme */
-  --fl-primary-hover: #eed3a6;
-  --fl-border: #332d26;
-  --fl-paper: #1c1a17;
-  --fl-paper-light: #0f0d0c;
-  --fl-paper-bright: #000000; /* OLED black background */
-  --fl-card: #100f0e; /* Tmavá karta na čiernom pozadí */
+  --fl-bg: #0d1118;           /* Deep midnight — accent areas */
+  --fl-surface: #e4ddd0;      /* Warm cream — primary text */
+  --fl-surface-hover: #b8ad9c; /* Muted cream — secondary text */
+  --fl-text-muted: #6b6358;   /* Warm gray — muted text */
+  --fl-primary: #c99a44;      /* Golden amber — main accent */
+  --fl-primary-hover: #ddb055; /* Bright gold — hover accent */
+  --fl-border: #252c38;       /* Dark blue-gray — borders */
+  --fl-paper: #151a24;        /* Dark indigo — surfaces */
+  --fl-paper-light: #111620;  /* Deeper indigo — subtle bg */
+  --fl-paper-bright: #0d1118; /* Darkest — body bg (matches bg) */
+  --fl-card: #1a2030;         /* Slate blue — card surfaces */
+  --fl-nav: #0a0e16;          /* Deepest navy — sidebars, nav */
+  --fl-nav-hover: #1e2538;    /* Blue slate — hover on nav */
 }
 
 body {
@@ -38,4 +50,23 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+}
+
+/* Swipe transition animations */
+@keyframes slideInRight {
+    0% { opacity: 0.3; transform: translateX(60px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+    0% { opacity: 0.3; transform: translateX(-60px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+.animate-slide-in-right {
+    animation: slideInRight 0.25s ease-out forwards;
+}
+
+.animate-slide-in-left {
+    animation: slideInLeft 0.25s ease-out forwards;
 }

@@ -325,8 +325,12 @@ export const TALENTS_DATA = {
         {
             id: 'berserker',
             name: 'Berserker',
-            description: 'Když poprvé utrpíš vyřazení, můžeš propadnout pudovému běsnění. Až v příštím kole přijdeš na řadu doplníš si tolik bodů vlastností, která ti klesla na nulu, kolik máš stupňů v talentu BERSERKR. Musíš hned napadnout nejbližšího protivníka útokem nablízko a pokračovat v boji, dokud tě nevyřadí nebo dokud nebudou vyřazeni všichni nepřátelé v dohledu. Po dobu běsnění se na tebe nedá používat MANIPULACE a všechny tvoje útoky v boji zblízka způsobí 1 bod zranění navíc.',
-            ranks: []
+            description: 'Když poprvé utrpíš vyřazení, můžeš propadnout pudovému běsnění. Musíš hned napadnout nejbližšího protivníka útokem nablízko a pokračovat v boji, dokud tě nevyřadí nebo dokud nebudou vyřazeni všichni nepřátelé v dohledu. Po dobu běsnění se na tebe nedá používat MANIPULACE a všechny tvoje útoky v boji zblízka způsobí 1 bod zranění navíc.',
+            ranks: [
+                { rank: 1, description: 'Při vyřazení doplníš 1 bod vlastnosti, která ti klesla na nulu.' },
+                { rank: 2, description: 'Při vyřazení doplníš 2 body vlastnosti, která ti klesla na nulu.' },
+                { rank: 3, description: 'Při vyřazení doplníš 3 body vlastnosti, která ti klesla na nulu.' }
+            ]
         },
         {
             id: 'bojovnik_s_holi',

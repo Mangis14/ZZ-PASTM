@@ -104,7 +104,6 @@ const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToS
 
     return (
         <>
-            <div style={{ paddingTop: 'calc(env(safe-area-inset-top) + 200px)' }}></div>
             <Navigation scrollToSection={scrollToSection} />
 
             <SheetBasicInfo char={char} updateField={updateField} />
