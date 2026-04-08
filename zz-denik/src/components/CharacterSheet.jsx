@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flame, Star, Scroll } from 'lucide-react';
 import Card from './common/Card';
 import SectionHeader from './common/SectionHeader';
@@ -20,9 +20,15 @@ import SpellList from './spells/SpellList';
 import SpellPicker from './spells/SpellPicker';
 import { TALENTS_DATA } from '../data/talents_data';
 
-const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToSection, setCurrentView }) => {
+const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToSection, setCurrentView, onModalStateChange }) => {
     const [showTalentPicker, setShowTalentPicker] = useState(false);
     const [showSpellPicker, setShowSpellPicker] = useState(false);
+    const [isTalentDetailOpen, setIsTalentDetailOpen] = useState(false);
+    const [isSpellDetailOpen, setIsSpellDetailOpen] = useState(false);
+
+    useEffect(() => {
+        onModalStateChange?.(showTalentPicker || showSpellPicker || isTalentDetailOpen || isSpellDetailOpen);
+    }, [showTalentPicker, showSpellPicker, isTalentDetailOpen, isSpellDetailOpen, onModalStateChange]);
 
     // --- TALENT HANDLERS ---
     const handleAddTalent = (talent) => {
@@ -138,6 +144,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToS
                     onUpgrade={handleUpgradeTalent}
                     onDowngrade={handleDowngradeTalent}
                     onShowFullTalent={handleShowFullTalent}
+                    onDetailOpenChange={setIsTalentDetailOpen}
                 />
                 {showTalentPicker && (
                     <TalentPicker
@@ -156,6 +163,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToS
                     onRemove={handleRemoveSpell}
                     onOpenPicker={() => setShowSpellPicker(true)}
                     onShowFullSpell={handleShowFullSpell}
+                    onDetailOpenChange={setIsSpellDetailOpen}
                 />
                 {showSpellPicker && (
                     <SpellPicker

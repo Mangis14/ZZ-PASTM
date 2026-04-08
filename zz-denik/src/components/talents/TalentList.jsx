@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { X, ChevronDown, ChevronUp, Star } from 'lucide-react';
 import TalentDetailPopup from './TalentDetailPopup';
 
-const TalentList = ({ talents, onRemove, onOpenPicker, onUpgrade, onDowngrade, onShowFullTalent }) => {
-    const [selectedTalent, setSelectedTalent] = useState(null);
+const TalentList = ({ talents, onRemove, onOpenPicker, onUpgrade, onDowngrade, onShowFullTalent, onDetailOpenChange }) => {
+    const [selectedTalentId, setSelectedTalentId] = useState(null);
+
+    const selectedTalent = useMemo(() => {
+        if (!selectedTalentId) return null;
+        return talents.find(talent => talent.id === selectedTalentId) || null;
+    }, [selectedTalentId, talents]);
+
+    useEffect(() => {
+        onDetailOpenChange?.(Boolean(selectedTalent));
+    }, [selectedTalent, onDetailOpenChange]);
 
     const handleUpgrade = (talent) => {
         onUpgrade(talent);
-        setSelectedTalent(null);
     };
 
     const handleDowngrade = (talent) => {
         onDowngrade(talent);
-        setSelectedTalent(null);
     };
 
     return (
@@ -22,7 +29,7 @@ const TalentList = ({ talents, onRemove, onOpenPicker, onUpgrade, onDowngrade, o
                 <div
                     key={`${talent.id}-${index}`}
                     className="bg-fl-paper-bright border border-fl-paper rounded relative group cursor-pointer hover:border-fl-primary/50 transition-colors"
-                    onClick={() => setSelectedTalent({ ...talent, _index: index })}
+                    onClick={() => setSelectedTalentId(talent.id)}
                 >
                     <div className="flex justify-between items-center p-3">
                         <div className="flex items-center gap-3">
@@ -69,11 +76,11 @@ const TalentList = ({ talents, onRemove, onOpenPicker, onUpgrade, onDowngrade, o
             {selectedTalent && (
                 <TalentDetailPopup
                     talent={selectedTalent}
-                    onClose={() => setSelectedTalent(null)}
+                    onClose={() => setSelectedTalentId(null)}
                     onUpgrade={handleUpgrade}
                     onDowngrade={handleDowngrade}
                     onShowFull={(t) => {
-                        setSelectedTalent(null);
+                        setSelectedTalentId(null);
                         onShowFullTalent(t);
                     }}
                 />

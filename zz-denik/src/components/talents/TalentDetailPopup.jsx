@@ -35,14 +35,33 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
                 {/* Learned Ranks */}
                 <div className="p-4 space-y-3">
                     <h4 className="text-[10px] uppercase font-bold text-fl-primary tracking-widest mb-2">Naučené úrovně</h4>
-                    {fullTalent && fullTalent.ranks.slice(0, talent.rank).map((rank, idx) => (
-                        <div key={rank.rank} className="flex gap-3 text-sm p-3 rounded bg-fl-card border border-fl-paper shadow-sm">
-                            <div className="min-w-[28px] h-7 flex items-center justify-center bg-fl-primary text-white font-bold rounded-full text-xs shadow-sm">
-                                {rank.rank}
+                    {fullTalent && fullTalent.ranks.map((rank) => {
+                        const isLearned = rank.rank <= talent.rank;
+
+                        return (
+                            <div
+                                key={rank.rank}
+                                className={`flex gap-3 text-sm p-3 rounded border shadow-sm transition-opacity ${
+                                    isLearned
+                                        ? 'bg-fl-card border-fl-paper'
+                                        : 'bg-fl-card/70 border-fl-paper opacity-70'
+                                }`}
+                            >
+                                <div
+                                    className={`min-w-[28px] h-7 flex items-center justify-center font-bold rounded-full text-xs shadow-sm ${
+                                        isLearned
+                                            ? 'bg-fl-primary text-white'
+                                            : 'bg-fl-paper text-fl-text-muted'
+                                    }`}
+                                >
+                                    {rank.rank}
+                                </div>
+                                <p className={`leading-relaxed flex-1 ${isLearned ? 'text-fl-surface-hover' : 'text-fl-text-muted'}`}>
+                                    {rank.description}
+                                </p>
                             </div>
-                            <p className="text-fl-surface-hover leading-relaxed flex-1">{rank.description}</p>
-                        </div>
-                    ))}
+                        );
+                    })}
 
                     {/* If no full data available, show the single description */}
                     {!fullTalent && (

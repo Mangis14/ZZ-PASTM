@@ -15,6 +15,7 @@ import CriticalInjuryModal from './CriticalInjuryModal';
 import Header from './components/layout/Header';
 import CharacterSheet from './components/CharacterSheet';
 import { useSwipe } from './utils/useSwipe';
+import { TALENTS_DATA } from './data/talents_data';
 
 // --- DEFINÍCIE A DÁTA (MUSIA BYŤ NA ZAČIATKU) ---
 
@@ -56,6 +57,8 @@ const defaultCharacter = {
   notes: ''
 };
 
+const ALL_TALENTS = [...(TALENTS_DATA.profession || []), ...(TALENTS_DATA.general || [])];
+
 // --- HLAVNÝ KOMPONENT APP ---
 
 const App = () => {
@@ -68,6 +71,7 @@ const App = () => {
   const [showDiceModal, setShowDiceModal] = useState(false);
   const [initialDice, setInitialDice] = useState(null);
   const [showCritModal, setShowCritModal] = useState(false);
+  const [isSheetModalOpen, setIsSheetModalOpen] = useState(false);
   const [currentView, setCurrentViewRaw] = useState('sheet');
   const [viewDirection, setViewDirection] = useState(null); // 'left' | 'right' | null // 'sheet', 'zbozi', 'talents', 'spells', 'weather'
 
@@ -108,6 +112,8 @@ const App = () => {
     setTimeout(() => setViewDirection(null), 300);
   };
 
+  const isSwipeLocked = showMenu || showDiceModal || showCritModal || isSheetModalOpen;
+
   const { onTouchStart, onTouchMove, onTouchEnd, swipeOffset, isTransitioning, slideDirection } = useSwipe({
     onSwipedLeft: () => {
       const idx = views.indexOf(currentView);
@@ -116,7 +122,8 @@ const App = () => {
     onSwipedRight: () => {
       const idx = views.indexOf(currentView);
       if (idx !== -1 && idx > 0) setCurrentView(views[idx - 1]);
-    }
+    },
+    disabled: isSwipeLocked
   });
 
   const swipeHandlers = { onTouchStart, onTouchMove, onTouchEnd };
@@ -263,6 +270,85 @@ const App = () => {
     });
   };
 
+  const learnTalent = (talentDefinition) => {
+    setChar(prev => {
+      const talents = Array.isArray(prev.talents) ? prev.talents : [];
+      const existingTalent = talents.find(talent => talent.id === talentDefinition.id);
+      const fullTalent = ALL_TALENTS.find(talent => talent.id === talentDefinition.id) || talentDefinition;
+      const maxRank = fullTalent?.ranks?.length || existingTalent?.rank || 1;
+
+      if (!existingTalent) {
+        const firstRank = fullTalent?.ranks?.[0];
+        showToast('Pridané do denníka!');
+        return {
+          ...prev,
+          talents: [
+            ...talents,
+            {
+              id: fullTalent.id,
+              name: fullTalent.name,
+              rank: 1,
+              description: firstRank?.description || fullTalent.description || '',
+              profession: fullTalent.profession
+            }
+          ]
+        };
+      }
+
+      if (existingTalent.rank >= maxRank) {
+        showToast('Tento talent už ovládaš naplno.');
+        return prev;
+      }
+
+      const nextRank = existingTalent.rank + 1;
+      const nextRankData = fullTalent?.ranks?.[nextRank - 1];
+
+      showToast('Úroveň talentu zvýšená!');
+      return {
+        ...prev,
+        talents: talents.map(talent =>
+          talent.id === existingTalent.id
+            ? {
+                ...talent,
+                rank: nextRank,
+                description: nextRankData?.description || talent.description,
+                profession: fullTalent.profession || talent.profession
+              }
+            : talent
+        )
+      };
+    });
+  };
+
+  const learnSpell = (spellDefinition) => {
+    setChar(prev => {
+      const spells = Array.isArray(prev.spells) ? prev.spells : [];
+
+      if (spells.some(spell => spell.id === spellDefinition.id)) {
+        showToast('Toto kúzlo už máš v denníku.');
+        return prev;
+      }
+
+      showToast('Pridané do denníka!');
+      return {
+        ...prev,
+        spells: [
+          ...spells,
+          {
+            id: spellDefinition.id,
+            name: spellDefinition.name,
+            rank: spellDefinition.rank,
+            range: spellDefinition.range,
+            duration: spellDefinition.duration,
+            ingredient: spellDefinition.ingredient,
+            description: spellDefinition.description,
+            school: spellDefinition.school || spellDefinition._school
+          }
+        ]
+      };
+    });
+  };
+
   const updateDeep = (section, index, field, value) => {
     setChar(prev => {
       if (index === null) { // For armor, helmet, shield which are objects, not arrays
@@ -402,13 +488,14 @@ const App = () => {
             refs={refs}
             scrollToSection={scrollToSection}
             setCurrentView={setCurrentView}
+            onModalStateChange={setIsSheetModalOpen}
           />
         ) : currentView === 'zbozi' ? (
           <ZboziSection addItemToInventory={addItemToInventory} />
         ) : currentView === 'talents' ? (
-          <TalentsSection />
+          <TalentsSection char={char} onLearnTalent={learnTalent} />
         ) : currentView === 'spells' ? (
-          <SpellsSection />
+          <SpellsSection char={char} onLearnSpell={learnSpell} />
         ) : (
           <WeatherSection />
         )}

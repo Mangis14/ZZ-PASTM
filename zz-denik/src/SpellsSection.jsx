@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Flame, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, Flame, ChevronDown, ChevronUp, Plus } from 'lucide-react';
 import { SPELLS_DATA } from './data/spells_data';
 
-const SpellCard = ({ spell, isExpanded, onToggle, showSchool }) => {
+const SpellCard = ({ spell, isExpanded, onToggle, showSchool, knownSpell, onLearnSpell }) => {
     return (
         <div className="bg-fl-paper-bright border border-fl-paper rounded mb-3 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             <div
@@ -37,17 +37,43 @@ const SpellCard = ({ spell, isExpanded, onToggle, showSchool }) => {
                     <p className="text-sm text-fl-surface-hover leading-relaxed font-serif">
                         {spell.description}
                     </p>
+                    <div className="mt-4 pt-3 border-t border-fl-paper flex flex-col gap-2">
+                        {knownSpell && (
+                            <div className="text-[11px] uppercase tracking-wider text-fl-text-muted">
+                                Toto kúzlo už máš v denníku.
+                            </div>
+                        )}
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (!knownSpell && onLearnSpell) {
+                                    onLearnSpell(spell);
+                                }
+                            }}
+                            disabled={!onLearnSpell || Boolean(knownSpell)}
+                            className={`w-full py-2.5 rounded text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-2 ${
+                                knownSpell
+                                    ? 'bg-fl-paper text-fl-text-muted border border-fl-paper cursor-not-allowed'
+                                    : 'bg-fl-primary text-white hover:bg-fl-primary-hover border border-fl-primary-hover shadow-sm'
+                            }`}
+                        >
+                            <Plus size={14} />
+                            {knownSpell ? 'Už ovládaš' : 'Pridať kúzlo'}
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
     );
 };
 
-const SpellsSection = () => {
+const SpellsSection = ({ char, onLearnSpell }) => {
     const schools = Object.keys(SPELLS_DATA).filter(s => SPELLS_DATA[s].length > 0);
     const [activeTab, setActiveTab] = useState(schools[0] || 'Obecná');
     const [search, setSearch] = useState('');
     const [expanded, setExpanded] = useState({});
+    const knownSpells = Array.isArray(char?.spells) ? char.spells : [];
 
     const toggleExpand = (id) => {
         setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
@@ -128,6 +154,8 @@ const SpellsSection = () => {
                             isExpanded={!!expanded[spell.id]}
                             onToggle={() => toggleExpand(spell.id)}
                             showSchool={isSearching}
+                            knownSpell={knownSpells.find(item => item.id === spell.id)}
+                            onLearnSpell={onLearnSpell}
                         />
                     ))
                 ) : (

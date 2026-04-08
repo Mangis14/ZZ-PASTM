@@ -2,7 +2,16 @@ import React, { useState, useMemo } from 'react';
 import { Search, ChevronDown, ChevronUp, Star, Shield, Zap } from 'lucide-react';
 import { TALENTS_DATA } from './data/talents_data';
 
-const TalentCard = ({ talent, isExpanded, onToggle }) => {
+const TalentCard = ({ talent, isExpanded, onToggle, knownTalent, onLearnTalent }) => {
+    const maxRank = talent.ranks?.length || 1;
+    const isKnown = Boolean(knownTalent);
+    const isMaxRank = isKnown && knownTalent.rank >= maxRank;
+    const actionLabel = !isKnown
+        ? 'Naučiť sa talent'
+        : isMaxRank
+            ? 'Už ovládaš'
+            : `Zvýšiť úroveň (${knownTalent.rank}/${maxRank})`;
+
     return (
         <div className="bg-fl-paper-bright border border-fl-paper rounded mb-3 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             <div
@@ -42,16 +51,42 @@ const TalentCard = ({ talent, isExpanded, onToggle }) => {
                             ))}
                         </div>
                     )}
+                    <div className="mt-4 pt-3 border-t border-fl-paper flex flex-col gap-2">
+                        {isKnown && (
+                            <div className="text-[11px] uppercase tracking-wider text-fl-text-muted">
+                                Aktuálna úroveň v denníku: <span className="font-bold text-fl-primary">{knownTalent.rank}/{maxRank}</span>
+                            </div>
+                        )}
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (!isMaxRank && onLearnTalent) {
+                                    onLearnTalent(talent);
+                                }
+                            }}
+                            disabled={!onLearnTalent || isMaxRank}
+                            className={`w-full py-2.5 rounded text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-2 ${
+                                isMaxRank
+                                    ? 'bg-fl-paper text-fl-text-muted border border-fl-paper cursor-not-allowed'
+                                    : 'bg-fl-primary text-white hover:bg-fl-primary-hover border border-fl-primary-hover shadow-sm'
+                            }`}
+                        >
+                            <Zap size={14} />
+                            {actionLabel}
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
     );
 };
 
-const TalentsSection = () => {
+const TalentsSection = ({ char, onLearnTalent }) => {
     const [activeTab, setActiveTab] = useState('profession'); // 'profession' | 'general'
     const [search, setSearch] = useState('');
     const [expanded, setExpanded] = useState({});
+    const knownTalents = Array.isArray(char?.talents) ? char.talents : [];
 
     const toggleExpand = (id) => {
         setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
@@ -131,6 +166,8 @@ const TalentsSection = () => {
                             talent={talent}
                             isExpanded={expanded[talent.id]}
                             onToggle={() => toggleExpand(talent.id)}
+                            knownTalent={knownTalents.find(item => item.id === talent.id)}
+                            onLearnTalent={onLearnTalent}
                         />
                     ))
                 ) : (

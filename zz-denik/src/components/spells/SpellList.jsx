@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Trash2, Flame, Info, ChevronDown, ChevronUp, X } from 'lucide-react';
 
 const SpellDetailPopup = ({ spell, onClose, onShowFull }) => {
@@ -60,8 +60,12 @@ const SpellDetailPopup = ({ spell, onClose, onShowFull }) => {
     );
 };
 
-const SpellList = ({ spells, onRemove, onOpenPicker, onShowFullSpell }) => {
+const SpellList = ({ spells, onRemove, onOpenPicker, onShowFullSpell, onDetailOpenChange }) => {
     const [selectedSpell, setSelectedSpell] = useState(null);
+
+    useEffect(() => {
+        onDetailOpenChange?.(Boolean(selectedSpell));
+    }, [selectedSpell, onDetailOpenChange]);
 
     return (
         <div className="space-y-3">

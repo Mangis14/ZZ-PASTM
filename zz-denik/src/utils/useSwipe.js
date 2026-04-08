@@ -1,6 +1,6 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
-export const useSwipe = ({ onSwipedLeft, onSwipedRight }) => {
+export const useSwipe = ({ onSwipedLeft, onSwipedRight, disabled = false }) => {
     const [touchStart, setTouchStart] = useState(null);
     const [touchEnd, setTouchEnd] = useState(null);
     const [swipeOffset, setSwipeOffset] = useState(0);
@@ -13,24 +13,24 @@ export const useSwipe = ({ onSwipedLeft, onSwipedRight }) => {
     const maxDrag = 120;
 
     const onTouchStart = useCallback((e) => {
-        if (isTransitioning) return;
+        if (disabled || isTransitioning) return;
         setTouchEnd(null);
         setTouchStart(e.targetTouches[0].clientX);
         setSwipeOffset(0);
-    }, [isTransitioning]);
+    }, [disabled, isTransitioning]);
 
     const onTouchMove = useCallback((e) => {
-        if (isTransitioning || touchStart === null) return;
+        if (disabled || isTransitioning || touchStart === null) return;
         const currentX = e.targetTouches[0].clientX;
         setTouchEnd(currentX);
         // Calculate drag offset (capped)
         const rawOffset = currentX - touchStart;
         const capped = Math.sign(rawOffset) * Math.min(Math.abs(rawOffset), maxDrag);
         setSwipeOffset(capped * 0.4); // Dampen the visual effect
-    }, [isTransitioning, touchStart]);
+    }, [disabled, isTransitioning, touchStart]);
 
     const onTouchEnd = useCallback(() => {
-        if (!touchStart || !touchEnd || isTransitioning) return;
+        if (disabled || !touchStart || !touchEnd || isTransitioning) return;
         const distance = touchStart - touchEnd;
         const isLeftSwipe = distance > minSwipeDistance;
         const isRightSwipe = distance < -minSwipeDistance;
@@ -57,7 +57,7 @@ export const useSwipe = ({ onSwipedLeft, onSwipedRight }) => {
 
         setTouchStart(null);
         setTouchEnd(null);
-    }, [touchStart, touchEnd, isTransitioning, onSwipedLeft, onSwipedRight]);
+    }, [disabled, touchStart, touchEnd, isTransitioning, onSwipedLeft, onSwipedRight]);
 
     return {
         onTouchStart,
