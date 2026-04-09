@@ -475,7 +475,7 @@ const App = () => {
         {...swipeHandlers}
         className="max-w-3xl mx-auto px-4 space-y-6 min-h-[80vh]"
         style={{
-          paddingTop: 'calc(env(safe-area-inset-top) + 144px)',
+          paddingTop: 'calc(env(safe-area-inset-top) + 84px)',
           paddingBottom: 'calc(env(safe-area-inset-bottom) + 92px)',
           touchAction: 'pan-y'
         }}
