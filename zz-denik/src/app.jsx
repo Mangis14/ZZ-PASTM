@@ -13,6 +13,7 @@ import DiceRollerModal from './DiceRollerModal';
 import CriticalInjuryModal from './CriticalInjuryModal';
 
 import Header from './components/layout/Header';
+import BottomNav from './components/layout/BottomNav';
 import CharacterSheet from './components/CharacterSheet';
 import { useSwipe } from './utils/useSwipe';
 import { TALENTS_DATA } from './data/talents_data';
@@ -362,9 +363,20 @@ const App = () => {
 
   const scrollToSection = (key) => {
     setCurrentView('sheet');
-    setTimeout(() => {
-      refs[key]?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+    window.setTimeout(() => {
+      const target = refs[key]?.current;
+      if (!target) return;
+
+      const headerHeight = document.querySelector('[data-mobile-header]')?.getBoundingClientRect().height || 0;
+      const sheetNavHeight = document.querySelector('[data-sheet-nav]')?.getBoundingClientRect().height || 0;
+      const offset = headerHeight + sheetNavHeight + 12;
+      const absoluteTop = target.getBoundingClientRect().top + window.scrollY - offset;
+
+      window.scrollTo({
+        top: Math.max(0, absoluteTop),
+        behavior: 'smooth'
+      });
+    }, currentView === 'sheet' ? 30 : 180);
   };
 
   const totalWeight = useMemo(() => {
@@ -385,7 +397,7 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-fl-bg text-fl-surface font-sans selection:bg-fl-primary selection:text-white pb-20">
+    <div className="min-h-screen bg-fl-bg text-fl-surface font-sans selection:bg-fl-primary selection:text-white">
       {toast && <Toaster message={toast} />}
       {showDiceModal && <DiceRollerModal initialRoll={initialDice} onClose={() => setShowDiceModal(false)} />}
       {showCritModal && <CriticalInjuryModal onClose={() => setShowCritModal(false)} />}
@@ -459,7 +471,15 @@ const App = () => {
       )}
 
       {/* MAIN CONTENT */}
-      <main {...swipeHandlers} className="max-w-3xl mx-auto px-4 space-y-6 min-h-[80vh]" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 144px)' }}>
+      <main
+        {...swipeHandlers}
+        className="max-w-3xl mx-auto px-4 space-y-6 min-h-[80vh]"
+        style={{
+          paddingTop: 'calc(env(safe-area-inset-top) + 144px)',
+          paddingBottom: 'calc(env(safe-area-inset-bottom) + 92px)',
+          touchAction: 'pan-y'
+        }}
+      >
         <div
           key={currentView}
           className={`${
@@ -501,6 +521,8 @@ const App = () => {
         )}
         </div>
       </main>
+
+      <BottomNav activeSection={currentView} onSectionChange={setCurrentView} />
     </div>
   );
 };

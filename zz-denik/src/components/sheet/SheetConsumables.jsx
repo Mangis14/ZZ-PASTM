@@ -4,24 +4,32 @@ import Card from '../common/Card';
 import SectionHeader from '../common/SectionHeader';
 
 const DICE_VALUES = [0, 'K6', 'K8', 'K10', 'K12'];
+const RESOURCE_CONFIG = [
+    { label: 'Jídlo', key: 'food', icon: Utensils },
+    { label: 'Voda', key: 'water', icon: Droplets },
+    { label: 'Šípy', key: 'arrows', icon: Target },
+    { label: 'Pochodně', key: 'torches', icon: Flame },
+    { label: 'Alkohol', key: 'alcohol', icon: Wine },
+    { label: 'Tabák', key: 'tobacco', icon: Cigarette }
+];
 
 const SheetConsumables = ({ char, updateField, innerRef }) => {
     const cycleUp = (key) => {
         const current = char.consumables[key] || 0;
         const idx = DICE_VALUES.indexOf(current);
-        if (idx === -1 || idx >= DICE_VALUES.length - 1) return; // Already at max
+        if (idx === -1 || idx >= DICE_VALUES.length - 1) return;
         updateField(`consumables.${key}`, DICE_VALUES[idx + 1]);
     };
 
     const cycleDown = (key) => {
         const current = char.consumables[key] || 0;
         const idx = DICE_VALUES.indexOf(current);
-        if (idx <= 0) return; // Already at 0
+        if (idx <= 0) return;
         updateField(`consumables.${key}`, DICE_VALUES[idx - 1]);
     };
 
     const getDisplayValue = (val) => {
-        if (!val || val === 0) return '—';
+        if (!val || val === 0) return 'Prázdné';
         return val;
     };
 
@@ -37,34 +45,59 @@ const SheetConsumables = ({ char, updateField, innerRef }) => {
     return (
         <Card innerRef={innerRef}>
             <SectionHeader title="Zdroje" icon={Flame} />
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {[
-                    { label: 'Jídlo', key: 'food', icon: Utensils },
-                    { label: 'Voda', key: 'water', icon: Droplets },
-                    { label: 'Šípy', key: 'arrows', icon: Target },
-                    { label: 'Pochodně', key: 'torches', icon: Flame },
-                    { label: 'Alkohol', key: 'alcohol', icon: Wine },
-                    { label: 'Tabák', key: 'tobacco', icon: Cigarette }
-                ].map(({ label, key, icon: Icon }) => {
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {RESOURCE_CONFIG.map(({ label, key, icon: Icon }) => {
                     const val = char.consumables[key];
+                    const isEmpty = !val || val === 0;
+                    const isMax = val === DICE_VALUES[DICE_VALUES.length - 1];
+
                     return (
-                        <div key={key} className="flex items-center justify-between bg-fl-paper-bright p-2 rounded border border-fl-paper">
+                        <div
+                            key={key}
+                            className="rounded-2xl border border-fl-paper bg-fl-paper-bright p-3 shadow-sm"
+                        >
                             <div className="flex items-center gap-2">
-                                <Icon size={16} className="text-fl-primary" />
-                                <span className="text-xs font-bold uppercase text-fl-text-muted">{label}</span>
+                                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-fl-paper text-fl-primary">
+                                    <Icon size={18} />
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-[11px] font-bold uppercase tracking-wider text-fl-text-muted">{label}</p>
+                                    <p className={`text-lg font-black leading-none ${getColorClass(val)}`}>
+                                        {getDisplayValue(val)}
+                                    </p>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-1">
+
+                            <div className="mt-3 grid grid-cols-2 gap-2">
                                 <button
+                                    type="button"
                                     onClick={() => cycleDown(key)}
-                                    className="w-7 h-7 flex items-center justify-center text-fl-border hover:text-fl-primary hover:bg-fl-paper rounded-full font-bold text-lg transition-colors"
-                                >−</button>
-                                <span className={`font-mono font-bold text-sm w-10 text-center ${getColorClass(val)}`}>
-                                    {getDisplayValue(val)}
-                                </span>
+                                    disabled={isEmpty}
+                                    aria-label={`Znížit zdroj ${label}`}
+                                    className={`flex h-11 items-center justify-center gap-2 rounded-xl border text-sm font-bold transition-colors ${
+                                        isEmpty
+                                            ? 'border-fl-border bg-fl-paper text-fl-text-muted opacity-50'
+                                            : 'border-fl-border bg-fl-paper text-fl-surface hover:border-fl-primary hover:text-fl-primary'
+                                    }`}
+                                >
+                                    <span className="text-lg leading-none">-</span>
+                                    <span>Ubrať</span>
+                                </button>
+
                                 <button
+                                    type="button"
                                     onClick={() => cycleUp(key)}
-                                    className="w-7 h-7 flex items-center justify-center text-fl-border hover:text-fl-primary hover:bg-fl-paper rounded-full font-bold text-lg transition-colors"
-                                >+</button>
+                                    disabled={isMax}
+                                    aria-label={`Zvýšit zdroj ${label}`}
+                                    className={`flex h-11 items-center justify-center gap-2 rounded-xl border text-sm font-bold transition-colors ${
+                                        isMax
+                                            ? 'border-fl-border bg-fl-paper text-fl-text-muted opacity-50'
+                                            : 'border-fl-primary bg-fl-primary/10 text-fl-primary hover:bg-fl-primary hover:text-white'
+                                    }`}
+                                >
+                                    <span className="text-lg leading-none">+</span>
+                                    <span>Pridať</span>
+                                </button>
                             </div>
                         </div>
                     );

@@ -33,6 +33,7 @@ const Header = ({
 
     return (
         <header
+            data-mobile-header
             className="fixed top-0 left-0 right-0 bg-fl-card text-fl-surface z-40 shadow-xl border-b border-fl-primary transition-all duration-200"
             style={{ paddingTop: 'calc(env(safe-area-inset-top) + 24px)' }}
         >
@@ -75,7 +76,7 @@ const Header = ({
             </div>
 
             {/* TOP NAVIGATION */}
-            <div className="max-w-3xl mx-auto flex border-t border-fl-border bg-fl-paper-light">
+            <div className="hidden max-w-3xl mx-auto border-t border-fl-border bg-fl-paper-light sm:flex">
                 <TabButton label="Deník" icon={Scroll} active={currentView === 'sheet'} onClick={() => setCurrentView('sheet')} />
                 <TabButton label="Zboží" icon={ShoppingBag} active={currentView === 'zbozi'} onClick={() => setCurrentView('zbozi')} />
                 <TabButton label="Talenty" icon={Star} active={currentView === 'talents'} onClick={() => setCurrentView('talents')} />
