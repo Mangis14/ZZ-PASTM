@@ -27,7 +27,7 @@ const Navigation = ({ scrollToSection }) => {
         <div
             data-sheet-nav
             className="sticky z-40 -mx-4 px-4 bg-fl-nav border-b border-fl-primary shadow-md transition-all duration-300"
-            style={{ top: 'calc(env(safe-area-inset-top) + 144px)' }}
+            style={{ top: 'calc(env(safe-area-inset-top) + 84px)' }}
         >
             <nav
                 className={`max-w-3xl mx-auto overflow-x-auto flex gap-1 ${isCompact ? 'py-1' : 'py-2'} scrollbar-hide`}
