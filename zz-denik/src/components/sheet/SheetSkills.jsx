@@ -4,28 +4,33 @@ import Card from '../common/Card';
 import SectionHeader from '../common/SectionHeader';
 
 const SkillRow = ({ label, value, onChange, onRoll, attr }) => (
-    <div className="flex justify-between items-end border-b border-fl-border pb-1 group hover:bg-fl-paper-bright">
-        <span 
-            className="text-sm font-bold text-fl-surface-hover pb-1 cursor-pointer hover:text-fl-primary transition-colors" 
-            onClick={onRoll} 
+    <div className="flex justify-between items-center border-b border-fl-border pb-1 hover:bg-fl-paper-bright">
+        <span
+            className="text-sm font-bold text-fl-surface-hover cursor-pointer hover:text-fl-primary transition-colors flex-1 pr-2 py-1"
+            onClick={onRoll}
             title={`Hodit na dovednost ${label}`}
         >
             {label} <span className="text-[10px] font-normal text-fl-primary ml-1">({attr})</span>
         </span>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 shrink-0">
             <button
+                type="button"
                 onClick={() => onChange(Math.max(0, (value || 0) - 1))}
-                className="text-fl-border hover:text-fl-primary px-1 font-bold opacity-0 group-hover:opacity-100 transition-opacity"
-            >-</button>
-            <input
-                type="number" autoComplete="off"
-                className="w-8 text-center bg-transparent font-serif font-bold text-lg border-none focus:outline-none focus:ring-0 text-fl-surface p-0"
-                value={value || ''}
-                onChange={(e) => onChange(parseInt(e.target.value) || 0)}
-            />
+                className="w-7 h-7 flex items-center justify-center rounded text-sm font-bold leading-none select-none
+                    bg-fl-primary/10 hover:bg-fl-primary/30 active:bg-fl-primary/50
+                    text-fl-primary border border-fl-primary/30 hover:border-fl-primary/60
+                    transition-all touch-manipulation"
+            >−</button>
+            <span className="w-6 text-center font-serif font-bold text-lg text-fl-surface select-none">
+                {value || 0}
+            </span>
             <button
-                onClick={() => onChange((value || 0) + 1)}
-                className="text-fl-border hover:text-fl-primary px-1 font-bold opacity-0 group-hover:opacity-100 transition-opacity"
+                type="button"
+                onClick={() => onChange(Math.min(5, (value || 0) + 1))}
+                className="w-7 h-7 flex items-center justify-center rounded text-sm font-bold leading-none select-none
+                    bg-fl-primary/10 hover:bg-fl-primary/30 active:bg-fl-primary/50
+                    text-fl-primary border border-fl-primary/30 hover:border-fl-primary/60
+                    transition-all touch-manipulation"
             >+</button>
         </div>
     </div>

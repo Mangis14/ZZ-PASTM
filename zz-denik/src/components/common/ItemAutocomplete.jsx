@@ -9,7 +9,7 @@ import zboziMaterials from '../../data/zbozi_materials.json';
 import zboziPotions from '../../data/zbozi_potions.json';
 import zboziServices from '../../data/zbozi_services.json';
 
-const allItems = [
+export const allItems = [
     ...zboziGeneral, ...zboziMelee, ...zboziRanged, ...zboziArmor,
     ...zboziClothing, ...zboziMaterials, ...zboziPotions
 ];

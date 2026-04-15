@@ -253,6 +253,20 @@ const App = () => {
     });
   };
 
+  const handleAddWeaponSlot = () => {
+    setChar(prev => ({
+      ...prev,
+      weapons: [...prev.weapons, { name: '', bonus: '', damage: '', range: '', note: '', weight: 1 }]
+    }));
+  };
+
+  const handleAddInventorySlot = () => {
+    setChar(prev => ({
+      ...prev,
+      inventory: [...prev.inventory, { name: '', weight: 1 }]
+    }));
+  };
+
   const addItemToInventory = (item) => {
     setChar(prev => {
       const newInv = [...prev.inventory];
@@ -475,8 +489,8 @@ const App = () => {
         {...swipeHandlers}
         className="max-w-3xl mx-auto px-4 space-y-6 min-h-[80vh]"
         style={{
-          paddingTop: 'calc(env(safe-area-inset-top) + 84px)',
-          paddingBottom: 'calc(env(safe-area-inset-bottom) + 92px)',
+          paddingTop: 'calc(env(safe-area-inset-top, 0px) + 86px)',
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 92px)',
           touchAction: 'pan-y'
         }}
       >
@@ -504,6 +518,8 @@ const App = () => {
             updateField={updateField}
             updateDeep={updateDeep}
             addItemToInventory={addItemToInventory}
+            handleAddInventorySlot={handleAddInventorySlot}
+            handleAddWeaponSlot={handleAddWeaponSlot}
             onRoll={startRoll}
             refs={refs}
             scrollToSection={scrollToSection}
@@ -522,7 +538,7 @@ const App = () => {
         </div>
       </main>
 
-      <BottomNav activeSection={currentView} onSectionChange={setCurrentView} />
+      {!showMenu && <BottomNav activeSection={currentView} onSectionChange={setCurrentView} />}
     </div>
   );
 };

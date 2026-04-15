@@ -35,7 +35,7 @@ const Header = ({
         <header
             data-mobile-header
             className="fixed top-0 left-0 right-0 bg-fl-card text-fl-surface z-40 shadow-xl border-b border-fl-primary transition-all duration-200"
-            style={{ paddingTop: 'calc(env(safe-area-inset-top) + 24px)' }}
+            style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 24px)' }}
         >
             <div className="max-w-3xl mx-auto px-4 min-h-16 h-auto py-2 flex items-center justify-between">
                 <div className="flex items-center gap-3">

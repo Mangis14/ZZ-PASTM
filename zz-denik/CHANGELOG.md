@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2026-04-15
+
+### Added
+- **Dynamic Equipment System**: Complete logic overhaul for inventory and combat equipment logistics.
+- **Auto-Equip Mechanics**: Equipping a weapon or piece of armor automatically fetches its attributes (bonus, damage, range, rating, requirements, weight) from the database and places them in an empty combat slot, explicitly removing the corresponding item from the user's inventory to save space.
+- **Swap / Full-Slot Handling Modals**: Added `EquipSwapModal` to elegantly swap an item with a full weapon/armor slot in a 1:1 configuration, sending the old item back directly to exactly the same inventory slot.
+- **Un-equip & Drop Mechanics**: Added an `UnequipModal` triggered by a trash icon next to any active weapon/armor slot representing a choice to "Stash to Backpack" (safe removal without inventory data loss) or "Drop Completely" (deletion).
+- **Weapon Slot Expansion**: Introduced the capability to dynamically "Add Weapon Slot" (`handleAddWeaponSlot`) in the combat sheet.
+- **Dynamic Mobile Navigation**: UI screen estate optimizations via `requestAnimationFrame` and hysteresis scroll-direction tracking to smoothly collapse navigation text labels when the user is scrolling down, returning them up during a scroll-up.
+- **Shopping Cart Mechanics**: Full shopping cart implemented and polished for the user inside the Zboží (Items) section.
+
+### Fixed
+- **Mobile App Display issues**: Fixed sticky header rendering problems. Added `env(safe-area-inset, 0px)` css fallbacks to fix white gaps occurring inside Android/iOS WebViews.
+
 ## [1.3.0] - 2025-11-28
 
 ### Added

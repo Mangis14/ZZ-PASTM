@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { ArrowUpDown, Check, ChevronDown, ChevronUp, Circle, Clock, Crosshair, Filter, FlaskConical, Hammer, HandCoins, Search, Shirt, Shield, ShoppingBag, ShoppingCart, Star, Sword, Trash2, X, Zap } from 'lucide-react';
 import Card from './components/common/Card';
 import SectionHeader from './components/common/SectionHeader';
@@ -28,27 +28,111 @@ const PriceDisplay = ({ price, cena, size = 'sm' }) => (
     </div>
 );
 
-const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, clearCart, addItemToInventory }) => {
+const BOTTOM_NAV_H = 64;
+
+const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, clearCart, addItemToInventory, onHeightChange }) => {
     const [open, setOpen] = useState(false);
     const [agreedPrice, setAgreedPrice] = useState({ gold: 0, silver: 0, copper: 0 });
+    const panelRef = useRef(null);
     const total = useMemo(() => money(cart.reduce((sum, item) => sum + copper(item.price) * item.qty, 0)), [cart]);
     const count = cart.reduce((sum, item) => sum + item.qty, 0);
     const checkout = () => { cart.forEach((item) => { for (let i = 0; i < item.qty; i += 1) addItemToInventory?.({ name: item.name, weight: parseWeight(item.weight) }); }); clearCart(); setAgreedPrice({ gold: 0, silver: 0, copper: 0 }); setOpen(false); };
+    
+    React.useEffect(() => {
+        if (!cart.length) {
+            onHeightChange?.(0);
+            return;
+        }
+        // Give the DOM a tiny slice of time to render the frame before measuring
+        setTimeout(() => {
+            if (panelRef.current) {
+                onHeightChange?.(panelRef.current.getBoundingClientRect().height);
+            }
+        }, 10);
+    }, [open, cart.length, onHeightChange]);
+
     if (!cart.length) return null;
     return (
-        <div className="fixed bottom-20 left-0 right-0 z-40 mx-auto max-w-3xl px-4">
-            {!open ? (
-                <button onClick={() => setOpen(true)} className="flex w-full items-center justify-between rounded-lg border border-fl-primary bg-fl-nav px-4 py-3 text-white shadow-xl hover:bg-fl-nav-hover">
-                    <div className="flex items-center gap-3"><div className="relative"><ShoppingCart size={22} /><span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-fl-primary text-[10px] font-bold text-white">{count}</span></div><span className="text-sm font-bold uppercase tracking-wider">Košík</span></div>
-                    <div className="flex items-center gap-2"><PriceDisplay price={total} size="lg" /><ChevronUp size={18} /></div>
-                </button>
-            ) : (
-                <div className="overflow-hidden rounded-lg border border-fl-primary bg-fl-card shadow-2xl animate-slide-in-left">
-                    <div className="flex items-center justify-between bg-fl-nav p-3"><div className="flex items-center gap-2 text-white"><ShoppingCart size={20} /><span className="text-sm font-bold uppercase tracking-wider">Košík ({count})</span></div><div className="flex items-center gap-2"><button onClick={clearCart} className="p-1 text-red-400 hover:text-red-300" title="Vysypat košík"><Trash2 size={18} /></button><button onClick={() => setOpen(false)} className="p-1 text-white hover:text-fl-primary"><ChevronDown size={20} /></button></div></div>
-                    <div className="max-h-48 space-y-2 overflow-y-auto p-3">{cart.map((item, i) => <div key={`${item.name}-${i}`} className="flex items-center justify-between rounded border border-fl-paper bg-fl-paper-bright p-2 text-sm"><div className="min-w-0 flex-1"><span className="block truncate font-bold text-fl-surface">{item.name}</span><span className="text-[10px] text-fl-text-muted">{item.qty > 1 ? `${item.qty}× ` : ''}<PriceDisplay price={item.price} cena={item.cena} /></span></div><div className="ml-2 flex items-center gap-3"><div className="flex items-center rounded border border-fl-border bg-fl-paper-light"><button onClick={() => removeFromCart(i)} className="flex h-5 w-5 items-center justify-center text-fl-primary hover:bg-fl-primary hover:text-white">-</button><span className="w-4 text-center text-xs font-bold">{item.qty}</span><button onClick={() => incrementCart(i)} className="flex h-5 w-5 items-center justify-center text-fl-primary hover:bg-fl-primary hover:text-white">+</button></div><div className="flex items-center gap-2"><PriceDisplay price={item.price ? { ...item.price, value: item.price.value * item.qty } : null} cena={item.cena} /><button onClick={() => completelyRemoveCart(i)} className="p-1 text-red-500 hover:text-red-700"><X size={14} /></button></div></div></div>)}</div>
-                    <div className="space-y-3 border-t border-fl-paper p-3"><div className="flex items-center justify-between text-sm"><span className="text-xs font-bold uppercase text-fl-text-muted">Katalogová cena:</span><div className="rounded border border-fl-paper bg-fl-paper-light px-3 py-1"><PriceDisplay price={total} size="lg" /></div></div><div className="flex flex-col gap-1"><label className="text-xs font-bold uppercase text-fl-text-muted">Dohodnutá cena:</label><MoneyInput money={agreedPrice} onChange={setAgreedPrice} /></div><button onClick={checkout} className="flex w-full items-center justify-center gap-2 rounded bg-green-700 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-md hover:bg-green-800 dark:bg-green-800 dark:hover:bg-green-700"><Check size={18} />Přidat vše do batohu</button></div>
-                </div>
-            )}
+        <div 
+            className="fixed left-0 right-0 z-40 mx-auto max-w-3xl px-4 pointer-events-none transition-all duration-300 ease-out" 
+            style={{ bottom: "calc(env(safe-area-inset-bottom) + 76px)" }}
+        >
+            <div ref={panelRef} className="pointer-events-auto">
+                {!open ? (
+                    <button onClick={() => setOpen(true)} className="flex w-full items-center justify-between rounded-xl border-2 border-fl-primary bg-fl-nav/95 backdrop-blur-md px-5 py-3.5 text-white shadow-2xl hover:bg-fl-nav-hover active:scale-95 transition-all">
+                        <div className="flex items-center gap-3">
+                            <div className="relative">
+                                <ShoppingCart size={24} className="text-fl-primary" />
+                                <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white shadow-md border border-fl-nav animate-bounce">
+                                    {count}
+                                </span>
+                            </div>
+                            <span className="text-sm font-black uppercase tracking-widest textShadow-sm">Košík</span>
+                        </div>
+                        <div className="flex items-center gap-3 bg-fl-card/40 px-3 py-1 rounded-lg border border-fl-primary/30">
+                            <PriceDisplay price={total} size="lg" />
+                            <ChevronUp size={20} className="text-fl-primary opacity-80" />
+                        </div>
+                    </button>
+                ) : (
+                    <div className="flex flex-col max-h-[65vh] overflow-hidden rounded-xl border border-fl-primary bg-fl-card/95 backdrop-blur-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.7)] animate-in slide-in-from-bottom-6 fade-in duration-300 ring-1 ring-white/10">
+                        {/* Header */}
+                        <div className="flex-none flex items-center justify-between bg-fl-nav px-4 py-3 border-b border-fl-primary/30">
+                            <div className="flex items-center gap-3 text-white">
+                                <ShoppingCart size={20} className="text-fl-primary" />
+                                <span className="text-sm font-black uppercase tracking-widest">Košík ({count})</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <button onClick={clearCart} className="p-1.5 text-red-400 hover:text-red-300 hover:bg-red-900/30 rounded-lg transition-colors" title="Vysypat košík"><Trash2 size={18} /></button>
+                                <button onClick={() => setOpen(false)} className="p-1.5 text-white hover:text-fl-primary bg-fl-surface/10 hover:bg-fl-surface/20 rounded-lg transition-colors"><ChevronDown size={20} /></button>
+                            </div>
+                        </div>
+
+                        {/* List - scrollable */}
+                        <div className="flex-1 overflow-y-auto p-3 space-y-2 overscroll-contain">
+                            {cart.map((item, i) => (
+                                <div key={`${item.name}-${i}`} className="flex items-center justify-between rounded-lg border border-fl-paper bg-fl-paper-bright/80 p-2.5 text-sm shadow-sm">
+                                    <div className="min-w-0 flex-1">
+                                        <span className="block font-bold text-fl-surface text-[13px]">{item.name}</span>
+                                        <span className="text-[10px] text-fl-text-muted mt-0.5 inline-block">
+                                            {item.qty > 1 ? <span className="font-bold text-fl-primary">{item.qty}× </span> : ''}
+                                            <PriceDisplay price={item.price} cena={item.cena} />
+                                        </span>
+                                    </div>
+                                    <div className="ml-3 flex flex-col items-end gap-1.5">
+                                        <div className="flex items-center gap-2">
+                                            <PriceDisplay price={item.price ? { ...item.price, value: item.price.value * item.qty } : null} cena={item.cena} />
+                                            <button onClick={() => completelyRemoveCart(i)} className="p-1 text-fl-text-muted hover:text-red-500 rounded"><X size={14} /></button>
+                                        </div>
+                                        <div className="flex items-center rounded-md border border-fl-border bg-fl-paper-light overflow-hidden shadow-inner">
+                                            <button onClick={() => removeFromCart(i)} className="flex h-6 w-7 items-center justify-center text-fl-primary hover:bg-fl-primary hover:text-white transition-colors font-bold text-lg leading-none active:bg-fl-primary-hover">−</button>
+                                            <span className="w-6 justify-center flex text-xs font-black text-fl-surface">{item.qty}</span>
+                                            <button onClick={() => incrementCart(i)} className="flex h-6 w-7 items-center justify-center text-fl-primary hover:bg-fl-primary hover:text-white transition-colors font-bold text-lg leading-none active:bg-fl-primary-hover">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Footer / Checkout */}
+                        <div className="flex-none space-y-3 bg-fl-card/90 p-4 border-t border-fl-primary/20 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.5)]">
+                            <div className="flex items-center justify-between text-sm bg-fl-paper/40 p-2 rounded border border-fl-paper shadow-inner">
+                                <span className="text-xs font-bold uppercase text-fl-text-muted tracking-wider">Katalog. cena:</span>
+                                <div><PriceDisplay price={total} size="lg" /></div>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <label className="text-[10px] font-black uppercase text-fl-primary tracking-widest pl-1">Dohodnutá cena (úplatok/zľava)</label>
+                                <MoneyInput money={agreedPrice} onChange={setAgreedPrice} />
+                            </div>
+                            <button onClick={checkout} className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-lg bg-green-700 py-3.5 text-sm font-black uppercase tracking-widest text-white shadow-lg hover:bg-green-600 transition-all active:scale-95">
+                                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                                <ShoppingCart size={18} />
+                                Vložiť všetko do batohu
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
@@ -63,7 +147,20 @@ const FilterPillGroup = ({ label, icon: Icon, options, selectedValues, onToggle 
 );
 
 const ZboziSection = ({ addItemToInventory }) => {
-    const [search, setSearch] = useState(''), [activeTab, setActiveTab] = useState('Vše'), [talentFilter, setTalentFilter] = useState([]), [materialFilter, setMaterialFilter] = useState([]), [weightFilter, setWeightFilter] = useState([]), [rarityFilter, setRarityFilter] = useState([]), [armorFilter, setArmorFilter] = useState([]), [damageFilter, setDamageFilter] = useState([]), [timeFilter, setTimeFilter] = useState([]), [handsFilter, setHandsFilter] = useState([]), [showFilters, setShowFilters] = useState(false), [sortOrder, setSortOrder] = useState('asc'), [cart, setCart] = useState([]);
+    const [search, setSearch] = useState('');
+    const [activeTab, setActiveTab] = useState('Vše');
+    const [talentFilter, setTalentFilter] = useState([]);
+    const [materialFilter, setMaterialFilter] = useState([]);
+    const [weightFilter, setWeightFilter] = useState([]);
+    const [rarityFilter, setRarityFilter] = useState([]);
+    const [armorFilter, setArmorFilter] = useState([]);
+    const [damageFilter, setDamageFilter] = useState([]);
+    const [timeFilter, setTimeFilter] = useState([]);
+    const [handsFilter, setHandsFilter] = useState([]);
+    const [showFilters, setShowFilters] = useState(false);
+    const [sortOrder, setSortOrder] = useState('asc');
+    const [cart, setCart] = useState([]);
+    const [cartHeight, setCartHeight] = useState(0);
     const dataMap = useMemo(() => ({ Vše: [...zboziGeneral, ...zboziMelee, ...zboziRanged, ...zboziArmor, ...zboziClothing, ...zboziMaterials, ...zboziPotions, ...zboziServices].map(mapItem), Zboží: zboziGeneral.map(mapItem), 'Zbraně nablízko': zboziMelee.map(mapItem), 'Střelné zbraně': zboziRanged.map(mapItem), Zbroj: zboziArmor.map(mapItem), Oblečení: zboziClothing.map(mapItem), Suroviny: zboziMaterials.map(mapItem), Lektvary: zboziPotions.map(mapItem), Služby: zboziServices.map(mapItem) }), []);
     const current = dataMap[activeTab] || [];
     const tabs = [{ id: 'Vše', icon: ShoppingBag }, { id: 'Zboží', icon: ShoppingBag }, { id: 'Zbraně nablízko', icon: Sword }, { id: 'Střelné zbraně', icon: Crosshair }, { id: 'Zbroj', icon: Shield }, { id: 'Oblečení', icon: Shirt }, { id: 'Suroviny', icon: Hammer }, { id: 'Lektvary', icon: FlaskConical }, { id: 'Služby', icon: HandCoins }];
@@ -99,11 +196,11 @@ const ZboziSection = ({ addItemToInventory }) => {
                     {showFilters && <div className="mt-1 space-y-4 border-t border-fl-paper pt-3 animate-in fade-in slide-in-from-top-2 duration-200"><div className="flex items-center justify-between gap-3"><div className="text-[11px] uppercase tracking-wider text-fl-text-muted">Vyber si libovolnou kombinaci filtrů</div>{!!activeFilterCount && <button type="button" onClick={resetFilters} className="inline-flex items-center gap-1 rounded-full border border-fl-primary px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-fl-primary hover:bg-fl-primary hover:text-white"><X size={12} />Zrušit filtry</button>}</div>{filterGroups.map((group) => <FilterPillGroup key={group.label} label={group.label} icon={group.icon} options={group.options} selectedValues={group.selectedValues} onToggle={(option) => group.setter((prev) => toggle(prev, option))} />)}</div>}
                 </div>
             </Card>
-            <div className="space-y-2">
+            <div className="space-y-2" style={{paddingBottom: cartHeight ? `calc(env(safe-area-inset-bottom) + 64px + 16px + ${cartHeight}px)` : "calc(env(safe-area-inset-bottom) + 64px)"}}>
                 {filtered.map((item, index) => <div key={`${item.name}-${index}`} className="group rounded-sm border border-fl-paper bg-fl-card p-3 shadow-sm hover:border-fl-primary"><div className="mb-2 flex items-start justify-between"><div><h3 className="text-lg font-bold text-fl-surface">{item.name}</h3><div className="mt-1 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-wide text-fl-primary"><span className="rounded bg-fl-paper-light px-1.5 py-0.5">{item.category}</span>{item.availability && <span>• {item.availability}</span>}{item.weight && item.weight !== '–' && <span>• Váha: {item.weight}</span>}{item.hands && <span>• Ruce: {item.hands}</span>}</div></div><div className="rounded border border-fl-paper bg-fl-paper-light px-2 py-1 text-sm"><PriceDisplay price={item.price} cena={item.cena} /></div></div><div className="mb-2 grid grid-cols-1 gap-x-4 gap-y-1 text-xs text-fl-text-muted sm:grid-cols-2">{item.materials && <div className="flex items-center gap-1"><Hammer size={12} className="text-fl-primary" /><span><span className="font-bold">Suroviny:</span> {item.materials}</span></div>}{item.time && <div className="flex items-center gap-1"><Clock size={12} className="text-fl-primary" /><span><span className="font-bold">Čas:</span> {item.time}</span></div>}{item.talent && item.talent !== '–' && <div className="flex items-center gap-1"><Star size={12} className="text-fl-primary" /><span><span className="font-bold">Talent:</span> {item.talent}</span></div>}{item.armor && <div className="flex items-center gap-1"><Shield size={12} className="text-fl-primary" /><span><span className="font-bold">Zbroj:</span> {item.armor}</span></div>}{item.damage && <div className="flex items-center gap-1"><Zap size={12} className="text-fl-primary" /><span><span className="font-bold">Zranění:</span> {item.damage}</span></div>}{item.bonus && <div className="flex items-center gap-1"><Star size={12} className="text-fl-primary" /><span><span className="font-bold">Bonus:</span> {item.bonus}</span></div>}</div>{(item.effect || item.properties || item.notes || item.extraEffect) && <div className="mt-2 rounded border-t border-fl-paper-light bg-fl-paper-bright p-2 pt-2 text-xs italic text-fl-surface-hover">{item.effect && <div className="mb-1"><span className="font-bold not-italic text-fl-primary">Účinek:</span> {item.effect}</div>}{item.properties && <div className="mb-1"><span className="font-bold not-italic text-fl-primary">Vlastnosti:</span> {item.properties}</div>}{item.notes && <div className="mb-1"><span className="font-bold not-italic text-fl-primary">Poznámky:</span> {item.notes}</div>}{item.extraEffect && <div><span className="font-bold not-italic text-fl-primary">Efekt:</span> {item.extraEffect}</div>}</div>}<div className="mt-3 flex gap-2"><button onClick={(e) => { e.stopPropagation(); addItemToInventory?.({ name: item.name, weight: parseWeight(item.weight) }); }} className="flex flex-1 items-center justify-center gap-2 rounded border border-fl-primary-hover bg-fl-primary py-2.5 text-xs font-bold uppercase text-white shadow-sm hover:bg-fl-primary-hover"><ShoppingBag size={14} /> Do batohu</button><button onClick={(e) => { e.stopPropagation(); addToCart(item); }} className="flex flex-1 items-center justify-center gap-2 rounded border border-fl-nav-hover bg-fl-nav py-2.5 text-xs font-bold uppercase text-white shadow-sm hover:bg-fl-nav-hover"><ShoppingCart size={14} /> Do košíku</button></div></div>)}
                 {!filtered.length && <div className="rounded border border-fl-paper bg-fl-paper-bright py-12 text-center italic text-fl-primary"><ShoppingBag size={48} className="mx-auto mb-4 opacity-20" /><p>Žádné předměty nenalezeny.</p></div>}
             </div>
-            <CartPanel cart={cart} removeFromCart={removeFromCart} incrementCart={incrementCart} completelyRemoveCart={completelyRemoveCart} clearCart={clearCart} addItemToInventory={addItemToInventory} />
+            <CartPanel cart={cart} removeFromCart={removeFromCart} incrementCart={incrementCart} completelyRemoveCart={completelyRemoveCart} clearCart={clearCart} addItemToInventory={addItemToInventory} onHeightChange={setCartHeight} />
         </section>
     );
 };
