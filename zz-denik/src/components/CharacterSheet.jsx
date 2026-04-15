@@ -20,7 +20,7 @@ import SpellList from './spells/SpellList';
 import SpellPicker from './spells/SpellPicker';
 import { TALENTS_DATA } from '../data/talents_data';
 
-const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToSection, setCurrentView, onModalStateChange }) => {
+const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToSection, setCurrentView, onModalStateChange, handleAddInventorySlot, handleAddWeaponSlot, addItemToInventory }) => {
     const [showTalentPicker, setShowTalentPicker] = useState(false);
     const [showSpellPicker, setShowSpellPicker] = useState(false);
     const [isTalentDetailOpen, setIsTalentDetailOpen] = useState(false);
@@ -102,12 +102,6 @@ const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToS
         if (setCurrentView) setCurrentView('spells');
     };
 
-    // --- INVENTORY HANDLER ---
-    const handleAddInventorySlot = () => {
-        const newInv = [...char.inventory, { name: '', weight: 1 }];
-        updateField('inventory', newInv);
-    };
-
     return (
         <>
             <Navigation scrollToSection={scrollToSection} />
@@ -120,7 +114,9 @@ const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToS
 
             <SheetSkills char={char} updateField={updateField} onRoll={onRoll} innerRef={refs.skills} />
 
-            <SheetCombat char={char} updateDeep={updateDeep} innerRef={refs.combat} />
+            <div ref={refs.combat}>
+                <SheetCombat char={char} updateDeep={updateDeep} handleAddWeaponSlot={handleAddWeaponSlot} addItemToInventory={addItemToInventory} />
+            </div>
 
             <SheetInventory 
                 char={char} 

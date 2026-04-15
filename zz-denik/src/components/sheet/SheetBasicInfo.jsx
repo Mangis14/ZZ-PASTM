@@ -6,7 +6,7 @@ import MoneyInput from '../common/MoneyInput';
 
 const SheetBasicInfo = ({ char, updateField }) => {
     return (
-        <Card className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+        <Card className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3 z-10 relative">
             <div className="space-y-4">
                 <div>
                     <label className="block text-[10px] font-bold uppercase text-fl-primary mb-1 tracking-wider">Jméno</label>
