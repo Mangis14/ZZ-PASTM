@@ -2,7 +2,7 @@
 
 Mobile-first character sheet and campaign helper for the Forbidden Lands / Zapovezene zeme tabletop RPG.
 
-![Version](https://img.shields.io/badge/version-1.8.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.8.1-blue.svg)
 ![Stack](https://img.shields.io/badge/React%20%2B%20Vite%20%2B%20Capacitor-Android-green.svg)
 
 ## Current Highlights
@@ -107,12 +107,12 @@ cd android
 The generated APK is copied at release time to the repository root using the format:
 
 ```text
-FL_1.8.0.apk
+FL_1.8.1.apk
 ```
 
 ## Version
 
-Current app version: `1.8.0`
+Current app version: `1.8.1`
 
 Version is tracked in:
 

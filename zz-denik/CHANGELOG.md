@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.1] - 2026-06-02
+
+### Fixed
+- Boční menu nyní překrývá spodní navigaci místo toho, aby navigace prosvítala přes otevřený drawer.
+- Boční menu používá mobilní safe-area odsazení a `100dvh`, takže obsah neleze pod status bar ani spodní systémovou oblast.
+
 ## [1.8.0] - 2026-06-02
 
 ### Added

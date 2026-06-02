@@ -513,8 +513,17 @@ const App = () => {
 
       {/* MENU MODAL */}
       {showMenu && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-start justify-start" onClick={() => setShowMenu(false)}>
-          <div className="w-80 h-full bg-fl-nav border-r border-fl-primary p-6 overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9998] flex items-start justify-start" onClick={() => setShowMenu(false)}>
+          <div
+            className="w-[min(22rem,calc(100vw-2.5rem))] bg-fl-nav border-r border-fl-primary px-6 overflow-y-auto shadow-2xl"
+            style={{
+              height: 'calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+              marginTop: 'env(safe-area-inset-top)',
+              paddingTop: '1.5rem',
+              paddingBottom: 'calc(env(safe-area-inset-bottom) + 1.5rem)'
+            }}
+            onClick={e => e.stopPropagation()}
+          >
             <div className="flex justify-between items-center mb-8 border-b border-fl-nav-hover pb-4">
               <h2 className="font-serif text-2xl text-fl-paper-bright dark:text-fl-surface font-bold">Deník</h2>
               <button onClick={() => setShowMenu(false)} className="text-fl-primary hover:text-white"><X /></button>
@@ -620,7 +629,7 @@ const App = () => {
         </div>
       </main>
 
-      <BottomNav activeSection={currentView} onSectionChange={setCurrentView} />
+      {!showMenu && <BottomNav activeSection={currentView} onSectionChange={setCurrentView} />}
     </div>
   );
 };
