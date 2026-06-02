@@ -6,6 +6,9 @@ export default defineConfig({
   plugins: [react()],
   base: './',
   server: {
-    host: true // Toto umožní prístup z mobilu cez sieť
+    host: true, // Toto umožní prístup z mobilu cez sieť
+    proxy: {
+      '/api': 'http://localhost:8787'
+    }
   }
 })

@@ -4,16 +4,10 @@ import { Brain, Zap, Sword, Backpack, Flame, Star, Scroll } from 'lucide-react';
 export const NavButton = ({ label, onClick, icon: Icon, active, compact }) => (
     <button
         onClick={onClick}
-        className={`flex flex-col items-center justify-center rounded transition-all duration-300 ease-out flex-shrink-0 min-w-[64px] overflow-hidden ${compact ? 'py-1.5 px-1' : 'py-2 px-1'} ${active ? 'text-white bg-fl-nav-hover shadow-md' : 'text-fl-border dark:text-fl-text-muted hover:text-white hover:bg-fl-nav-hover'}`}
+        className={`flex items-center justify-center gap-1.5 rounded transition-all flex-shrink-0 ${compact ? 'flex-row py-1.5 px-3 min-w-0' : 'flex-col py-2 px-1 min-w-[60px]'} ${active ? 'text-white bg-fl-nav-hover shadow-sm' : 'text-fl-border dark:text-fl-text-muted hover:text-white hover:bg-fl-nav-hover'}`}
     >
-        <div className="flex h-6 w-full items-center justify-center">
-            <Icon className={`transition-all duration-300 ease-out ${compact ? 'w-5 h-5 opacity-90' : 'w-5 h-5 opacity-100'}`} />
-        </div>
-        <div className={`transition-all duration-300 ease-out overflow-hidden flex items-center justify-center ${compact ? 'max-h-0 opacity-0' : 'max-h-4 opacity-100 mt-1'}`}>
-            <span className={`uppercase font-bold tracking-widest whitespace-nowrap text-[9px] leading-none`}>
-                {label}
-            </span>
-        </div>
+        <Icon size={compact ? 14 : 18} className={compact ? "" : "mb-1"} />
+        <span className={`${compact ? 'text-[10px]' : 'text-[9px]'} uppercase font-bold tracking-wider whitespace-nowrap`}>{label}</span>
     </button>
 );
 
@@ -22,27 +16,9 @@ const Navigation = ({ scrollToSection }) => {
     const stopSwipePropagation = (e) => e.stopPropagation();
 
     useEffect(() => {
-        let lastScrollY = window.scrollY;
-        let ticking = false;
-
         const handleScroll = () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const currentY = window.scrollY;
-                    if (currentY < 20) {
-                        setIsCompact(false);
-                    } else if (currentY > lastScrollY + 15) {
-                        setIsCompact(true);
-                    } else if (currentY < lastScrollY - 20) {
-                        setIsCompact(false);
-                    }
-                    lastScrollY = currentY > 0 ? currentY : 0;
-                    ticking = false;
-                });
-                ticking = true;
-            }
+            setIsCompact(window.scrollY > 40);
         };
-
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
@@ -50,11 +26,10 @@ const Navigation = ({ scrollToSection }) => {
     return (
         <div
             data-sheet-nav
-            className={`sticky z-40 -mx-4 px-4 bg-fl-nav border-b border-fl-primary transition-all duration-300 ease-out shadow-lg`}
-            style={{ top: 'calc(env(safe-area-inset-top, 0px) + 86px)' }}
+            className="sticky z-40 -mx-4 px-4 bg-fl-nav border-b border-fl-primary shadow-md transition-all duration-300 sticky-sheet-nav"
         >
             <nav
-                className={`max-w-3xl mx-auto overflow-x-auto flex gap-1 ${isCompact ? 'py-1' : 'py-1.5'} scrollbar-hide transition-all duration-300 ease-out`}
+                className={`max-w-3xl mx-auto overflow-x-auto flex gap-1 ${isCompact ? 'py-1' : 'py-2'} scrollbar-hide`}
                 onTouchStart={stopSwipePropagation}
                 onTouchMove={stopSwipePropagation}
             >

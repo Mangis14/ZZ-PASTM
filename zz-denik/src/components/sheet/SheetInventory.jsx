@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
-import { Backpack, Plus, X, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Backpack, Plus, X } from 'lucide-react';
 import Card from '../common/Card';
-import SectionHeader from '../common/SectionHeader';
-import ItemAutocomplete, { allItems } from '../common/ItemAutocomplete';
-import WeightSelect from '../common/WeightSelect';
 import EquipSwapModal from '../common/EquipSwapModal';
+import ItemAutocomplete from '../common/ItemAutocomplete';
+import SectionHeader from '../common/SectionHeader';
+import WeightSelect from '../common/WeightSelect';
+import { useCatalog } from '../../context/CatalogContext';
 import { parseWeight } from '../../ZboziSection';
 
-const SheetInventory = ({ char, updateDeep, updateField, innerRef, handleAddInventorySlot }) => {
+const weaponCategories = new Set(['Zbraně nablízko', 'Střelné zbraně', 'Zbraně na dálku']);
+
+const isWeaponItem = (item) => weaponCategories.has(item?.Category);
+const isArmorItem = (item) => item?.Category === 'Zbroj';
+
+const getItemName = (item) => item?.Předmět || item?.name || '';
+
+const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot }) => {
+    const { allItems } = useCatalog();
     const [swapRequest, setSwapRequest] = useState(null);
 
     const handleClearItem = (index) => {
@@ -15,72 +24,85 @@ const SheetInventory = ({ char, updateDeep, updateField, innerRef, handleAddInve
         updateDeep('inventory', index, 'weight', 1);
     };
 
-    const doEquipWeapon = (dbItem, invIdx, targetIdx) => {
-        const nameFallback = dbItem.Předmět || '';
-        const rangeStr = dbItem.Dosah || dbItem.Ruce?.match(/\((.*?)\)/)?.[1] || dbItem.Ruce || '';
-        
-        updateDeep('weapons', targetIdx, 'name', nameFallback);
-        updateDeep('weapons', targetIdx, 'bonus', dbItem.Bonus || '');
-        updateDeep('weapons', targetIdx, 'damage', dbItem.Zranění || '');
-        updateDeep('weapons', targetIdx, 'range', rangeStr);
-        updateDeep('weapons', targetIdx, 'note', dbItem.Vlastnosti || '');
-        if (dbItem.Váha !== undefined) updateDeep('weapons', targetIdx, 'weight', parseWeight(dbItem.Váha));
+    const doEquipWeapon = (dbItem, targetIndex) => {
+        const range = dbItem.Dosah || dbItem.Ruce?.match(/\((.*?)\)/)?.[1] || dbItem.Ruce || '';
+
+        updateDeep('weapons', targetIndex, 'name', getItemName(dbItem));
+        updateDeep('weapons', targetIndex, 'bonus', dbItem.Bonus || '');
+        updateDeep('weapons', targetIndex, 'damage', dbItem.Zranění || '');
+        updateDeep('weapons', targetIndex, 'range', range);
+        updateDeep('weapons', targetIndex, 'note', dbItem.Vlastnosti || '');
+        updateDeep('weapons', targetIndex, 'weight', dbItem.Váha !== undefined ? parseWeight(dbItem.Váha) : 1);
     };
 
-    const doEquipArmor = (dbItem, invIdx, targetSlot) => {
-        const nameFallback = dbItem.Předmět || '';
-        updateDeep(targetSlot, null, 'name', nameFallback);
+    const doEquipArmor = (dbItem, targetSlot) => {
+        updateDeep(targetSlot, null, 'name', getItemName(dbItem));
+        updateDeep(targetSlot, null, 'bonus', dbItem.Bonus || '');
         updateDeep(targetSlot, null, 'rating', dbItem.Zbroj || '');
-        if (dbItem.Váha !== undefined) updateDeep(targetSlot, null, 'weight', parseWeight(dbItem.Váha));
+        updateDeep(targetSlot, null, 'weight', dbItem.Váha !== undefined ? parseWeight(dbItem.Váha) : 1);
     };
 
-    const handleEquip = (dbItem, invIdx) => {
+    const getArmorTargetSlot = (dbItem) => {
+        const lowerName = getItemName(dbItem).toLowerCase();
+        if (lowerName.includes('štít')) return 'shield';
+        if (
+            lowerName.includes('helma') ||
+            lowerName.includes('čapka') ||
+            lowerName.includes('přilbice') ||
+            lowerName.includes('přilba') ||
+            lowerName.includes('klobouk')
+        ) {
+            return 'helmet';
+        }
+        return 'armor';
+    };
+
+    const handleEquip = (dbItem, inventoryIndex) => {
         if (!dbItem) return;
-        
-        if (dbItem.Category === 'Zbraně nablízko' || dbItem.Category === 'Zbraně na dálku') {
-            const emptyIdx = char.weapons.findIndex(w => !w.name || w.name.trim() === '');
-            
-            if (emptyIdx >= 0) {
-                // Free spot exists -> Just equip and remove from inv
-                doEquipWeapon(dbItem, invIdx, emptyIdx);
-                handleClearItem(invIdx);
-            } else {
-                // All full -> Prompt swap
-                const options = char.weapons.map((w, idx) => ({ idx, current: w, type: 'weapon' }));
-                setSwapRequest({ dbItem, invIdx, options });
-            }
-        } else if (dbItem.Category === 'Zbroj') {
-            const nameLower = (dbItem.Předmět || '').toLowerCase();
-            let targetSlot = 'armor';
-            if (nameLower.includes('štít')) targetSlot = 'shield';
-            else if (nameLower.includes('helma') || nameLower.includes('čapka') || nameLower.includes('přilbice') || nameLower.includes('přilba') || nameLower.includes('klobouk')) targetSlot = 'helmet';
 
-            const currentInSlot = char[targetSlot];
-            if (!currentInSlot.name || currentInSlot.name.trim() === '') {
-                // Free spot
-                doEquipArmor(dbItem, invIdx, targetSlot);
-                handleClearItem(invIdx);
-            } else {
-                // Full spot -> Swap
-                const options = [{ key: targetSlot, current: currentInSlot, type: 'armor' }];
-                setSwapRequest({ dbItem, invIdx, options });
+        if (isWeaponItem(dbItem)) {
+            const emptyIndex = char.weapons.findIndex((weapon) => !weapon.name?.trim());
+            if (emptyIndex >= 0) {
+                doEquipWeapon(dbItem, emptyIndex);
+                handleClearItem(inventoryIndex);
+                return;
             }
+
+            setSwapRequest({
+                dbItem,
+                inventoryIndex,
+                options: char.weapons.map((weapon, index) => ({ idx: index, current: weapon, type: 'weapon' })),
+            });
+            return;
+        }
+
+        if (isArmorItem(dbItem)) {
+            const targetSlot = getArmorTargetSlot(dbItem);
+            const currentInSlot = char[targetSlot];
+
+            if (!currentInSlot.name?.trim()) {
+                doEquipArmor(dbItem, targetSlot);
+                handleClearItem(inventoryIndex);
+                return;
+            }
+
+            setSwapRequest({
+                dbItem,
+                inventoryIndex,
+                options: [{ key: targetSlot, current: currentInSlot, type: 'armor' }],
+            });
         }
     };
 
-    const confirmSwap = (opt) => {
-        const { dbItem, invIdx } = swapRequest;
-        
-        // 1. Move current equipped item back to the exact inventory slot
-        updateDeep('inventory', invIdx, 'name', opt.current.name);
-        updateDeep('inventory', invIdx, 'weight', opt.current.weight !== undefined ? opt.current.weight : 1);
+    const confirmSwap = (option) => {
+        if (!swapRequest) return;
+        const { dbItem, inventoryIndex } = swapRequest;
 
-        // 2. Equip new item
-        if (opt.type === 'weapon') {
-            doEquipWeapon(dbItem, invIdx, opt.idx);
-        } else {
-            doEquipArmor(dbItem, invIdx, opt.key);
-        }
+        updateDeep('inventory', inventoryIndex, 'name', option.current.name);
+        updateDeep('inventory', inventoryIndex, 'weight', option.current.weight !== undefined ? option.current.weight : 1);
+
+        if (option.type === 'weapon') doEquipWeapon(dbItem, option.idx);
+        else doEquipArmor(dbItem, option.key);
 
         setSwapRequest(null);
     };
@@ -91,44 +113,46 @@ const SheetInventory = ({ char, updateDeep, updateField, innerRef, handleAddInve
             <div className="grid grid-cols-[1fr_auto_auto_auto] gap-1.5 text-[9px] font-bold uppercase text-fl-primary mb-2 px-1">
                 <span>Předmět</span>
                 <span className="text-center w-14">Váha</span>
-                <span className="w-7"></span>
-                <span className="w-6"></span>
+                <span className="w-7" />
+                <span className="w-6" />
             </div>
             <div className="space-y-2">
-                {char.inventory.map((item, i) => {
-                    const dbItem = item.name ? allItems.find(x => x.Předmět === item.name) : null;
-                    const isEquipable = dbItem && (dbItem.Category === 'Zbraně nablízko' || dbItem.Category === 'Zbraně na dálku' || dbItem.Category === 'Zbroj');
+                {char.inventory.map((item, index) => {
+                    const dbItem = item.name ? allItems.find((candidate) => candidate.Předmět === item.name) : null;
+                    const isEquipable = isWeaponItem(dbItem) || isArmorItem(dbItem);
 
                     return (
-                        <div key={i} className="grid grid-cols-[1fr_auto_auto_auto] gap-1.5 items-center bg-fl-paper-bright p-1 rounded border border-fl-paper hover:border-fl-primary/50 transition-colors group">
+                        <div key={index} className="grid grid-cols-[1fr_auto_auto_auto] gap-1.5 items-center bg-fl-paper-bright p-1 rounded border border-fl-paper hover:border-fl-primary/50 transition-colors group">
                             <ItemAutocomplete
                                 className="bg-transparent font-bold text-fl-surface w-full focus:outline-none placeholder:text-fl-border px-1"
                                 placeholder="Předmět..."
                                 value={item.name}
-                                onChange={val => updateDeep('inventory', i, 'name', val)}
-                                onSelect={selected => {
-                                    updateDeep('inventory', i, 'name', selected.Předmět);
+                                onChange={(value) => updateDeep('inventory', index, 'name', value)}
+                                onSelect={(selected) => {
+                                    updateDeep('inventory', index, 'name', selected.Předmět);
                                     if (selected.Váha !== undefined) {
-                                        updateDeep('inventory', i, 'weight', parseWeight(selected.Váha));
+                                        updateDeep('inventory', index, 'weight', parseWeight(selected.Váha));
                                     }
                                 }}
                             />
-                            <WeightSelect value={item.weight} onChange={(v) => updateDeep('inventory', i, 'weight', v)} />
-                            
+                            <WeightSelect value={item.weight} onChange={(value) => updateDeep('inventory', index, 'weight', value)} />
+
                             <div className="w-7 flex justify-center">
                                 {isEquipable && (
-                                    <button 
-                                        onClick={() => handleEquip(dbItem, i)}
+                                    <button
+                                        type="button"
+                                        onClick={() => handleEquip(dbItem, index)}
                                         className="w-6 h-6 flex items-center justify-center text-fl-primary hover:text-fl-surface bg-fl-primary/10 hover:bg-fl-primary transition-all rounded shadow-sm"
-                                        title="Nasadiť do boja"
+                                        title="Nasadiť"
                                     >
                                         <ArrowUpRight size={14} strokeWidth={2.5} />
                                     </button>
                                 )}
                             </div>
 
-                            <button 
-                                onClick={() => handleClearItem(i)}
+                            <button
+                                type="button"
+                                onClick={() => handleClearItem(index)}
                                 className="w-6 h-6 flex items-center justify-center text-fl-border hover:text-red-700 opacity-50 group-hover:opacity-100 transition-all rounded hover:bg-red-900/30"
                                 title="Odstranit předmět"
                             >
@@ -139,6 +163,7 @@ const SheetInventory = ({ char, updateDeep, updateField, innerRef, handleAddInve
                 })}
             </div>
             <button
+                type="button"
                 onClick={handleAddInventorySlot}
                 className="w-full mt-3 py-2 bg-fl-paper hover:bg-fl-border text-fl-primary font-bold uppercase text-xs tracking-widest rounded transition-colors flex items-center justify-center gap-2 border border-fl-primary/30"
             >

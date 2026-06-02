@@ -1,23 +1,24 @@
 import React, { useState, useMemo } from 'react';
 import { Search, X, Plus, ChevronDown, ChevronUp, Flame, Check } from 'lucide-react';
-import { SPELLS_DATA } from '../../data/spells_data';
+import { useCatalog } from '../../context/CatalogContext';
 
 const SpellPicker = ({ char, onAdd, onClose }) => {
+    const { spells: catalogSpells } = useCatalog();
     const [searchTerm, setSearchTerm] = useState("");
-    const [activeSchool, setActiveSchool] = useState(Object.keys(SPELLS_DATA)[0] || "Obecná");
+    const [activeSchool, setActiveSchool] = useState(Object.keys(catalogSpells)[0] || "Obecná");
     const [expandedSpell, setExpandedSpell] = useState(null);
 
-    const schools = Object.keys(SPELLS_DATA).filter(s => SPELLS_DATA[s].length > 0);
+    const schools = Object.keys(catalogSpells).filter(s => catalogSpells[s].length > 0);
     const knownSpells = Array.isArray(char.spells) ? char.spells : [];
 
     const filteredSpells = useMemo(() => {
-        const data = SPELLS_DATA[activeSchool] || [];
+        const data = catalogSpells[activeSchool] || [];
         if (!searchTerm) return data;
         return data.filter(s =>
             s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             s.description.toLowerCase().includes(searchTerm.toLowerCase())
         );
-    }, [activeSchool, searchTerm]);
+    }, [activeSchool, catalogSpells, searchTerm]);
 
     const isKnown = (spellId) => knownSpells.some(s => s.id === spellId);
 

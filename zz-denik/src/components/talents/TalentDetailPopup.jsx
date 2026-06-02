@@ -1,13 +1,15 @@
 import React, { useMemo } from 'react';
 import { X, Star, ChevronUp, ChevronDown, Info, Plus, Minus } from 'lucide-react';
-import { TALENTS_DATA } from '../../data/talents_data';
+import { useCatalog } from '../../context/CatalogContext';
 
 const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull }) => {
+    const { talents: catalogTalents } = useCatalog();
+
     // Find the full talent data to show all rank descriptions
     const fullTalent = useMemo(() => {
-        const allTalents = [...(TALENTS_DATA.profession || []), ...(TALENTS_DATA.general || [])];
+        const allTalents = [...(catalogTalents.profession || []), ...(catalogTalents.general || [])];
         return allTalents.find(t => t.id === talent.id);
-    }, [talent.id]);
+    }, [catalogTalents, talent.id]);
 
     const maxRank = fullTalent ? fullTalent.ranks.length : talent.rank;
     const canUpgrade = talent.rank < maxRank;

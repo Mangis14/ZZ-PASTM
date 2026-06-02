@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Flame, ChevronDown, ChevronUp, Plus } from 'lucide-react';
-import { SPELLS_DATA } from './data/spells_data';
+import { useCatalog } from './context/CatalogContext';
 
 const SpellCard = ({ spell, isExpanded, onToggle, showSchool, knownSpell, onLearnSpell }) => {
     return (
@@ -69,7 +69,8 @@ const SpellCard = ({ spell, isExpanded, onToggle, showSchool, knownSpell, onLear
 };
 
 const SpellsSection = ({ char, onLearnSpell }) => {
-    const schools = Object.keys(SPELLS_DATA).filter(s => SPELLS_DATA[s].length > 0);
+    const { spells: catalogSpells } = useCatalog();
+    const schools = Object.keys(catalogSpells).filter(s => catalogSpells[s].length > 0);
     const [activeTab, setActiveTab] = useState(schools[0] || 'Obecná');
     const [search, setSearch] = useState('');
     const [expanded, setExpanded] = useState({});
@@ -86,13 +87,13 @@ const SpellsSection = ({ char, onLearnSpell }) => {
 
         if (!lowerSearch) {
             // No search — show only the selected school
-            return (SPELLS_DATA[activeTab] || []).map(s => ({ ...s, _school: activeTab }));
+            return (catalogSpells[activeTab] || []).map(s => ({ ...s, _school: activeTab }));
         }
 
         // Search active — search across ALL schools
         const allSpells = [];
         for (const school of schools) {
-            for (const spell of SPELLS_DATA[school]) {
+            for (const spell of catalogSpells[school]) {
                 allSpells.push({ ...spell, _school: school });
             }
         }
@@ -103,7 +104,7 @@ const SpellsSection = ({ char, onLearnSpell }) => {
             (s.ingredient && s.ingredient.toLowerCase().includes(lowerSearch)) ||
             s._school.toLowerCase().includes(lowerSearch)
         );
-    }, [activeTab, search, schools]);
+    }, [activeTab, catalogSpells, search, schools]);
 
     return (
         <div className="space-y-4 animate-in fade-in duration-300">

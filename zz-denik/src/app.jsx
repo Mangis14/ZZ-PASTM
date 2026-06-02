@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
-  Menu, X, Plus, Skull, Dices, Download, Upload, Trash2, CloudRain, Sun, Moon
+  Menu, X, Plus, Skull, Dices, Download, Upload, Trash2, CloudRain, Sun, Moon, BookOpen
 } from 'lucide-react';
 
 import Toaster from './components/common/Toast';
@@ -11,6 +11,9 @@ import SpellsSection from './SpellsSection';
 import WeatherSection from './WeatherSection';
 import DiceRollerModal from './DiceRollerModal';
 import CriticalInjuryModal from './CriticalInjuryModal';
+import CharacterCreationWizard from './components/CharacterCreationWizard';
+import DataManagementModal from './components/DataManagementModal';
+import RulesReferenceModal from './components/RulesReferenceModal';
 
 import Header from './components/layout/Header';
 import BottomNav from './components/layout/BottomNav';
@@ -73,6 +76,10 @@ const App = () => {
   const [initialDice, setInitialDice] = useState(null);
   const [showCritModal, setShowCritModal] = useState(false);
   const [isSheetModalOpen, setIsSheetModalOpen] = useState(false);
+  const [showCreationWizard, setShowCreationWizard] = useState(false);
+  const [showNewCharChoice, setShowNewCharChoice] = useState(false);
+  const [showDataModal, setShowDataModal] = useState(false);
+  const [showRulesModal, setShowRulesModal] = useState(false);
   const [currentView, setCurrentViewRaw] = useState('sheet');
   const [viewDirection, setViewDirection] = useState(null); // 'left' | 'right' | null // 'sheet', 'zbozi', 'talents', 'spells', 'weather'
 
@@ -113,7 +120,7 @@ const App = () => {
     setTimeout(() => setViewDirection(null), 300);
   };
 
-  const isSwipeLocked = showMenu || showDiceModal || showCritModal || isSheetModalOpen;
+  const isSwipeLocked = showMenu || showDiceModal || showCritModal || isSheetModalOpen || showCreationWizard || showNewCharChoice || showDataModal || showRulesModal;
 
   const { onTouchStart, onTouchMove, onTouchEnd, swipeOffset, isTransitioning, slideDirection } = useSwipe({
     onSwipedLeft: () => {
@@ -190,12 +197,17 @@ const App = () => {
     setTimeout(() => setToast(null), 3000);
   };
 
-  const createNew = () => {
+  const createNewDirect = () => {
     const newChar = { ...defaultCharacter, id: Date.now().toString(), lastSaved: Date.now() };
     setChar(newChar);
     setSavedChars(prev => ({ ...prev, [newChar.id]: newChar }));
     setShowMenu(false);
-    showToast("Nová postava vytvořena");
+    showToast("Nová prázdná postava vytvořena");
+  };
+
+  const createNew = () => {
+    setShowMenu(false);
+    setShowNewCharChoice(true);
   };
 
   const loadChar = (id) => {
@@ -215,31 +227,46 @@ const App = () => {
     }
   };
 
-  const exportData = () => {
-    const blob = new Blob([JSON.stringify(savedChars, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `fl_backup_${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
+  const importAllCharacters = (data) => {
+    setSavedChars(data);
+    localStorage.setItem('fl_characters', JSON.stringify(data));
+    
+    // Switch to first character in imported database if any
+    const firstId = Object.keys(data)[0];
+    if (firstId && data[firstId]) {
+      setChar(data[firstId]);
+      localStorage.setItem('fl_last_char_id', firstId);
+    }
+    
+    setShowDataModal(false);
+    showToast("Záloha všech postav obnovena!");
   };
 
-  const importData = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const data = JSON.parse(e.target.result);
-          setSavedChars(data);
-          localStorage.setItem('fl_characters', JSON.stringify(data));
-          showToast("Záloha obnovena");
-        } catch (err) {
-          alert("Chyba při importu");
-        }
-      };
-      reader.readAsText(file);
+  const importSingleCharacter = (newChar) => {
+    let finalId = newChar.id || Date.now().toString();
+    
+    // Check if ID collision exists
+    if (savedChars[finalId]) {
+      finalId = Date.now().toString();
     }
+
+    const mergedChar = { 
+      ...newChar, 
+      id: finalId, 
+      lastSaved: Date.now() 
+    };
+
+    setSavedChars(prev => {
+      const updated = { ...prev, [finalId]: mergedChar };
+      localStorage.setItem('fl_characters', JSON.stringify(updated));
+      return updated;
+    });
+
+    setChar(mergedChar);
+    localStorage.setItem('fl_last_char_id', finalId);
+    
+    setShowDataModal(false);
+    showToast(`Postava ${mergedChar.name || 'Bezejmenný'} importována!`);
   };
 
   const updateField = (path, value) => {
@@ -251,20 +278,6 @@ const App = () => {
       current[parts[parts.length - 1]] = value;
       return newChar;
     });
-  };
-
-  const handleAddWeaponSlot = () => {
-    setChar(prev => ({
-      ...prev,
-      weapons: [...prev.weapons, { name: '', bonus: '', damage: '', range: '', note: '', weight: 1 }]
-    }));
-  };
-
-  const handleAddInventorySlot = () => {
-    setChar(prev => ({
-      ...prev,
-      inventory: [...prev.inventory, { name: '', weight: 1 }]
-    }));
   };
 
   const addItemToInventory = (item) => {
@@ -283,6 +296,58 @@ const App = () => {
       }
       return { ...prev, inventory: newInv };
     });
+  };
+
+  const equipItemDirectly = (item) => {
+    const parseWeightLocal = (w) => {
+      if (!w) return 0;
+      const str = String(w).toLowerCase().trim();
+      if (['–', '-', 'drobné', 'drobný', 'drobná', '', '0'].includes(str)) return 0;
+      if (str.includes('lehk') || str.includes('1/2') || str.includes('½')) return 0.5;
+      if (str.includes('normální') || str.includes('běžn')) return 1;
+      if (str.includes('těžk')) return 2;
+      const num = parseFloat(str.replace(',', '.'));
+      return isNaN(num) ? 0 : num;
+    };
+
+    if (item.Category === 'Zbroj') {
+      const nameLower = (item.Předmět || '').toLowerCase();
+      const slot = nameLower.includes('štít') ? 'shield' :
+                   (nameLower.includes('čapka') || nameLower.includes('přilbice') || nameLower.includes('helma') || nameLower.includes('čelenka')) ? 'helmet' : 'armor';
+      
+      setChar(prev => ({
+        ...prev,
+        [slot]: {
+          name: item.Předmět,
+          bonus: item.Bonus || '',
+          rating: item.Zbroj || '',
+          weight: parseWeightLocal(item.Váha)
+        }
+      }));
+      
+      const slotLabels = { shield: 'Štít', helmet: 'Helma', armor: 'Zbroj' };
+      showToast(`${slotLabels[slot]} ${item.Předmět} vybaven!`);
+    } else if (item.Category === 'Zbraně nablízko' || item.Category === 'Střelné zbraně') {
+      const weaponObj = {
+        name: item.Předmět,
+        bonus: item.Bonus || '',
+        damage: item.Zranění || '',
+        range: item.Category === 'Střelné zbraně' ? (item.Vlastnosti || 'Střední') : 'Blízká',
+        note: item.Vlastnosti || '',
+        weight: parseWeightLocal(item.Váha)
+      };
+
+      let targetIdx = 0;
+      setChar(prev => {
+        const newWeapons = [...prev.weapons];
+        const emptyIndex = newWeapons.findIndex(w => !w.name);
+        targetIdx = emptyIndex === -1 ? 0 : emptyIndex;
+        newWeapons[targetIdx] = weaponObj;
+        return { ...prev, weapons: newWeapons };
+      });
+      
+      showToast(`Zbraň ${item.Předmět} vybavena do slotu ${targetIdx + 1}!`);
+    }
   };
 
   const learnTalent = (talentDefinition) => {
@@ -415,6 +480,19 @@ const App = () => {
       {toast && <Toaster message={toast} />}
       {showDiceModal && <DiceRollerModal initialRoll={initialDice} onClose={() => setShowDiceModal(false)} />}
       {showCritModal && <CriticalInjuryModal onClose={() => setShowCritModal(false)} />}
+      {showDataModal && (
+        <DataManagementModal
+          char={char}
+          savedChars={savedChars}
+          onClose={() => setShowDataModal(false)}
+          onImportAll={importAllCharacters}
+          onImportSingle={importSingleCharacter}
+          showToast={showToast}
+        />
+      )}
+      {showRulesModal && (
+        <RulesReferenceModal onClose={() => setShowRulesModal(false)} />
+      )}
 
       <Header
         char={char}
@@ -449,8 +527,12 @@ const App = () => {
               <Dices size={20} /> Hod Kostkami
             </button>
 
-            <button onClick={() => { setCurrentView('weather'); setShowMenu(false); }} className="w-full flex items-center gap-3 p-4 bg-blue-900 text-fl-paper-light font-bold rounded hover:bg-blue-800 transition-colors mb-6 shadow-lg border border-blue-700">
+            <button onClick={() => { setCurrentView('weather'); setShowMenu(false); }} className="w-full flex items-center gap-3 p-4 bg-blue-900 text-fl-paper-light font-bold rounded hover:bg-blue-800 transition-colors mb-4 shadow-lg border border-blue-700">
               <CloudRain size={20} /> Počasí
+            </button>
+
+            <button onClick={() => { setShowRulesModal(true); setShowMenu(false); }} className="w-full flex items-center gap-3 p-4 bg-amber-900 text-fl-paper-light font-bold rounded hover:bg-amber-800 transition-colors mb-6 shadow-lg border border-amber-700">
+              <BookOpen size={20} /> Pravidla & Tahák
             </button>
 
             <button onClick={() => setIsDarkMode(!isDarkMode)} className="w-full flex items-center gap-3 p-4 bg-fl-bg text-fl-primary font-bold rounded hover:bg-fl-nav-hover transition-colors mb-6 shadow-lg border border-fl-border">
@@ -472,13 +554,12 @@ const App = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-3 pt-6 border-t border-fl-nav-hover">
-              <button onClick={exportData} className="flex flex-col items-center gap-2 p-3 bg-fl-bg rounded border border-fl-border text-fl-primary hover:text-white hover:border-fl-primary transition-colors">
+              <button onClick={() => { setShowDataModal(true); setShowMenu(false); }} className="flex flex-col items-center gap-2 p-3 bg-fl-bg rounded border border-fl-border text-fl-primary hover:text-white hover:border-fl-primary transition-colors">
                 <Download size={20} /> <span className="text-xs font-bold uppercase">Export</span>
               </button>
-              <label className="flex flex-col items-center gap-2 p-3 bg-fl-bg rounded border border-fl-border text-fl-primary hover:text-white hover:border-fl-primary transition-colors cursor-pointer">
+              <button onClick={() => { setShowDataModal(true); setShowMenu(false); }} className="flex flex-col items-center gap-2 p-3 bg-fl-bg rounded border border-fl-border text-fl-primary hover:text-white hover:border-fl-primary transition-colors">
                 <Upload size={20} /> <span className="text-xs font-bold uppercase">Import</span>
-                <input type="file" className="hidden" accept=".json" onChange={importData} />
-              </label>
+              </button>
             </div>
           </div>
         </div>
@@ -487,10 +568,8 @@ const App = () => {
       {/* MAIN CONTENT */}
       <main
         {...swipeHandlers}
-        className="max-w-3xl mx-auto px-4 space-y-6 min-h-[80vh]"
+        className="max-w-3xl mx-auto px-4 space-y-6 min-h-[80vh] main-content-layout"
         style={{
-          paddingTop: 'calc(env(safe-area-inset-top, 0px) + 86px)',
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 92px)',
           touchAction: 'pan-y'
         }}
       >
@@ -518,8 +597,6 @@ const App = () => {
             updateField={updateField}
             updateDeep={updateDeep}
             addItemToInventory={addItemToInventory}
-            handleAddInventorySlot={handleAddInventorySlot}
-            handleAddWeaponSlot={handleAddWeaponSlot}
             onRoll={startRoll}
             refs={refs}
             scrollToSection={scrollToSection}
@@ -527,7 +604,7 @@ const App = () => {
             onModalStateChange={setIsSheetModalOpen}
           />
         ) : currentView === 'zbozi' ? (
-          <ZboziSection addItemToInventory={addItemToInventory} />
+          <ZboziSection addItemToInventory={addItemToInventory} equipItem={equipItemDirectly} />
         ) : currentView === 'talents' ? (
           <TalentsSection char={char} onLearnTalent={learnTalent} />
         ) : currentView === 'spells' ? (
@@ -538,7 +615,7 @@ const App = () => {
         </div>
       </main>
 
-      {!showMenu && <BottomNav activeSection={currentView} onSectionChange={setCurrentView} />}
+      <BottomNav activeSection={currentView} onSectionChange={setCurrentView} />
     </div>
   );
 };

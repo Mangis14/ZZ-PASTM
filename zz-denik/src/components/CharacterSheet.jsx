@@ -18,9 +18,10 @@ import TalentList from './talents/TalentList';
 import TalentPicker from './talents/TalentPicker';
 import SpellList from './spells/SpellList';
 import SpellPicker from './spells/SpellPicker';
-import { TALENTS_DATA } from '../data/talents_data';
+import { useCatalog } from '../context/CatalogContext';
 
-const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToSection, setCurrentView, onModalStateChange, handleAddInventorySlot, handleAddWeaponSlot, addItemToInventory }) => {
+const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, onRoll, refs, scrollToSection, setCurrentView, onModalStateChange }) => {
+    const { talents: catalogTalents } = useCatalog();
     const [showTalentPicker, setShowTalentPicker] = useState(false);
     const [showSpellPicker, setShowSpellPicker] = useState(false);
     const [isTalentDetailOpen, setIsTalentDetailOpen] = useState(false);
@@ -52,7 +53,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToS
 
     const handleUpgradeTalent = (talent) => {
         const talents = Array.isArray(char.talents) ? char.talents : [];
-        const allTalents = [...(TALENTS_DATA.profession || []), ...(TALENTS_DATA.general || [])];
+        const allTalents = [...(catalogTalents.profession || []), ...(catalogTalents.general || [])];
         const fullTalent = allTalents.find(t => t.id === talent.id);
         if (!fullTalent) return;
         const nextRank = talent.rank + 1;
@@ -67,7 +68,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToS
     const handleDowngradeTalent = (talent) => {
         const talents = Array.isArray(char.talents) ? char.talents : [];
         if (talent.rank <= 1) return;
-        const allTalents = [...(TALENTS_DATA.profession || []), ...(TALENTS_DATA.general || [])];
+        const allTalents = [...(catalogTalents.profession || []), ...(catalogTalents.general || [])];
         const fullTalent = allTalents.find(t => t.id === talent.id);
         const prevRank = talent.rank - 1;
         const rankData = fullTalent?.ranks[prevRank - 1];
@@ -102,6 +103,20 @@ const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToS
         if (setCurrentView) setCurrentView('spells');
     };
 
+    // --- INVENTORY HANDLER ---
+    const handleAddInventorySlot = () => {
+        const newInv = [...char.inventory, { name: '', weight: 1 }];
+        updateField('inventory', newInv);
+    };
+
+    const handleAddWeaponSlot = () => {
+        const newWeapons = [
+            ...char.weapons,
+            { name: '', bonus: '', damage: '', range: '', note: '', weight: 1 },
+        ];
+        updateField('weapons', newWeapons);
+    };
+
     return (
         <>
             <Navigation scrollToSection={scrollToSection} />
@@ -114,9 +129,13 @@ const CharacterSheet = ({ char, updateField, updateDeep, onRoll, refs, scrollToS
 
             <SheetSkills char={char} updateField={updateField} onRoll={onRoll} innerRef={refs.skills} />
 
-            <div ref={refs.combat}>
-                <SheetCombat char={char} updateDeep={updateDeep} handleAddWeaponSlot={handleAddWeaponSlot} addItemToInventory={addItemToInventory} />
-            </div>
+            <SheetCombat
+                char={char}
+                updateDeep={updateDeep}
+                innerRef={refs.combat}
+                handleAddWeaponSlot={handleAddWeaponSlot}
+                addItemToInventory={addItemToInventory}
+            />
 
             <SheetInventory 
                 char={char} 

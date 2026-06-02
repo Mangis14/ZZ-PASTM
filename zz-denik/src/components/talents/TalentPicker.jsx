@@ -1,20 +1,21 @@
 import React, { useState, useMemo } from 'react';
 import { Search, X, Plus, ChevronDown, ChevronUp, Star } from 'lucide-react';
-import { TALENTS_DATA } from '../../data/talents_data';
+import { useCatalog } from '../../context/CatalogContext';
 
 const TalentPicker = ({ char, onAdd, onClose }) => {
+    const { talents: catalogTalents } = useCatalog();
     const [searchTerm, setSearchTerm] = useState("");
     const [activeTab, setActiveTab] = useState("profession"); // 'profession' | 'general'
     const [expandedTalent, setExpandedTalent] = useState(null);
 
     const filteredTalents = useMemo(() => {
-        const data = activeTab === 'profession' ? TALENTS_DATA.profession : TALENTS_DATA.general;
+        const data = activeTab === 'profession' ? catalogTalents.profession : catalogTalents.general;
         if (!searchTerm) return data;
         return data.filter(t =>
             t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             (t.profession && t.profession.toLowerCase().includes(searchTerm.toLowerCase()))
         );
-    }, [activeTab, searchTerm]);
+    }, [activeTab, catalogTalents, searchTerm]);
 
     const handleAdd = (talent, rankIndex) => {
         onAdd({

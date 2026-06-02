@@ -54,46 +54,49 @@ const SheetConsumables = ({ char, updateField, innerRef }) => {
                     return (
                         <div
                             key={key}
-                            className="rounded-2xl border border-fl-paper bg-fl-paper-bright p-3 shadow-sm flex flex-col justify-between"
+                            className="rounded-2xl border border-fl-paper bg-fl-paper-bright p-3 shadow-sm"
                         >
-                            <div className="flex flex-col items-center gap-1 mb-2">
+                            <div className="flex items-center gap-2">
                                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-fl-paper text-fl-primary">
                                     <Icon size={18} />
                                 </div>
-                                <p className="text-[11px] font-bold uppercase tracking-wider text-fl-text-muted">{label}</p>
+                                <div className="min-w-0">
+                                    <p className="text-[11px] font-bold uppercase tracking-wider text-fl-text-muted">{label}</p>
+                                    <p className={`text-lg font-black leading-none ${getColorClass(val)}`}>
+                                        {getDisplayValue(val)}
+                                    </p>
+                                </div>
                             </div>
 
-                            <div className="mt-auto flex items-center justify-between gap-1 border-t border-fl-paper pt-3">
+                            <div className="mt-3 grid grid-cols-2 gap-2">
                                 <button
                                     type="button"
                                     onClick={() => cycleDown(key)}
                                     disabled={isEmpty}
                                     aria-label={`Znížit zdroj ${label}`}
-                                    className={`flex h-8 w-8 items-center justify-center rounded text-lg font-bold leading-none transition-colors touch-manipulation border ${
+                                    className={`flex h-11 items-center justify-center gap-2 rounded-xl border text-sm font-bold transition-colors ${
                                         isEmpty
                                             ? 'border-fl-border bg-fl-paper text-fl-text-muted opacity-50'
-                                            : 'bg-fl-primary/10 hover:bg-fl-primary/30 text-fl-primary border-fl-primary/30'
+                                            : 'border-fl-border bg-fl-paper text-fl-surface hover:border-fl-primary hover:text-fl-primary'
                                     }`}
                                 >
-                                    -
+                                    <span className="text-lg leading-none">-</span>
+                                    <span>Ubrať</span>
                                 </button>
-
-                                <span className={`text-xl font-black tabular-nums whitespace-nowrap text-center ${getColorClass(val)}`}>
-                                    {getDisplayValue(val)}
-                                </span>
 
                                 <button
                                     type="button"
                                     onClick={() => cycleUp(key)}
                                     disabled={isMax}
                                     aria-label={`Zvýšit zdroj ${label}`}
-                                    className={`flex h-8 w-8 items-center justify-center rounded text-lg font-bold leading-none transition-colors touch-manipulation border ${
+                                    className={`flex h-11 items-center justify-center gap-2 rounded-xl border text-sm font-bold transition-colors ${
                                         isMax
                                             ? 'border-fl-border bg-fl-paper text-fl-text-muted opacity-50'
-                                            : 'bg-fl-primary/10 hover:bg-fl-primary/30 text-fl-primary border-fl-primary/30'
+                                            : 'border-fl-primary bg-fl-primary/10 text-fl-primary hover:bg-fl-primary hover:text-white'
                                     }`}
                                 >
-                                    +
+                                    <span className="text-lg leading-none">+</span>
+                                    <span>Pridať</span>
                                 </button>
                             </div>
                         </div>

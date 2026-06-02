@@ -2,19 +2,81 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.4.0] - 2026-04-15
+## [1.8.0] - 2026-06-02
 
 ### Added
-- **Dynamic Equipment System**: Complete logic overhaul for inventory and combat equipment logistics.
-- **Auto-Equip Mechanics**: Equipping a weapon or piece of armor automatically fetches its attributes (bonus, damage, range, rating, requirements, weight) from the database and places them in an empty combat slot, explicitly removing the corresponding item from the user's inventory to save space.
-- **Swap / Full-Slot Handling Modals**: Added `EquipSwapModal` to elegantly swap an item with a full weapon/armor slot in a 1:1 configuration, sending the old item back directly to exactly the same inventory slot.
-- **Un-equip & Drop Mechanics**: Added an `UnequipModal` triggered by a trash icon next to any active weapon/armor slot representing a choice to "Stash to Backpack" (safe removal without inventory data loss) or "Drop Completely" (deletion).
-- **Weapon Slot Expansion**: Introduced the capability to dynamically "Add Weapon Slot" (`handleAddWeaponSlot`) in the combat sheet.
-- **Dynamic Mobile Navigation**: UI screen estate optimizations via `requestAnimationFrame` and hysteresis scroll-direction tracking to smoothly collapse navigation text labels when the user is scrolling down, returning them up during a scroll-up.
-- **Shopping Cart Mechanics**: Full shopping cart implemented and polished for the user inside the Zboží (Items) section.
+- Celková optimalizace záložky Zboží pro mobilní zařízení.
+- **Harmonikové zobrazení (Accordion)**: Karty předmětů jsou nyní ve výchozím stavu zbalené a zobrazují pouze název, kategorii a cenu. Kliknutím se plynule rozbalí a ukáží kompletní detaily (suroviny, čas, talenty, bojové statistiky, efekty) a akční tlačítka. To ušetří až 70 % vertikálního prostoru na mobilu.
+- **Sdružení kategorií (Grouped Tabs)**: 9 původních horizontálně rolovatelných tabů bylo zredukováno na **5 hlavních záložek**:
+  - *Vše*: Kompletní katalog.
+  - *Výzbroj*: Zbraně nablízko, střelné zbraně a zbroje.
+  - *Výbava*: Zboží, oblečení a lektvary.
+  - *Suroviny*: Craftovací suroviny.
+  - *Služby*: Služby, hostince a doprava.
+- **Chytré kontextové filtry (Smart Filters)**: Panel detailních filtrů se nyní dynamicky přizpůsobuje vybrané záložce (např. skrývá filtry jako bojové zranění a ruce, pokud si hráč prohlíží Suroviny nebo Služby).
+- Přidán filtr **Typ předmětu** pro rychlé rozlišení subkategorií ve sdružených záložkách (např. filtrování pouze Zbroje uvnitř Výzbroje).
+- **Prepojení nákupu a vybavení**: Přidáno akční tlačítko **Koupit & Vybavit** pro zbraně a zbroje, které předmět zakoupí a automaticky dosadí do aktivního slotu na listu postavy (zbraně, zbroj, helma, štít) a přepočítá statistiky.
+
+## [1.7.0] - 2026-06-02
+
+### Added
+- Nový interaktivní herní tahák a přehled pravidel (`RulesReferenceModal.jsx`) dostupný přímo z bočního menu pod tlačítkem **Pravidla & Tahák**.
+- Přehledně rozčleněné karty pravidel a tabulky optimalizované pro mobilní displeje:
+  - **Boj**: Pomalé a rychlé akce (1 AP), dosahy a vzdálenostní zóny (Rvačka, Blízká, Krátká, Dlouhá, Extrémní).
+  - **Stavy**: Detailní mechanické dopady a penalizace pro stavy Hladový, Žíznivý, Nevyspalý a Prochladlý.
+  - **Cesta**: Aktivity během čtyř čtvrtin dne (Pochod, Stavba tábora, Hlídka, Lov/Sběr) a pravidla odpočinku a spánku.
+  - **Dovednosti**: Přehledná tabulka mapování dovedností k mateřským vlastnostem (Síla, Obratnost, Rozum, Empatie).
+- Integrace do `app.jsx` s automatickým blokováním swipe gest při otevřeném taháku pro bezproblémovou interakci a scrollování na mobilech.
+
+## [1.6.0] - 2026-06-02
+
+### Added
+- Plně funkční import a export postav přizpůsobený pro mobilní (Capacitor/WebView) i desktopové prostředí.
+- Nový komponent `DataManagementModal.jsx` poskytující dvě záložky:
+  - **Aktuální postava**: Umožňuje sdílení (Web Share API), stahování JSON souboru nebo zkopírování do schránky pouze pro vybranou postavu. Import umožňuje přidání (import) nové postavy do databáze bez přepsání stávajících.
+  - **Celá záloha**: Umožňuje sdílení, stažení nebo zkopírování kompletní databáze všech uložených postav a kompletní obnovu (přepsání) databáze.
+- Integrace do `app.jsx` se stavem `showDataModal` a helper funkcemi `importAllCharacters` a `importSingleCharacter` (včetně prevence kolizí ID).
+
+### Changed
+- Tlačítka **Export** a **Import** v bočním menu nyní namísto přímého stahování/nahrávání otevírají nový modal pro správu dat.
+
+## [1.5.0] - 2026-06-02
+
+### Added
+- Nový modul Tvorba postavy (Character Creation Wizard) s podporou standardních pravidel a homebrew změn.
+- Průvodce krok za krokem: základní údaje, rozdělování vlastností, rozdělování dovedností, výběr talentů a startovních kouzel.
+- Rozšíření schématu postavy o věk, pýchu, temné tajemství, vzhled, reputaci a vztahy.
 
 ### Fixed
-- **Mobile App Display issues**: Fixed sticky header rendering problems. Added `env(safe-area-inset, 0px)` css fallbacks to fix white gaps occurring inside Android/iOS WebViews.
+- Oprava chyby `TypeError: Cannot read properties of undefined (reading 'hungry')` v `SheetAttributes.jsx` zavedením bezpečného přístupu (optional chaining) ke stavům postavy a správnou inicializací `conditions` v průvodci tvorbou postavy.
+- Sjednocení navigace: horní lišta s taby z `Header.jsx` byla zcela odstraněna a spodní navigace `BottomNav` je nyní aktivní pro všechna rozlišení (včetně PC). Tím se předešlo duplicitám a chybějícímu menu na různých typech displejů.
+- Oprava pozice vnitřního sticky menu postavy (`Navigation.jsx`) zavedením třídy `sticky-sheet-nav` s jednotným horním offsetem 80px.
+- Oprava prázdné mezery v horní části deníku zavedením jednotného paddingu (`main-content-layout`).
+
+## [1.4.0] - 2026-06-02
+
+
+### Added
+- Backend implementation plan for catalog imports, API, database, and Google/MCP automation.
+- Initial backend catalog import pipeline for local `.docx` sources.
+- Minimal local backend API with catalog endpoints and admin import trigger.
+- Frontend catalog provider that loads `/api/catalog/bootstrap` and falls back to bundled static data.
+- Catalog status modal with source, counts, import warnings/errors, refresh, and import actions.
+- Google source manifest and sync pipeline for the supplied Google Docs/Drive links.
+- Backend endpoint `POST /api/admin/sync-google` and npm script `catalog:sync-google`.
+- Import run history with catalog snapshots and diff summaries for added, changed, and removed records.
+- Backend endpoint `GET /api/catalog/history` for recent catalog import runs.
+- npm scripts `catalog:import` and `backend:dev`.
+
+### Changed
+- Vite dev server now proxies `/api` requests to the local backend on port `8787`.
+- Zboží, talents, spells, pickers, and inventory autocomplete now read catalog data through the shared provider.
+- Catalog status modal can now trigger Google source sync from the app.
+- Catalog status modal now shows the latest import diff summary and a short preview of changed records.
+- Talent DOCX import now separates all `Cesta` talents into profession talents and preserves list subpoints under their three rank levels.
+- Character sheet restored stepper controls for attributes, willpower, and experience.
+- Inventory equipment flow restored for equipping weapons/armor and unequipping to backpack or dropping items.
+- Encumbrance limit now includes the Soumar talent carrying bonus.
 
 ## [1.3.0] - 2025-11-28
 

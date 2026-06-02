@@ -5,6 +5,8 @@ zz-denik/node_modules/
 # Production
 dist/
 zz-denik/dist/
+zz-denik/backend/data/
+zz-denik/backend/source-cache/
 
 # IDEs
 .vscode/
