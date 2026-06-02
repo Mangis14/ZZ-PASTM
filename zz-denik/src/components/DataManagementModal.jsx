@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
-import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { X, Download, Upload, Share2, Copy, Database, User, ClipboardCheck } from 'lucide-react';
 
@@ -17,12 +16,13 @@ export default function DataManagementModal({
     const [canShare, setCanShare] = useState(false);
     const [copiedAll, setCopiedAll] = useState(false);
     const [copiedSingle, setCopiedSingle] = useState(false);
+    const isNativeApp = Capacitor.isNativePlatform();
 
     useEffect(() => {
-        if (Capacitor.isNativePlatform() || navigator.share) {
+        if (isNativeApp || navigator.share) {
             setCanShare(true);
         }
-    }, []);
+    }, [isNativeApp]);
 
     const handleCopyText = async (text, setCopiedFlag) => {
         try {
@@ -37,18 +37,10 @@ export default function DataManagementModal({
 
     const handleShare = async (title, text, filename) => {
         try {
-            if (Capacitor.isNativePlatform()) {
-                const saved = await Filesystem.writeFile({
-                    path: filename,
-                    data: text,
-                    directory: Directory.Cache,
-                    encoding: Encoding.UTF8
-                });
-
+            if (isNativeApp) {
                 await Share.share({
                     title,
-                    text: 'Záloha dat deníku Zapovězené Země',
-                    url: saved.uri,
+                    text,
                     dialogTitle: 'Sdílet zálohu'
                 });
 
@@ -84,15 +76,12 @@ export default function DataManagementModal({
 
     const handleDownloadFile = async (text, filename) => {
         try {
-            if (Capacitor.isNativePlatform()) {
-                await Filesystem.writeFile({
-                    path: filename,
-                    data: text,
-                    directory: Directory.Documents,
-                    encoding: Encoding.UTF8
+            if (isNativeApp) {
+                await Share.share({
+                    title: filename,
+                    text,
+                    dialogTitle: `Uložit nebo sdílet ${filename}`
                 });
-
-                showToast(`Soubor uložen: ${filename}`);
                 return;
             }
 
@@ -103,10 +92,17 @@ export default function DataManagementModal({
             a.download = filename;
             a.click();
             URL.revokeObjectURL(url);
-        showToast("Soubor stažen");
+            showToast("Soubor stažen");
         } catch (err) {
-            console.error(err);
-            showToast("Uložení souboru selhalo!");
+            if (err.name !== 'AbortError') {
+                console.error(err);
+                try {
+                    await navigator.clipboard.writeText(text);
+                    showToast("Sdílení selhalo, záloha je zkopírovaná.");
+                } catch {
+                    showToast("Export selhal. Zkuste Kopírovat text.");
+                }
+            }
         }
     };
 

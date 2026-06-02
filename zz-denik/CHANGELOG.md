@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.3] - 2026-06-02
+
+### Fixed
+- Removed the native Filesystem export path that could crash the Android app when pressing `Stáhnout soubor`.
+- Mobile export now opens the native share sheet with the JSON backup text and falls back to copying the backup text if sharing fails.
+
 ## [1.8.2] - 2026-06-02
 
 ### Fixed
