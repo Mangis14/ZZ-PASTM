@@ -17,6 +17,14 @@ All notable changes to this project will be documented in this file.
 - Přidán filtr **Typ předmětu** pro rychlé rozlišení subkategorií ve sdružených záložkách (např. filtrování pouze Zbroje uvnitř Výzbroje).
 - **Prepojení nákupu a vybavení**: Přidáno akční tlačítko **Koupit & Vybavit** pro zbraně a zbroje, které předmět zakoupí a automaticky dosadí do aktivního slotu na listu postavy (zbraně, zbroj, helma, štít) a přepočítá statistiky.
 
+### Fixed
+- Obnoven výpočet bonusu záťaže pro talent Soumar: 1. úroveň +2, 2. a vyšší úroveň +5.
+- Košík ve Zboží a toast notifikace nyní respektují spodní navigaci i safe-area odsazení na mobilu.
+- Import/export modal je nyní nad spodní navigací a používá safe-area odsazení pro mobilní WebView.
+
+### Changed
+- README and Android version metadata are now aligned with release `1.8.0`.
+
 ## [1.7.0] - 2026-06-02
 
 ### Added

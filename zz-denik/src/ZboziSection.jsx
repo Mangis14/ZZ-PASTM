@@ -90,7 +90,7 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
     if (cart.length === 0) return null;
 
     return (
-        <div className="fixed bottom-20 left-0 right-0 z-40 px-4 max-w-3xl mx-auto">
+        <div className="floating-cart-panel fixed left-0 right-0 z-40 px-4 max-w-3xl mx-auto">
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
@@ -113,7 +113,10 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
             )}
 
             {isOpen && (
-                <div className="bg-fl-card border border-fl-primary rounded-lg shadow-2xl overflow-hidden animate-slide-in-left">
+                <div
+                    className="bg-fl-card border border-fl-primary rounded-lg shadow-2xl overflow-hidden animate-slide-in-left flex flex-col"
+                    style={{ maxHeight: 'calc(100dvh - env(safe-area-inset-bottom) - 7.5rem)' }}
+                >
                     <div className="bg-fl-nav p-3 flex items-center justify-between">
                         <div className="flex items-center gap-2 text-white">
                             <ShoppingCart size={20} />
@@ -129,7 +132,7 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
                         </div>
                     </div>
 
-                    <div className="max-h-48 overflow-y-auto p-3 space-y-2">
+                    <div className="min-h-0 flex-1 max-h-48 overflow-y-auto p-3 space-y-2">
                         {cart.map((item, idx) => (
                             <div key={idx} className="flex items-center justify-between bg-fl-paper-bright p-2 rounded border border-fl-paper text-sm">
                                 <div className="flex-1 min-w-0">
@@ -537,7 +540,7 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
     });
 
     return (
-        <section id="zbozi-section" className="scroll-mt-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <section id="zbozi-section" className={`scroll-mt-20 animate-in fade-in slide-in-from-bottom-4 duration-500 ${cart.length > 0 ? 'pb-[34rem]' : ''}`}>
             <SectionHeader title="Zboží a Služby" icon={ShoppingBag} />
 
             <div className="flex flex-wrap gap-2 mb-6">

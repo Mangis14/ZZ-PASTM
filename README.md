@@ -1,74 +1,130 @@
-# Forbidden Lands Character Sheet & Manager
+# ZZ Denik
 
-A modern, mobile-optimized character manager and dice roller for the **Forbidden Lands** tabletop RPG.
+Mobile-first character sheet and campaign helper for the Forbidden Lands / Zapovezene zeme tabletop RPG.
 
-![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Version](https://img.shields.io/badge/version-1.8.0-blue.svg)
+![Stack](https://img.shields.io/badge/React%20%2B%20Vite%20%2B%20Capacitor-Android-green.svg)
 
-## 🌟 Features
+## Current Highlights
 
-- **Character Management**: Track Attributes, Skills, and Critical Injuries.
-- **Inventory & Equipment**: Manage items with weight (Encumbrance) tracking.
-- **Interactive Dice Roller**: Dedicated roller for Base, Skill, and Gear dice.
-- **Comprehensive Database**: Browse through Talents and Spells (Druid & Sorcerer).
-- **Mobile-First Design**: Optimized for mobile devices with safe-area support, built with React and Capacitor.
-- **Dark Mode**: High-contrast dark theme designed for gaming sessions.
+- Character sheet with attributes, skills, willpower, experience, conditions, critical injuries, notes, mounts, and relationships.
+- Large mobile steppers for attributes, resources, and other frequently changed values.
+- Bottom navigation for Denik, Zbozi, Talenty, and Kouzla across mobile and desktop layouts.
+- Inventory and equipment flow for buying, equipping, unequipping to backpack, or dropping weapons and armor.
+- Encumbrance tracking, including the Soumar talent bonus.
+- Zbozi catalog with grouped tabs, accordion item cards, contextual filters, cart, and Koupit & Vybavit actions.
+- Talent catalog split into general talents and profession paths; every talent containing `Cesta` is treated as a profession talent.
+- Spell catalog for browsing and learning spells.
+- Character creation wizard with homebrew-aware setup flow.
+- Import/export modal for single characters and full backups, optimized for mobile WebView safe areas.
+- Rules reference modal with quick combat, condition, journey, and skill lookup.
+- Local backend catalog API with DOCX import, Google Docs/Drive sync, import history, warnings, and diff summaries.
+- Android APK build through Capacitor.
 
-## 🛠 Tech Stack
+## Tech Stack
 
-- **Frontend**: [React](https://reactjs.org/) + [Vite](https://vitejs.dev/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Mobile Wrapper**: [Capacitor](https://capacitorjs.com/)
-- **Data Processing**: Node.js scripts for converting raw RPG data into the application.
+- React 18 and Vite
+- Tailwind CSS
+- Lucide React icons
+- Capacitor Android/iOS wrapper
+- Node.js backend utilities for DOCX catalog import and Google source sync
+- Mammoth and Cheerio for document parsing
 
-## 🚀 Getting Started
+## Repository Layout
 
-### Prerequisites
+- `zz-denik/src/` - React application source.
+- `zz-denik/src/components/` - Character sheet, modals, layout, catalog, spell, and talent components.
+- `zz-denik/src/data/` - Bundled static fallback catalog data.
+- `zz-denik/backend/` - Local catalog import, sync, API server, history, and source config.
+- `zz-denik/docs/` - Backend implementation notes and import plan.
+- `zz-denik/import_files/` - Local source documents used during development.
+- `zz-denik/android/` - Capacitor Android project.
+- `zz-denik/dist/` - Generated Vite web build.
 
-- [Node.js](https://nodejs.org/) (v18 or higher recommended)
-- [npm](https://www.npmjs.com/)
+## Development
 
-### Installation
+Install dependencies:
 
-1. Clone the repository.
-2. Navigate to the core application folder:
-   ```bash
-   cd zz-denik
-   ```
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+cd zz-denik
+npm install
+```
 
-### Development
+Run the frontend:
 
-To start the development server with hot-reload:
 ```bash
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173`.
+The app runs at `http://localhost:5173`.
 
-### Building for Mobile
+Run the local backend:
 
-The project uses Capacitor to target Android and iOS.
+```bash
+npm run backend:dev
+```
 
-- **Android**: `npx cap open android`
-- **iOS**: `npx cap open ios`
+The Vite dev server proxies `/api` to `http://localhost:8787`.
 
-## 📂 Project Structure
+## Catalog Import
 
-- `zz-denik/src/`: React source code and application logic.
-- `zz-denik/public/`: Static assets.
-- `zz-denik/scripts/`: Utility scripts for data conversion (CSV to JSON, Spell extraction).
-- `android/`: Android native project.
-- `ios/`: iOS native project.
+Import local DOCX sources into generated catalog data:
 
-## 📄 License
+```bash
+npm run catalog:import
+```
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Sync configured Google Docs/Drive sources and import them:
 
-## 🤝 Acknowledgments
+```bash
+npm run catalog:sync-google
+```
 
-Based on the **Forbidden Lands** (Zapovězené země) RPG system by Free League Publishing.
+The backend exposes:
+
+- `GET /api/catalog/bootstrap`
+- `GET /api/catalog/history`
+- `POST /api/admin/import`
+- `POST /api/admin/sync-google`
+
+## Android APK
+
+Build the web app and sync Capacitor:
+
+```bash
+cd zz-denik
+npm run build
+npx cap sync android
+```
+
+Build a debug APK:
+
+```bash
+cd android
+.\gradlew.bat assembleDebug
+```
+
+The generated APK is copied at release time to the repository root using the format:
+
+```text
+FL_1.8.0.apk
+```
+
+## Version
+
+Current app version: `1.8.0`
+
+Version is tracked in:
+
+- `zz-denik/package.json`
+- `zz-denik/android/app/build.gradle`
+- `zz-denik/CHANGELOG.md`
+- `README.md`
+
+## License
+
+This project is licensed under the MIT License.
+
+## Acknowledgments
+
+Based on the Forbidden Lands RPG system by Free League Publishing, with homebrew Zapovezene zeme content and automation for local campaign data.

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Download, Upload, Share2, Copy, FileText, Database, User, ClipboardCheck } from 'lucide-react';
-import Card from './common/Card';
+import { X, Download, Upload, Share2, Copy, Database, User, ClipboardCheck } from 'lucide-react';
 
 export default function DataManagementModal({
     char,
@@ -118,11 +117,20 @@ export default function DataManagementModal({
     const dateStr = new Date().toISOString().slice(0, 10);
 
     return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-fl-card w-full max-w-lg rounded-lg border-2 border-fl-primary shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+        <div
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center p-3 sm:p-4"
+            style={{
+                paddingTop: 'calc(env(safe-area-inset-top) + 0.75rem)',
+                paddingBottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)'
+            }}
+        >
+            <div
+                className="bg-fl-card w-full max-w-lg rounded-lg border-2 border-fl-primary shadow-2xl flex flex-col overflow-hidden"
+                style={{ maxHeight: 'calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 1.5rem)' }}
+            >
                 {/* Header */}
                 <div className="p-4 border-b border-fl-border bg-fl-card flex justify-between items-center">
-                    <h3 className="text-xl font-serif font-bold text-fl-primary flex items-center gap-2">
+                    <h3 className="min-w-0 text-lg sm:text-xl font-serif font-bold text-fl-primary flex items-center gap-2 leading-tight">
                         <Database size={20} /> Správa dat postavy
                     </h3>
                     <button onClick={onClose} className="text-fl-primary hover:text-white p-1">
@@ -134,7 +142,7 @@ export default function DataManagementModal({
                 <div className="flex border-b border-fl-border bg-fl-paper-light">
                     <button
                         onClick={() => setActiveTab('single')}
-                        className={`flex-1 py-3 text-xs uppercase font-bold tracking-wider transition-colors border-b-2 flex items-center justify-center gap-2 ${
+                        className={`min-w-0 flex-1 px-2 py-3 text-[11px] sm:text-xs uppercase font-bold tracking-wider leading-tight whitespace-normal transition-colors border-b-2 flex items-center justify-center gap-2 ${
                             activeTab === 'single'
                                 ? 'border-fl-primary text-fl-primary bg-fl-paper'
                                 : 'border-transparent text-fl-text-muted hover:text-fl-primary'
@@ -144,7 +152,7 @@ export default function DataManagementModal({
                     </button>
                     <button
                         onClick={() => setActiveTab('bulk')}
-                        className={`flex-1 py-3 text-xs uppercase font-bold tracking-wider transition-colors border-b-2 flex items-center justify-center gap-2 ${
+                        className={`min-w-0 flex-1 px-2 py-3 text-[11px] sm:text-xs uppercase font-bold tracking-wider leading-tight whitespace-normal transition-colors border-b-2 flex items-center justify-center gap-2 ${
                             activeTab === 'bulk'
                                 ? 'border-fl-primary text-fl-primary bg-fl-paper'
                                 : 'border-transparent text-fl-text-muted hover:text-fl-primary'
@@ -155,7 +163,7 @@ export default function DataManagementModal({
                 </div>
 
                 {/* Content */}
-                <div className="p-5 flex-1 overflow-y-auto space-y-6">
+                <div className="min-h-0 flex-1 overflow-y-auto space-y-6 p-4 pb-6 sm:p-5">
                     {activeTab === 'single' ? (
                         /* SINGLE CHARACTER ACTIONS */
                         <div className="space-y-5">

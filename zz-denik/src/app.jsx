@@ -465,7 +465,12 @@ const App = () => {
     return w;
   }, [char]);
 
-  const encumbranceLimit = char.attributes.strength.current * 2;
+  const soumarTalent = (Array.isArray(char.talents) ? char.talents : []).find(talent =>
+    talent.id === 'soumar' || talent.name?.toLocaleLowerCase('cs-CZ') === 'soumar'
+  );
+  const soumarRank = Number(soumarTalent?.rank || 0);
+  const soumarEncumbranceBonus = soumarRank >= 2 ? 5 : soumarRank === 1 ? 2 : 0;
+  const encumbranceLimit = (char.attributes.strength.current * 2) + soumarEncumbranceBonus;
   const isOverencumbered = totalWeight > encumbranceLimit;
 
   if (!isLoaded) return <div className="min-h-screen flex items-center justify-center bg-fl-bg text-fl-primary">Načítám...</div>;

@@ -77,6 +77,14 @@ body {
     padding-bottom: calc(env(safe-area-inset-bottom) + 92px);
 }
 
+.floating-cart-panel {
+    bottom: calc(env(safe-area-inset-bottom) + 92px);
+}
+
+.toast-safe-bottom {
+    bottom: calc(env(safe-area-inset-bottom) + 96px);
+}
+
 /* Responsive top offset for inner character sheet navigation */
 .sticky-sheet-nav {
     top: calc(env(safe-area-inset-top) + 80px);
