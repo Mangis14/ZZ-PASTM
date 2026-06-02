@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.2] - 2026-06-02
+
+### Fixed
+- Tlačítko Stáhnout soubor v mobilní Capacitor aplikaci nyní ukládá JSON zálohu přes nativní Filesystem plugin místo nefunkčního WebView blob downloadu.
+- Sdílení záloh v mobilní aplikaci používá nativní Capacitor Share plugin.
+
 ## [1.8.1] - 2026-06-02
 
 ### Fixed

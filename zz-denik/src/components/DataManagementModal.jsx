@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Capacitor } from '@capacitor/core';
+import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
 import { X, Download, Upload, Share2, Copy, Database, User, ClipboardCheck } from 'lucide-react';
 
 export default function DataManagementModal({
@@ -16,7 +19,7 @@ export default function DataManagementModal({
     const [copiedSingle, setCopiedSingle] = useState(false);
 
     useEffect(() => {
-        if (navigator.share) {
+        if (Capacitor.isNativePlatform() || navigator.share) {
             setCanShare(true);
         }
     }, []);
@@ -34,6 +37,25 @@ export default function DataManagementModal({
 
     const handleShare = async (title, text, filename) => {
         try {
+            if (Capacitor.isNativePlatform()) {
+                const saved = await Filesystem.writeFile({
+                    path: filename,
+                    data: text,
+                    directory: Directory.Cache,
+                    encoding: Encoding.UTF8
+                });
+
+                await Share.share({
+                    title,
+                    text: 'Záloha dat deníku Zapovězené Země',
+                    url: saved.uri,
+                    dialogTitle: 'Sdílet zálohu'
+                });
+
+                showToast("Zdieľanie dokončené");
+                return;
+            }
+
             // We can share either plain text or try to construct a Shareable File if supported
             const file = new File([text], filename, { type: 'application/json' });
             
@@ -60,15 +82,32 @@ export default function DataManagementModal({
         }
     };
 
-    const handleDownloadFile = (text, filename) => {
-        const blob = new Blob([text], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(url);
+    const handleDownloadFile = async (text, filename) => {
+        try {
+            if (Capacitor.isNativePlatform()) {
+                await Filesystem.writeFile({
+                    path: filename,
+                    data: text,
+                    directory: Directory.Documents,
+                    encoding: Encoding.UTF8
+                });
+
+                showToast(`Soubor uložen: ${filename}`);
+                return;
+            }
+
+            const blob = new Blob([text], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
         showToast("Soubor stažen");
+        } catch (err) {
+            console.error(err);
+            showToast("Uložení souboru selhalo!");
+        }
     };
 
     const processImportText = (text, type) => {
