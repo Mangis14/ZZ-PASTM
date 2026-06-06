@@ -1,130 +1,128 @@
-# ZZ Denik
+# ZZ Denník
 
-Mobile-first character sheet and campaign helper for the Forbidden Lands / Zapovezene zeme tabletop RPG.
+Mobilný a webový denník postavy pre stolovú RPG hru Forbidden Lands / Zapovězené země.
 
-![Version](https://img.shields.io/badge/version-1.8.3-blue.svg)
 ![Stack](https://img.shields.io/badge/React%20%2B%20Vite%20%2B%20Capacitor-Android-green.svg)
+![Main](https://img.shields.io/badge/main-aktu%C3%A1lny%20v%C3%BDvoj-blue.svg)
 
-## Current Highlights
+> Aktuálny stav vetvy `main` obsahuje nové funkcie a opravy vytvorené po poslednom publikovanom APK `1.8.3`.
 
-- Character sheet with attributes, skills, willpower, experience, conditions, critical injuries, notes, mounts, and relationships.
-- Large mobile steppers for attributes, resources, and other frequently changed values.
-- Bottom navigation for Denik, Zbozi, Talenty, and Kouzla across mobile and desktop layouts.
-- Inventory and equipment flow for buying, equipping, unequipping to backpack, or dropping weapons and armor.
-- Encumbrance tracking, including the Soumar talent bonus.
-- Zbozi catalog with grouped tabs, accordion item cards, contextual filters, cart, and Koupit & Vybavit actions.
-- Talent catalog split into general talents and profession paths; every talent containing `Cesta` is treated as a profession talent.
-- Spell catalog for browsing and learning spells.
-- Character creation wizard with homebrew-aware setup flow.
-- Import/export modal for single characters and full backups, optimized for mobile WebView safe areas.
-- Rules reference modal with quick combat, condition, journey, and skill lookup.
-- Local backend catalog API with DOCX import, Google Docs/Drive sync, import history, warnings, and diff summaries.
-- Android APK build through Capacitor.
+## Najnovšie funkcie
 
-## Tech Stack
+- Kompletný responzívny overhaul Denníka s prehľadnými dlaždicami.
+- Personalizácia Denníka:
+  - zbalenie a rozbalenie každej dlaždice,
+  - uloženie otvoreného a zbaleného stavu,
+  - zmena poradia dlaždíc podržaním,
+  - uloženie preferovaného herného prehľadu,
+  - obnovenie predvoleného rozloženia,
+  - režim Hra, ktorý skryje editačné tlačidlá.
+- Karty vlastností v poradí `SIL`, `OBR`, `OSO`, `BYS` s jasným zdravým, poškodeným a vyradeným stavom.
+- Klikateľný horný panel s vlastnosťami, stavmi, vôľou, záťažou a farebným mešcom.
+- Kliknutie na horný indikátor otvorí a presunie používateľa na príslušnú dlaždicu.
+- Automatické otvorenie menu Nová postava, ak ešte nie je vytvorená žiadna postava.
+- Opravený výpočet záťaže z maximálnej Sily; Soumar úrovne 3 pridáva `+10`.
+- Možnosť odstrániť aj prázdne sloty inventára.
+- Potvrdenie pred zmenou maximálnej hodnoty vlastnosti.
+- Výber talentov a kúziel zostáva otvorený pri pridávaní viacerých položiek.
+- Odstránená swipe navigácia a horizontálne slide animácie pre plynulejšie používanie na telefóne.
 
-- React 18 and Vite
-- Tailwind CSS
-- Lucide React icons
-- Capacitor Android/iOS wrapper
-- Node.js backend utilities for DOCX catalog import and Google source sync
-- Mammoth and Cheerio for document parsing
+## Zboží
 
-## Repository Layout
+- Samostatné hlavné kategórie bez spájania do všeobecných skupín.
+- Viacnásobný výber kategórií.
+- Vyhľadávanie, radenie, rýchle filtre a aktívne filtre.
+- Uloženie posledného filtra pri návrate na kartu.
+- Katalóg sa synchronizuje z Google Drive a transformuje do jednotného formátu.
+- Android a offline režim používajú posledný pribalený transformovaný katalóg.
 
-- `zz-denik/src/` - React application source.
-- `zz-denik/src/components/` - Character sheet, modals, layout, catalog, spell, and talent components.
-- `zz-denik/src/data/` - Bundled static fallback catalog data.
-- `zz-denik/backend/` - Local catalog import, sync, API server, history, and source config.
-- `zz-denik/docs/` - Backend implementation notes and import plan.
-- `zz-denik/import_files/` - Local source documents used during development.
-- `zz-denik/android/` - Capacitor Android project.
-- `zz-denik/dist/` - Generated Vite web build.
+## Kúzla
 
-## Development
+- Responzívne kategórie podľa školy mágie.
+- Viacnásobný výber škôl.
+- Filtrovanie podľa stupňa a stavu `Naučené` / `Ostatné`.
+- Vyhľadávanie podľa názvu, školy, popisu a pomôcky.
+- Rovnaké filtre pri pridávaní nového kúzla.
+- Vyhľadávanie medzi naučenými kúzlami priamo v Denníku.
 
-Install dependencies:
+## Ďalšie funkcie
 
-```bash
+- Správa viacerých postáv a sprievodca vytvorením novej postavy.
+- Boj, inventár, zdroje, talenty, kúzla, kritické zranenia, zvieratá a poznámky.
+- Export a import postáv a záloh.
+- Svetlý a tmavý režim.
+- Webová aplikácia aj Android aplikácia cez Capacitor.
+
+## Štruktúra repozitára
+
+- [`zz-denik/src/`](zz-denik/src/) - React aplikácia.
+- [`zz-denik/src/components/`](zz-denik/src/components/) - komponenty Denníka, katalógov a dialógov.
+- [`zz-denik/backend/`](zz-denik/backend/) - katalógový import, Google Drive synchronizácia a lokálne API.
+- [`zz-denik/import_files/`](zz-denik/import_files/) - zdrojové dokumenty používané pri importe.
+- [`zz-denik/android/`](zz-denik/android/) - Capacitor Android projekt.
+- [`zz-denik/CHANGELOG.md`](zz-denik/CHANGELOG.md) - kompletný prehľad zmien.
+
+## Lokálne spustenie
+
+```powershell
 cd zz-denik
 npm install
-```
-
-Run the frontend:
-
-```bash
 npm run dev
 ```
 
-The app runs at `http://localhost:5173`.
+Produkčný web build:
 
-Run the local backend:
-
-```bash
-npm run backend:dev
+```powershell
+npm run build
 ```
 
-The Vite dev server proxies `/api` to `http://localhost:8787`.
+## Katalóg a Google Drive
 
-## Catalog Import
+Synchronizácia Google Drive zdrojov a následný import:
 
-Import local DOCX sources into generated catalog data:
-
-```bash
-npm run catalog:import
-```
-
-Sync configured Google Docs/Drive sources and import them:
-
-```bash
+```powershell
+cd zz-denik
 npm run catalog:sync-google
 ```
 
-The backend exposes:
+Import lokálnych zdrojov:
 
-- `GET /api/catalog/bootstrap`
-- `GET /api/catalog/history`
-- `POST /api/admin/import`
-- `POST /api/admin/sync-google`
+```powershell
+npm run catalog:import
+```
 
-## Android APK
+Lokálny katalógový backend:
 
-Build the web app and sync Capacitor:
+```powershell
+npm run backend:dev
+```
 
-```bash
+## Android build
+
+```powershell
 cd zz-denik
 npm run build
 npx cap sync android
-```
-
-Build a debug APK:
-
-```bash
 cd android
 .\gradlew.bat assembleDebug
 ```
 
-The generated APK is copied at release time to the repository root using the format:
+Výsledné debug APK:
 
 ```text
-FL_1.8.3.apk
+zz-denik/android/app/build/outputs/apk/debug/app-debug.apk
 ```
 
-## Version
+Posledné publikované APK v koreňovom adresári je [`FL_1.8.3.apk`](FL_1.8.3.apk). Aktuálny `main` už obsahuje ďalšie zmeny uvedené vyššie.
 
-Current app version: `1.8.3`
+## Technológie
 
-Version is tracked in:
+- React 18
+- Vite 5
+- Tailwind CSS
+- Capacitor 8
+- Node.js katalógový backend
 
-- `zz-denik/package.json`
-- `zz-denik/android/app/build.gradle`
-- `zz-denik/CHANGELOG.md`
-- `README.md`
+## Licencia
 
-## License
-
-This project is licensed under the MIT License.
-
-## Acknowledgments
-
-Based on the Forbidden Lands RPG system by Free League Publishing, with homebrew Zapovezene zeme content and automation for local campaign data.
+Projekt je licencovaný pod MIT licenciou. Herný systém Forbidden Lands vytvorilo Free League Publishing.
