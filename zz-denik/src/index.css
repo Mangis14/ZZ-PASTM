@@ -52,28 +52,9 @@ body {
     padding-right: env(safe-area-inset-right);
 }
 
-/* Swipe transition animations */
-@keyframes slideInRight {
-    0% { opacity: 0.3; transform: translateX(60px); }
-    100% { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInLeft {
-    0% { opacity: 0.3; transform: translateX(-60px); }
-    100% { opacity: 1; transform: translateX(0); }
-}
-
-.animate-slide-in-right {
-    animation: slideInRight 0.25s ease-out forwards;
-}
-
-.animate-slide-in-left {
-    animation: slideInLeft 0.25s ease-out forwards;
-}
-
 /* Responsive main content padding for mobile/desktop layout heights */
 .main-content-layout {
-    padding-top: calc(env(safe-area-inset-top) + 84px);
+    padding-top: calc(env(safe-area-inset-top) + 132px);
     padding-bottom: calc(env(safe-area-inset-bottom) + 92px);
 }
 
@@ -88,4 +69,15 @@ body {
 /* Responsive top offset for inner character sheet navigation */
 .sticky-sheet-nav {
     top: calc(env(safe-area-inset-top) + 80px);
+}
+
+/* Game mode keeps play actions available while preventing sheet editing. */
+.sheet-game-mode .sheet-tile-content button:not([data-game-action]) {
+    display: none;
+}
+
+.sheet-game-mode .sheet-tile-content input,
+.sheet-game-mode .sheet-tile-content select,
+.sheet-game-mode .sheet-tile-content textarea {
+    pointer-events: none;
 }

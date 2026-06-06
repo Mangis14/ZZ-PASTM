@@ -73,6 +73,7 @@ const SheetConsumables = ({ char, updateField, innerRef }) => {
                                     type="button"
                                     onClick={() => cycleDown(key)}
                                     disabled={isEmpty}
+                                    data-game-action
                                     aria-label={`Znížit zdroj ${label}`}
                                     className={`flex h-11 items-center justify-center gap-2 rounded-xl border text-sm font-bold transition-colors ${
                                         isEmpty
@@ -88,6 +89,7 @@ const SheetConsumables = ({ char, updateField, innerRef }) => {
                                     type="button"
                                     onClick={() => cycleUp(key)}
                                     disabled={isMax}
+                                    data-game-action
                                     aria-label={`Zvýšit zdroj ${label}`}
                                     className={`flex h-11 items-center justify-center gap-2 rounded-xl border text-sm font-bold transition-colors ${
                                         isMax

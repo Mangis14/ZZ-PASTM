@@ -18,7 +18,6 @@ import RulesReferenceModal from './components/RulesReferenceModal';
 import Header from './components/layout/Header';
 import BottomNav from './components/layout/BottomNav';
 import CharacterSheet from './components/CharacterSheet';
-import { useSwipe } from './utils/useSwipe';
 import { TALENTS_DATA } from './data/talents_data';
 
 // --- DEFINÍCIE A DÁTA (MUSIA BYŤ NA ZAČIATKU) ---
@@ -81,7 +80,6 @@ const App = () => {
   const [showDataModal, setShowDataModal] = useState(false);
   const [showRulesModal, setShowRulesModal] = useState(false);
   const [currentView, setCurrentViewRaw] = useState('sheet');
-  const [viewDirection, setViewDirection] = useState(null); // 'left' | 'right' | null // 'sheet', 'zbozi', 'talents', 'spells', 'weather'
 
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem('fl_theme') === 'dark';
@@ -98,6 +96,8 @@ const App = () => {
   }, [isDarkMode]);
 
   const refs = {
+    profile: useRef(null),
+    money: useRef(null),
     attributes: useRef(null),
     skills: useRef(null),
     combat: useRef(null),
@@ -107,34 +107,10 @@ const App = () => {
     notes: useRef(null)
   };
 
-  const views = ['sheet', 'zbozi', 'talents', 'spells'];
-
-  // Animated view switch — detects direction based on index
   const setCurrentView = (newView) => {
     if (newView === currentView) return;
-    const oldIdx = views.indexOf(currentView);
-    const newIdx = views.indexOf(newView);
-    setViewDirection(newIdx > oldIdx ? 'left' : 'right');
     setCurrentViewRaw(newView);
-    // Clear direction after animation
-    setTimeout(() => setViewDirection(null), 300);
   };
-
-  const isSwipeLocked = showMenu || showDiceModal || showCritModal || isSheetModalOpen || showCreationWizard || showNewCharChoice || showDataModal || showRulesModal;
-
-  const { onTouchStart, onTouchMove, onTouchEnd, swipeOffset, isTransitioning, slideDirection } = useSwipe({
-    onSwipedLeft: () => {
-      const idx = views.indexOf(currentView);
-      if (idx !== -1 && idx < views.length - 1) setCurrentView(views[idx + 1]);
-    },
-    onSwipedRight: () => {
-      const idx = views.indexOf(currentView);
-      if (idx !== -1 && idx > 0) setCurrentView(views[idx - 1]);
-    },
-    disabled: isSwipeLocked
-  });
-
-  const swipeHandlers = { onTouchStart, onTouchMove, onTouchEnd };
 
   useEffect(() => {
     const saved = localStorage.getItem('fl_characters');
@@ -178,6 +154,14 @@ const App = () => {
     setIsLoaded(true);
   }, []);
 
+  const savedCharacterCount = Object.keys(savedChars).length;
+
+  useEffect(() => {
+    if (isLoaded && savedCharacterCount === 0 && !char.id) {
+      setShowNewCharChoice(true);
+    }
+  }, [isLoaded, savedCharacterCount, char.id]);
+
   useEffect(() => {
     if (isLoaded && char.id) {
       setIsSaving(true);
@@ -198,9 +182,14 @@ const App = () => {
   };
 
   const createNewDirect = () => {
-    const newChar = { ...defaultCharacter, id: Date.now().toString(), lastSaved: Date.now() };
+    const newChar = {
+      ...JSON.parse(JSON.stringify(defaultCharacter)),
+      id: Date.now().toString(),
+      lastSaved: Date.now()
+    };
     setChar(newChar);
     setSavedChars(prev => ({ ...prev, [newChar.id]: newChar }));
+    setShowNewCharChoice(false);
     setShowMenu(false);
     showToast("Nová prázdná postava vytvořena");
   };
@@ -208,6 +197,26 @@ const App = () => {
   const createNew = () => {
     setShowMenu(false);
     setShowNewCharChoice(true);
+  };
+
+  const createFromWizard = (newChar) => {
+    const completedChar = {
+      ...JSON.parse(JSON.stringify(defaultCharacter)),
+      ...newChar,
+      id: newChar.id || Date.now().toString(),
+      lastSaved: Date.now()
+    };
+
+    setChar(completedChar);
+    setSavedChars(prev => {
+      const updated = { ...prev, [completedChar.id]: completedChar };
+      localStorage.setItem('fl_characters', JSON.stringify(updated));
+      return updated;
+    });
+    localStorage.setItem('fl_last_char_id', completedChar.id);
+    setCurrentView('sheet');
+    setShowCreationWizard(false);
+    showToast(`Postava ${completedChar.name || 'Bezejmenný'} vytvořena!`);
   };
 
   const loadChar = (id) => {
@@ -443,19 +452,22 @@ const App = () => {
   const scrollToSection = (key) => {
     setCurrentView('sheet');
     window.setTimeout(() => {
-      const target = refs[key]?.current;
-      if (!target) return;
+      window.dispatchEvent(new CustomEvent('fl:navigate-sheet-section', { detail: { section: key } }));
+      window.setTimeout(() => {
+        const target = refs[key]?.current;
+        if (!target) return;
 
-      const headerHeight = document.querySelector('[data-mobile-header]')?.getBoundingClientRect().height || 0;
-      const sheetNavHeight = document.querySelector('[data-sheet-nav]')?.getBoundingClientRect().height || 0;
-      const offset = headerHeight + sheetNavHeight + 12;
-      const absoluteTop = target.getBoundingClientRect().top + window.scrollY - offset;
+        const headerHeight = document.querySelector('[data-mobile-header]')?.getBoundingClientRect().height || 0;
+        const sheetNavHeight = document.querySelector('[data-sheet-nav]')?.getBoundingClientRect().height || 0;
+        const offset = headerHeight + sheetNavHeight + 12;
+        const absoluteTop = target.getBoundingClientRect().top + window.scrollY - offset;
 
-      window.scrollTo({
-        top: Math.max(0, absoluteTop),
-        behavior: 'smooth'
-      });
-    }, currentView === 'sheet' ? 30 : 180);
+        window.scrollTo({
+          top: Math.max(0, absoluteTop),
+          behavior: 'smooth'
+        });
+      }, 100);
+    }, currentView === 'sheet' ? 0 : 180);
   };
 
   const totalWeight = useMemo(() => {
@@ -469,8 +481,8 @@ const App = () => {
     talent.id === 'soumar' || talent.name?.toLocaleLowerCase('cs-CZ') === 'soumar'
   );
   const soumarRank = Number(soumarTalent?.rank || 0);
-  const soumarEncumbranceBonus = soumarRank >= 2 ? 5 : soumarRank === 1 ? 2 : 0;
-  const encumbranceLimit = (char.attributes.strength.current * 2) + soumarEncumbranceBonus;
+  const soumarEncumbranceBonus = soumarRank >= 3 ? 10 : soumarRank === 2 ? 5 : soumarRank === 1 ? 2 : 0;
+  const encumbranceLimit = (char.attributes.strength.max * 2) + soumarEncumbranceBonus;
   const isOverencumbered = totalWeight > encumbranceLimit;
 
   if (!isLoaded) return <div className="min-h-screen flex items-center justify-center bg-fl-bg text-fl-primary">Načítám...</div>;
@@ -498,6 +510,64 @@ const App = () => {
       {showRulesModal && (
         <RulesReferenceModal onClose={() => setShowRulesModal(false)} />
       )}
+      {showNewCharChoice && (
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+          onClick={() => setShowNewCharChoice(false)}
+        >
+          <div
+            className="w-full max-w-md rounded-lg border-2 border-fl-primary bg-fl-card p-6 shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div>
+                <h2 className="font-serif text-2xl font-bold text-fl-primary">Nová postava</h2>
+                <p className="mt-1 text-sm text-fl-text-muted">Vyberte způsob vytvoření postavy.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowNewCharChoice(false)}
+                className="text-fl-text-muted transition-colors hover:text-fl-primary"
+                aria-label="Zavřít"
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowNewCharChoice(false);
+                  setShowCreationWizard(true);
+                }}
+                className="w-full rounded border border-fl-primary bg-fl-primary p-4 text-left font-bold text-fl-bg transition-colors hover:bg-fl-primary-hover"
+              >
+                Tvorba postavy krok za krokem
+                <span className="mt-1 block text-xs font-normal opacity-80">
+                  Průvodce vlastnostmi, dovednostmi, talenty a výstrojí.
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={createNewDirect}
+                className="w-full rounded border border-fl-border bg-fl-paper p-4 text-left font-bold text-fl-surface transition-colors hover:border-fl-primary"
+              >
+                Prázdná postava
+                <span className="mt-1 block text-xs font-normal text-fl-text-muted">
+                  Všechny hodnoty doplníte ručně v deníku.
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showCreationWizard && (
+        <CharacterCreationWizard
+          onComplete={createFromWizard}
+          onClose={() => setShowCreationWizard(false)}
+        />
+      )}
 
       <Header
         char={char}
@@ -507,8 +577,7 @@ const App = () => {
         totalWeight={totalWeight}
         encumbranceLimit={encumbranceLimit}
         isOverencumbered={isOverencumbered}
-        currentView={currentView}
-        setCurrentView={setCurrentView}
+        onNavigate={scrollToSection}
       />
 
       {/* MENU MODAL */}
@@ -580,31 +649,8 @@ const App = () => {
       )}
 
       {/* MAIN CONTENT */}
-      <main
-        {...swipeHandlers}
-        className="max-w-3xl mx-auto px-4 space-y-6 min-h-[80vh] main-content-layout"
-        style={{
-          touchAction: 'pan-y'
-        }}
-      >
-        <div
-          key={currentView}
-          className={`${
-            isTransitioning
-              ? slideDirection === 'left' 
-                ? 'animate-slide-in-right' 
-                : 'animate-slide-in-left'
-              : viewDirection === 'left'
-                ? 'animate-slide-in-right'
-                : viewDirection === 'right'
-                  ? 'animate-slide-in-left'
-                  : ''
-          }`}
-          style={{
-            transform: !isTransitioning && swipeOffset ? `translateX(${swipeOffset}px)` : undefined,
-            transition: !isTransitioning && swipeOffset ? 'none' : undefined,
-          }}
-        >
+      <main className="max-w-3xl mx-auto px-4 space-y-6 min-h-[80vh] main-content-layout">
+        <div key={currentView}>
         {currentView === 'sheet' ? (
             <CharacterSheet
             char={char}
@@ -616,6 +662,9 @@ const App = () => {
             scrollToSection={scrollToSection}
             setCurrentView={setCurrentView}
             onModalStateChange={setIsSheetModalOpen}
+            totalWeight={totalWeight}
+            encumbranceLimit={encumbranceLimit}
+            isOverencumbered={isOverencumbered}
           />
         ) : currentView === 'zbozi' ? (
           <ZboziSection addItemToInventory={addItemToInventory} equipItem={equipItemDirectly} />

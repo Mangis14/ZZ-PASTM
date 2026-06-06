@@ -29,7 +29,7 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
                             {talent.profession && <span className="text-[10px] uppercase text-fl-primary tracking-wider">{talent.profession}</span>}
                         </div>
                     </div>
-                    <button onClick={onClose} className="text-fl-primary hover:text-fl-paper-light transition-colors">
+                    <button data-game-action onClick={onClose} className="text-fl-primary hover:text-fl-paper-light transition-colors">
                         <X size={22} />
                     </button>
                 </div>

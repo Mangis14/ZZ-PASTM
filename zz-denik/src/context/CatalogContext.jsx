@@ -1,15 +1,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import zboziGeneral from '../data/zbozi_general.json';
-import zboziMelee from '../data/zbozi_weapons_melee.json';
-import zboziRanged from '../data/zbozi_weapons_ranged.json';
-import zboziArmor from '../data/zbozi_armor.json';
-import zboziClothing from '../data/zbozi_clothing.json';
-import zboziMaterials from '../data/zbozi_materials.json';
-import zboziPotions from '../data/zbozi_potions.json';
-import zboziServices from '../data/zbozi_services.json';
 import { TALENTS_DATA } from '../data/talents_data';
 import { SPELLS_DATA } from '../data/spells_data';
+import bundledImportedCatalog from '../../backend/data/catalog.json';
 
 const CATEGORY_ORDER = [
   'Zboží',
@@ -26,37 +19,21 @@ const BOOTSTRAP_ENDPOINT = '/api/catalog/bootstrap';
 const IMPORT_ENDPOINT = '/api/admin/import';
 const GOOGLE_SYNC_ENDPOINT = '/api/admin/sync-google';
 
-const staticItemsByCategory = {
-  'Zboží': zboziGeneral,
-  'Zbraně nablízko': zboziMelee,
-  'Střelné zbraně': zboziRanged,
-  Zbroj: zboziArmor,
-  Oblečení: zboziClothing,
-  Suroviny: zboziMaterials,
-  Lektvary: zboziPotions,
-  Služby: zboziServices,
-};
-
 function buildAllItems(itemsByCategory) {
-  return CATEGORY_ORDER.flatMap((category) => itemsByCategory[category] || []);
+  const orderedCategories = [
+    ...CATEGORY_ORDER,
+    ...Object.keys(itemsByCategory).filter((category) => !CATEGORY_ORDER.includes(category)).sort(),
+  ];
+  return orderedCategories.flatMap((category) => itemsByCategory[category] || []);
 }
 
 function createFallbackCatalog(extra = {}) {
+  const importedFallback = createCatalogFromApi(bundledImportedCatalog, {
+    source: 'bundled-import',
+  });
+
   return {
-    source: 'static',
-    isLoading: false,
-    isImporting: false,
-    error: null,
-    actionError: null,
-    generatedAt: null,
-    itemsByCategory: staticItemsByCategory,
-    allItems: buildAllItems(staticItemsByCategory),
-    talents: TALENTS_DATA,
-    spells: SPELLS_DATA,
-    professions: [],
-    report: null,
-    latestRun: null,
-    importHistory: [],
+    ...importedFallback,
     refreshCatalog: async () => {},
     runImport: async () => {},
     runGoogleSync: async () => {},

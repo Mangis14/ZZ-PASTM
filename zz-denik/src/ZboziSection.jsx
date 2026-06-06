@@ -1,18 +1,72 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Search, Filter, ArrowUpDown, ShoppingBag, ShoppingCart, Hammer, Clock, Star, Shield, Zap, Sword, Crosshair, Shirt, FlaskConical, HandCoins, Circle, X, Trash2, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import Card from './components/common/Card';
 import SectionHeader from './components/common/SectionHeader';
 import MoneyInput from './components/common/MoneyInput';
+import { CATEGORY_ORDER, useCatalog } from './context/CatalogContext';
 
-// Import data files
-import zboziGeneral from './data/zbozi_general.json';
-import zboziMelee from './data/zbozi_weapons_melee.json';
-import zboziRanged from './data/zbozi_weapons_ranged.json';
-import zboziArmor from './data/zbozi_armor.json';
-import zboziClothing from './data/zbozi_clothing.json';
-import zboziMaterials from './data/zbozi_materials.json';
-import zboziPotions from './data/zbozi_potions.json';
-import zboziServices from './data/zbozi_services.json';
+const ALL_CATEGORY = 'Vše';
+const BROWSE_STATE_KEY = 'fl_goods_browse_state';
+
+const DEFAULT_BROWSE_STATE = {
+    search: '',
+    selectedCategories: [ALL_CATEGORY],
+    talentFilter: [],
+    materialFilter: [],
+    weightFilter: [],
+    rarityFilter: [],
+    zbrojFilter: [],
+    damageFilter: [],
+    timeFilter: [],
+    handsFilter: [],
+    showFilters: false,
+    sortOrder: 'asc'
+};
+
+const loadBrowseState = () => {
+    try {
+        const saved = JSON.parse(localStorage.getItem(BROWSE_STATE_KEY) || '{}');
+        return { ...DEFAULT_BROWSE_STATE, ...saved };
+    } catch {
+        return DEFAULT_BROWSE_STATE;
+    }
+};
+
+const CATEGORY_ICONS = {
+    [ALL_CATEGORY]: ShoppingBag,
+    'Zboží': ShoppingBag,
+    'Zbraně nablízko': Sword,
+    'Střelné zbraně': Crosshair,
+    'Zbroj': Shield,
+    'Oblečení': Shirt,
+    'Suroviny': Hammer,
+    'Lektvary': FlaskConical,
+    'Služby': HandCoins
+};
+
+const CATEGORY_FILTER_KEYS = {
+    [ALL_CATEGORY]: ['weight', 'rarity', 'talent', 'material', 'time', 'zbroj', 'damage', 'hands'],
+    'Zboží': ['weight', 'rarity', 'talent', 'material', 'time'],
+    'Zbraně nablízko': ['damage', 'hands', 'weight', 'rarity', 'talent'],
+    'Střelné zbraně': ['damage', 'hands', 'weight', 'rarity', 'talent'],
+    'Zbroj': ['zbroj', 'weight', 'rarity', 'talent'],
+    'Oblečení': ['weight', 'rarity', 'talent'],
+    'Suroviny': ['material', 'talent', 'time', 'weight', 'rarity'],
+    'Lektvary': ['rarity', 'talent', 'material', 'time', 'weight'],
+    'Služby': ['rarity', 'time']
+};
+
+const QUICK_FILTER_KEYS = {
+    [ALL_CATEGORY]: ['weight', 'rarity'],
+    'Zboží': ['weight', 'rarity'],
+    'Zbraně nablízko': ['damage', 'hands'],
+    'Střelné zbraně': ['damage', 'hands'],
+    'Zbroj': ['zbroj', 'weight'],
+    'Oblečení': ['weight', 'rarity'],
+    'Suroviny': ['material', 'talent'],
+    'Lektvary': ['rarity', 'talent'],
+    'Služby': ['rarity', 'time']
+};
 
 const getCopperValue = (price) => {
     if (!price) return 0;
@@ -114,7 +168,7 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
 
             {isOpen && (
                 <div
-                    className="bg-fl-card border border-fl-primary rounded-lg shadow-2xl overflow-hidden animate-slide-in-left flex flex-col"
+                    className="bg-fl-card border border-fl-primary rounded-lg shadow-2xl overflow-hidden flex flex-col"
                     style={{ maxHeight: 'calc(100dvh - env(safe-area-inset-bottom) - 7.5rem)' }}
                 >
                     <div className="bg-fl-nav p-3 flex items-center justify-between">
@@ -256,21 +310,40 @@ const FilterPillGroup = ({ label, icon: Icon, options, selectedValues, onToggle,
 };
 
 const ZboziSection = ({ addItemToInventory, equipItem }) => {
-    const [search, setSearch] = useState('');
-    const [activeTab, setActiveTab] = useState('Vše');
-    const [subCategoryFilter, setSubCategoryFilter] = useState([]);
-    const [talentFilter, setTalentFilter] = useState([]);
-    const [materialFilter, setMaterialFilter] = useState([]);
-    const [weightFilter, setWeightFilter] = useState([]);
-    const [rarityFilter, setRarityFilter] = useState([]);
-    const [zbrojFilter, setZbrojFilter] = useState([]);
-    const [damageFilter, setDamageFilter] = useState([]);
-    const [timeFilter, setTimeFilter] = useState([]);
-    const [handsFilter, setHandsFilter] = useState([]);
+    const { itemsByCategory, allItems } = useCatalog();
+    const [initialBrowseState] = useState(loadBrowseState);
+    const [search, setSearch] = useState(initialBrowseState.search);
+    const [selectedCategories, setSelectedCategories] = useState(initialBrowseState.selectedCategories);
+    const [talentFilter, setTalentFilter] = useState(initialBrowseState.talentFilter);
+    const [materialFilter, setMaterialFilter] = useState(initialBrowseState.materialFilter);
+    const [weightFilter, setWeightFilter] = useState(initialBrowseState.weightFilter);
+    const [rarityFilter, setRarityFilter] = useState(initialBrowseState.rarityFilter);
+    const [zbrojFilter, setZbrojFilter] = useState(initialBrowseState.zbrojFilter);
+    const [damageFilter, setDamageFilter] = useState(initialBrowseState.damageFilter);
+    const [timeFilter, setTimeFilter] = useState(initialBrowseState.timeFilter);
+    const [handsFilter, setHandsFilter] = useState(initialBrowseState.handsFilter);
     const [expandedItems, setExpandedItems] = useState({});
-    const [showFilters, setShowFilters] = useState(false);
-    const [sortOrder, setSortOrder] = useState('asc');
+    const [showCategories, setShowCategories] = useState(false);
+    const [showFilters, setShowFilters] = useState(initialBrowseState.showFilters);
+    const [sortOrder, setSortOrder] = useState(initialBrowseState.sortOrder);
     const [cart, setCart] = useState([]);
+
+    useEffect(() => {
+        localStorage.setItem(BROWSE_STATE_KEY, JSON.stringify({
+            search,
+            selectedCategories,
+            talentFilter,
+            materialFilter,
+            weightFilter,
+            rarityFilter,
+            zbrojFilter,
+            damageFilter,
+            timeFilter,
+            handsFilter,
+            showFilters,
+            sortOrder
+        }));
+    }, [search, selectedCategories, talentFilter, materialFilter, weightFilter, rarityFilter, zbrojFilter, damageFilter, timeFilter, handsFilter, showFilters, sortOrder]);
 
     const addToCart = (item) => {
         setCart(prev => {
@@ -321,55 +394,32 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
         }));
     };
 
-    const dataMap = useMemo(() => {
-        const vyzbroj = [
-            ...zboziMelee,
-            ...zboziRanged,
-            ...zboziArmor
-        ];
-        const vybava = [
-            ...zboziGeneral,
-            ...zboziClothing,
-            ...zboziPotions
-        ];
-        const vse = [
-            ...vyzbroj,
-            ...vybava,
-            ...zboziMaterials,
-            ...zboziServices
-        ];
-        return {
-            'Vše': vse,
-            'Výzbroj': vyzbroj,
-            'Výbava': vybava,
-            'Suroviny': zboziMaterials,
-            'Služby': zboziServices
-        };
-    }, []);
+    const dataMap = useMemo(() => ({
+        [ALL_CATEGORY]: allItems,
+        ...itemsByCategory
+    }), [allItems, itemsByCategory]);
 
-    const tabs = [
-        { id: 'Vše', icon: ShoppingBag },
-        { id: 'Výzbroj', icon: Sword },
-        { id: 'Výbava', icon: ShoppingBag },
-        { id: 'Suroviny', icon: Hammer },
-        { id: 'Služby', icon: HandCoins }
-    ];
+    const categories = useMemo(() => {
+        const importedCategories = Object.keys(itemsByCategory).filter(id => !CATEGORY_ORDER.includes(id)).sort();
+        return [ALL_CATEGORY, ...CATEGORY_ORDER, ...importedCategories].map(id => ({
+            id,
+            icon: CATEGORY_ICONS[id] || ShoppingBag,
+            count: (dataMap[id] || []).filter(item => item.Předmět !== 'Předmět').length
+        }));
+    }, [dataMap, itemsByCategory]);
 
-    const subCategories = useMemo(() => {
-        if (activeTab === 'Výzbroj') return ['Zbraně nablízko', 'Střelné zbraně', 'Zbroj'];
-        if (activeTab === 'Výbava') return ['Zboží', 'Oblečení', 'Lektvary'];
-        return [];
-    }, [activeTab]);
+    const currentData = useMemo(() => {
+        if (selectedCategories.includes(ALL_CATEGORY)) return dataMap[ALL_CATEGORY] || [];
+        return selectedCategories.flatMap(category => dataMap[category] || []);
+    }, [dataMap, selectedCategories]);
 
     const talents = useMemo(() => {
-        const currentData = dataMap[activeTab] || [];
         const values = new Set(currentData.map(item => item.Talent).filter(Boolean).filter(t => t !== '–'));
         return Array.from(values).sort();
-    }, [activeTab, dataMap]);
+    }, [currentData]);
 
     const materials = useMemo(() => {
         const mats = new Set();
-        const currentData = dataMap[activeTab] || [];
         currentData.forEach(item => {
             if (item.Suroviny && item.Suroviny !== '–') {
                 const s = item.Suroviny.toLowerCase();
@@ -385,10 +435,9 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
             }
         });
         return Array.from(mats).sort();
-    }, [activeTab, dataMap]);
+    }, [currentData]);
 
     const weights = useMemo(() => {
-        const currentData = dataMap[activeTab] || [];
         const values = new Set(currentData.map(item => item.Váha).filter(Boolean).filter(t => t !== '–' && t !== '-'));
         return Array.from(values).sort((a, b) => {
             const getRank = (s) => {
@@ -401,10 +450,9 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
             };
             return getRank(a) - getRank(b);
         });
-    }, [activeTab, dataMap]);
+    }, [currentData]);
 
     const rarities = useMemo(() => {
-        const currentData = dataMap[activeTab] || [];
         const values = new Set(currentData.map(item => item.Dostupnost).filter(Boolean).filter(t => t !== '–' && t !== '-'));
         return Array.from(values).sort((a, b) => {
             const sA = a.toLowerCase();
@@ -417,28 +465,24 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
             };
             return getRank(sA) - getRank(sB);
         });
-    }, [activeTab, dataMap]);
+    }, [currentData]);
 
     const zbrojValues = useMemo(() => {
-        const currentData = dataMap[activeTab] || [];
         const values = new Set(currentData.map(item => item.Zbroj).filter(Boolean).filter(t => t !== '–' && t !== '-'));
         return Array.from(values).sort((a, b) => parseInt(a) - parseInt(b));
-    }, [activeTab, dataMap]);
+    }, [currentData]);
 
     const damages = useMemo(() => {
-        const currentData = dataMap[activeTab] || [];
         const values = new Set(currentData.map(item => item.Zranění).filter(Boolean).filter(t => t !== '–' && t !== '-'));
         return Array.from(values).sort((a, b) => parseInt(a) - parseInt(b));
-    }, [activeTab, dataMap]);
+    }, [currentData]);
 
     const hands = useMemo(() => {
-        const currentData = dataMap[activeTab] || [];
         const values = new Set(currentData.map(item => item.Ruce).filter(Boolean).filter(t => t !== '–' && t !== '-'));
         return Array.from(values).sort();
-    }, [activeTab, dataMap]);
+    }, [currentData]);
 
     const times = useMemo(() => {
-        const currentData = dataMap[activeTab] || [];
         const values = new Set(currentData.map(item => item.Čas).filter(Boolean).filter(t => t !== '–' && t !== '-'));
         return Array.from(values).sort((a, b) => {
             const getRank = (str) => {
@@ -450,10 +494,9 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
             };
             return getRank(a) - getRank(b);
         });
-    }, [activeTab, dataMap]);
+    }, [currentData]);
 
     const activeFilterCount =
-        subCategoryFilter.length +
         talentFilter.length +
         materialFilter.length +
         weightFilter.length +
@@ -464,7 +507,6 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
         timeFilter.length;
 
     const resetFilters = () => {
-        setSubCategoryFilter([]);
         setTalentFilter([]);
         setMaterialFilter([]);
         setWeightFilter([]);
@@ -476,7 +518,7 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
     };
 
     const filteredData = useMemo(() => {
-        let data = dataMap[activeTab] || [];
+        let data = [...currentData];
 
         data = data.filter(item => {
             if (item.Předmět === 'Předmět') return false;
@@ -488,7 +530,6 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
                 (item.Vlastnosti && item.Vlastnosti.toLowerCase().includes(searchLower)) ||
                 (item.Poznámky && item.Poznámky.toLowerCase().includes(searchLower));
 
-            const matchesSubCategory = subCategoryFilter.length === 0 || subCategoryFilter.includes(item.Category);
             const matchesTalent = talentFilter.length === 0 || talentFilter.some(value => item.Talent && item.Talent.includes(value));
             const matchesWeight = weightFilter.length === 0 || weightFilter.includes(item.Váha);
             const matchesRarity = rarityFilter.length === 0 || rarityFilter.includes(item.Dostupnost);
@@ -498,7 +539,7 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
             const matchesTime = timeFilter.length === 0 || timeFilter.includes(item.Čas);
             const matchesMaterial = materialFilter.length === 0 || materialFilter.some(category => materialMatchesCategory(item.Suroviny, category));
 
-            return matchesSearch && matchesSubCategory && matchesTalent && matchesWeight && matchesRarity && matchesMaterial &&
+            return matchesSearch && matchesTalent && matchesWeight && matchesRarity && matchesMaterial &&
                    matchesZbroj && matchesDamage && matchesHands && matchesTime;
         });
 
@@ -509,10 +550,9 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
         });
 
         return data;
-    }, [search, activeTab, subCategoryFilter, talentFilter, sortOrder, materialFilter, weightFilter, rarityFilter, zbrojFilter, damageFilter, handsFilter, timeFilter, dataMap]);
+    }, [search, currentData, talentFilter, sortOrder, materialFilter, weightFilter, rarityFilter, zbrojFilter, damageFilter, handsFilter, timeFilter]);
 
     const filterGroups = [
-        { key: 'subcategory', label: 'Typ předmětu', icon: Filter, selectedValues: subCategoryFilter, setter: setSubCategoryFilter, options: subCategories },
         { key: 'talent', label: 'Talent', icon: Star, selectedValues: talentFilter, setter: setTalentFilter, options: talents },
         { key: 'material', label: 'Suroviny', icon: Hammer, selectedValues: materialFilter, setter: setMaterialFilter, options: materials },
         { key: 'weight', label: 'Váha', icon: Shield, selectedValues: weightFilter, setter: setWeightFilter, options: weights },
@@ -522,45 +562,92 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
         { key: 'time', label: 'Výroba (Čas)', icon: Clock, selectedValues: timeFilter, setter: setTimeFilter, options: times },
         { key: 'hands', label: 'Ruce', icon: HandCoins, selectedValues: handsFilter, setter: setHandsFilter, options: hands }
     ].filter(group => {
-        if (group.options.length === 0) return false;
-        
-        if (activeTab === 'Služby') {
-            return ['rarity', 'time'].includes(group.key);
-        }
-        if (activeTab === 'Suroviny') {
-            return ['material', 'time', 'talent', 'weight', 'rarity'].includes(group.key);
-        }
-        if (activeTab === 'Výbava') {
-            return ['subcategory', 'weight', 'rarity', 'talent'].includes(group.key);
-        }
-        if (activeTab === 'Výzbroj') {
-            return ['subcategory', 'weight', 'rarity', 'zbroj', 'damage', 'hands', 'talent'].includes(group.key);
-        }
-        return true;
+        const allowedKeys = new Set(selectedCategories.flatMap(category => CATEGORY_FILTER_KEYS[category] || CATEGORY_FILTER_KEYS[ALL_CATEGORY]));
+        return group.options.length > 0 && allowedKeys.has(group.key);
     });
+
+    const quickKeys = new Set(selectedCategories.flatMap(category => QUICK_FILTER_KEYS[category] || QUICK_FILTER_KEYS[ALL_CATEGORY]));
+    const quickFilterGroups = filterGroups.filter(group => quickKeys.has(group.key));
+    const additionalFilterGroups = filterGroups.filter(group => !quickKeys.has(group.key));
+    const activeFilterChips = filterGroups.flatMap(group => group.selectedValues.map(value => ({
+        key: `${group.key}-${value}`,
+        label: value,
+        remove: () => group.setter(prev => prev.filter(item => item !== value))
+    })));
+    const categoryLabel = selectedCategories.includes(ALL_CATEGORY)
+        ? ALL_CATEGORY
+        : selectedCategories.join(', ');
+    const selectedItemCount = currentData.filter(item => item.Předmět !== 'Předmět').length;
+    const ActiveCategoryIcon = selectedCategories.length === 1
+        ? CATEGORY_ICONS[selectedCategories[0]] || ShoppingBag
+        : ShoppingBag;
+
+    const toggleCategory = (category) => {
+        setSelectedCategories(prev => {
+            if (category === ALL_CATEGORY) return [ALL_CATEGORY];
+            const withoutAll = prev.filter(item => item !== ALL_CATEGORY);
+            const next = withoutAll.includes(category)
+                ? withoutAll.filter(item => item !== category)
+                : [...withoutAll, category];
+            return next.length > 0 ? next : [ALL_CATEGORY];
+        });
+    };
 
     return (
         <section id="zbozi-section" className={`scroll-mt-20 animate-in fade-in slide-in-from-bottom-4 duration-500 ${cart.length > 0 ? 'pb-[34rem]' : ''}`}>
             <SectionHeader title="Zboží a Služby" icon={ShoppingBag} />
 
-            <div className="flex flex-wrap gap-2 mb-6">
-                {tabs.map(tab => (
-                    <button
-                        key={tab.id}
-                        onClick={() => {
-                            setActiveTab(tab.id);
-                            resetFilters();
-                        }}
-                        className={`flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-bold uppercase tracking-wider transition-all ${
-                            activeTab === tab.id
-                                ? 'bg-fl-primary text-white shadow-md scale-105'
-                                : 'bg-fl-paper text-fl-text-muted hover:bg-fl-border hover:text-fl-surface'
-                        }`}
-                    >
-                        <tab.icon size={14} />
-                        {tab.id}
-                    </button>
-                ))}
+            <div className="mb-4">
+                <button
+                    type="button"
+                    onClick={() => setShowCategories(prev => !prev)}
+                    className="w-full flex items-center justify-between gap-3 rounded-lg border border-fl-primary bg-fl-card p-3 text-left shadow-md transition-colors hover:bg-fl-paper"
+                >
+                    <div className="flex min-w-0 items-center gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-fl-primary/15 text-fl-primary">
+                            <ActiveCategoryIcon size={21} />
+                        </div>
+                        <div className="min-w-0">
+                            <div className="text-[10px] font-bold uppercase tracking-widest text-fl-text-muted">Kategorie</div>
+                            <div className="truncate font-serif text-lg font-bold text-fl-surface">{categoryLabel}</div>
+                        </div>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-2">
+                        <span className="rounded-full border border-fl-border bg-fl-paper px-2 py-1 text-xs font-bold text-fl-primary">
+                            {selectedItemCount} položek
+                        </span>
+                        {showCategories ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                    </div>
+                </button>
+
+                {showCategories && (
+                    <div className="mt-2 grid grid-cols-2 gap-2 rounded-lg border border-fl-border bg-fl-card p-2 shadow-lg sm:grid-cols-3">
+                        {categories.map(category => {
+                            const CategoryIcon = category.icon;
+                            const isActive = selectedCategories.includes(category.id);
+                            return (
+                                <button
+                                    key={category.id}
+                                    type="button"
+                                    onClick={() => toggleCategory(category.id)}
+                                    className={`flex min-h-[70px] items-center gap-2 rounded-md border p-2 text-left transition-colors ${
+                                        isActive
+                                            ? 'border-fl-primary bg-fl-primary text-white'
+                                            : 'border-fl-border bg-fl-paper-bright text-fl-surface hover:border-fl-primary hover:bg-fl-paper'
+                                    }`}
+                                >
+                                    <CategoryIcon size={18} className="shrink-0" />
+                                    <div className="min-w-0">
+                                        <div className="text-xs font-bold leading-tight">{category.id}</div>
+                                        <div className={`mt-1 text-[10px] ${isActive ? 'text-white/75' : 'text-fl-text-muted'}`}>
+                                            {category.count} položek
+                                        </div>
+                                    </div>
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
 
             <Card className="mb-6">
@@ -570,7 +657,7 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fl-primary" size={16} />
                             <input
                                 type="text"
-                                placeholder="Hledat předmět, účinek..."
+                                placeholder={`Hledat v kategoriích ${categoryLabel}...`}
                                 className="w-full h-full pl-9 pr-3 bg-fl-paper-bright border border-fl-border rounded-sm focus:outline-none focus:border-fl-primary text-fl-surface text-sm placeholder:text-fl-border"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
@@ -584,42 +671,31 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
                             <ArrowUpDown size={14} />
                             <span className="hidden sm:inline">Cena</span> {sortOrder === 'asc' ? '▲' : '▼'}
                         </button>
-                        <button
-                            onClick={() => setShowFilters(prev => !prev)}
-                            className={`relative px-3 border rounded-sm flex items-center justify-center transition-colors shadow-sm ${
-                                showFilters || activeFilterCount > 0
-                                    ? 'bg-fl-primary text-white border-fl-primary'
-                                    : 'bg-fl-paper text-fl-surface hover:bg-fl-border border-fl-border'
-                            }`}
-                            title="Podrobné filtrování"
-                        >
-                            <Filter size={16} />
-                            {activeFilterCount > 0 && (
-                                <span className="absolute -top-1.5 -right-1.5 bg-red-600 border border-white text-white text-[9px] font-bold min-w-4 h-4 px-1 flex items-center justify-center rounded-full leading-none">
-                                    {activeFilterCount}
-                                </span>
-                            )}
-                        </button>
+                        {additionalFilterGroups.length > 0 && (
+                            <button
+                                onClick={() => setShowFilters(prev => !prev)}
+                                aria-label="Další filtry"
+                                className={`relative px-3 border rounded-sm flex items-center justify-center transition-colors shadow-sm ${
+                                    showFilters || activeFilterCount > 0
+                                        ? 'bg-fl-primary text-white border-fl-primary'
+                                        : 'bg-fl-paper text-fl-surface hover:bg-fl-border border-fl-border'
+                                }`}
+                                title="Podrobné filtrování"
+                            >
+                                <Filter size={16} />
+                                <span className="ml-1 hidden text-[10px] font-bold uppercase sm:inline">Další</span>
+                                {activeFilterCount > 0 && (
+                                    <span className="absolute -top-1.5 -right-1.5 bg-red-600 border border-white text-white text-[9px] font-bold min-w-4 h-4 px-1 flex items-center justify-center rounded-full leading-none">
+                                        {activeFilterCount}
+                                    </span>
+                                )}
+                            </button>
+                        )}
                     </div>
 
-                    {showFilters && (
-                        <div className="pt-3 mt-1 border-t border-fl-paper animate-in fade-in slide-in-from-top-2 duration-200 space-y-4">
-                            <div className="flex items-center justify-between gap-3">
-                                <div className="text-[11px] uppercase tracking-wider text-fl-text-muted">
-                                    Vyber si libovolnou kombinaci filtrů
-                                </div>
-                                {activeFilterCount > 0 && (
-                                    <button
-                                        type="button"
-                                        onClick={resetFilters}
-                                        className="text-[11px] font-bold uppercase tracking-wider text-fl-primary hover:text-fl-primary-hover transition-colors"
-                                    >
-                                        Vyčistit
-                                    </button>
-                                )}
-                            </div>
-
-                            {filterGroups.map(group => (
+                    {quickFilterGroups.length > 0 && (
+                        <div className="space-y-4 border-t border-fl-paper pt-3">
+                            {quickFilterGroups.map(group => (
                                 <FilterPillGroup
                                     key={group.label}
                                     label={group.label}
@@ -632,8 +708,77 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
                             ))}
                         </div>
                     )}
+
+                    {showFilters && additionalFilterGroups.length > 0 && (
+                        <div className="pt-3 mt-1 border-t border-fl-paper animate-in fade-in slide-in-from-top-2 duration-200 space-y-4">
+                            <div className="flex items-center justify-between gap-3">
+                                <div className="text-[11px] uppercase tracking-wider text-fl-text-muted">
+                                    Další filtry pro vybrané kategorie
+                                </div>
+                                {activeFilterCount > 0 && (
+                                    <button
+                                        type="button"
+                                        onClick={resetFilters}
+                                        className="text-[11px] font-bold uppercase tracking-wider text-fl-primary hover:text-fl-primary-hover transition-colors"
+                                    >
+                                        Vyčistit
+                                    </button>
+                                )}
+                            </div>
+
+                            {additionalFilterGroups.map(group => (
+                                <FilterPillGroup
+                                    key={group.label}
+                                    label={group.label}
+                                    icon={group.icon}
+                                    options={group.options}
+                                    selectedValues={group.selectedValues}
+                                    onToggle={(option) => group.setter(prev => toggleSelection(prev, option))}
+                                    onClear={() => group.setter([])}
+                                />
+                            ))}
+                        </div>
+                    )}
+
+                    {activeFilterChips.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-2 border-t border-fl-paper pt-3">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-fl-text-muted">Aktivní:</span>
+                            {activeFilterChips.map(chip => (
+                                <button
+                                    key={chip.key}
+                                    type="button"
+                                    onClick={chip.remove}
+                                    className="flex items-center gap-1 rounded-full border border-fl-primary/40 bg-fl-primary/10 px-2 py-1 text-[10px] font-bold text-fl-primary hover:bg-fl-primary hover:text-white"
+                                >
+                                    {chip.label} <X size={10} />
+                                </button>
+                            ))}
+                            <button
+                                type="button"
+                                onClick={resetFilters}
+                                className="ml-auto text-[10px] font-bold uppercase text-red-600 hover:text-red-500"
+                            >
+                                Vyčistit vše
+                            </button>
+                        </div>
+                    )}
                 </div>
             </Card>
+
+            <div className="mb-3 flex items-center justify-between gap-3">
+                <div className="text-sm font-bold text-fl-surface">
+                    {filteredData.length} {filteredData.length === 1 ? 'výsledek' : 'výsledků'}
+                </div>
+                {search && (
+                    <button
+                        type="button"
+                        onClick={() => setSearch('')}
+                        className="text-[10px] font-bold uppercase tracking-wider text-fl-primary hover:text-fl-primary-hover"
+                    >
+                        Zrušit hledání
+                    </button>
+                )}
+            </div>
 
             <div className="space-y-2">
                 {filteredData.map((item, index) => {

@@ -1,0 +1,405 @@
+Tabulky pro nové postavy
+
+Věk
+
+Atributy
+
+Dovednost
+
+Počet obecných talentů
+
+Mladá
+
+15
+
+10
+
+1
+
+Dospěla
+
+14
+
+14
+
+2
+
+Stará
+
+13
+
+18
+
+3
+
+Pro dospělé a staré postavy je možné vzít si nemagický talent povolání úrovně 2 místo jednoho obecného.
+
+Nová postava musí mít každý atribut mezi 2 a 4, dle povolání a rodu je možné zvýšit maximum na 5 nebo klidně 6 viz. následující tabulka. Stále ale rozděluješ počet atributů dle svého věku.
+
+Atribut
+
+Rod
+
+Povolání
+
+Síla
+
+Trpaslík, Ork
+
+Válečník, Šampion, Řemeslník
+
+Obratnost
+
+Vlken, Skřet, Elf
+
+Zloděj, Lovec, Lupič
+
+Bystrost
+
+Půlelf
+
+Druid, Kouzelník, Švihák
+
+Osobnost
+
+Člověk, Půlčík
+
+Bard, Kupec
+
+
+
+Dovednost na úroveň 2 a 3 si můžeš dát u nové postavy pouze u dovedností, které má vypsané tvé povolání. Dovednost na úroveň 1 a 2 stojí 1 bod, na úroveň 3 pak o jeden bod víc.Tj. Výdrž 2 stojí 2 body, ale Výdrž 3 stojí 4 body
+
+Povolání
+
+Dovednosti
+
+Válečník
+
+svaly, výdrž, boj zblízka, řemesla, mrštnost,
+
+Druid
+
+výdrž, přežití, empatie, léčení, zvířata
+
+Kouzelník
+
+řemesla, zlodějina, příběhy, empatie, manipulace
+
+Jezdec
+
+výdrž, boj zblízka, střelba, přežití, zvířata
+
+Kupec
+
+řemesla, zlodějina, ostražitost, empatie, manipulace
+
+Bard
+
+příběhy, empatie, manipulace, léčení, vystupování
+
+Lovec
+
+plížení, mrštnost, střelba, ostražitost, přežití
+
+Zloděj
+
+boj zblízka, plížení, zlodějina, mrštnost, manipulace
+
+Šampion
+
+svaly, výdrž, boj zblízka, mrštnost, přežití
+
+Řemeslník
+
+svaly, výdrž, řemesla, zlodějna, příběhy
+
+Švihák
+
+boj zblízka, příběhy, empatie, manipulace, zvířata
+
+Lupič
+
+výdrž, plížení, zlodějna, mrštnost, ostražitost
+
+
+
+Rasa
+
+Mladá
+
+Dospěla
+
+Stará
+
+Člověk
+
+16-25
+
+26-50
+
+51+
+
+Trpaslík
+
+16-30
+
+31-100
+
+101+
+
+Půlelf
+
+16-30
+
+31-100
+
+101+
+
+Půlčík
+
+20-40
+
+41-80
+
+81+
+
+Vlken
+
+16-25
+
+26-40
+
+61+
+
+Ork
+
+13-20
+
+21-40
+
+41+
+
+Skřet
+
+13-20
+
+21-45
+
+46+
+
+Elf
+
+Vždy dospělá
+
+Úprava malých druhů
+
+Permanentní bonus +1 k PLÍŽENÍ, mohou ale řídit pouze vlky a poníky. Dlouhé luky a zbraně nablízko, které nejsou LEHKÉ dávají postih -1 na MRŠTNOST a těžké jednoruční je nutno nosit obouručně, dvojručné těžké nablízko není možno použít.
+
+Cena zkušeností za nové dovednosti a talenty. Magické talenty stojí bez učitele / knihy 3x víc.
+
+Úroveň
+
+Cena
+
+Podmínka pro dovednost
+
+Podmínka pro talent
+
+1
+
+5
+
+úspěšně použít dovednost toto sezení, odpočiněk / spánek
+
+Hod na bystrost (nejde zkoušet štěstí) nebo učitel za čtvrtden
+
+2
+
+5
+
+odpočiněk / spánek
+
+odpočiněk / spánek
+
+3
+
+10
+
+odpočiněk / spánek
+
+odpočiněk / spánek
+
+4
+
+15
+
+Kniha / učitel / nadlidský výkon
+
+Kniha / učitel
+
+5
+
+25
+
+Kniha / učitel / nadlidský výkon
+
+Kniha / učitel
+
+Vylepšená výroba
+
+Talenty na výroby přidávají za každou úroveň navíc +k(6/8/10/12) k výrobě nebo opravě. Obtížnost opravy se zvyšuje za každou kostku, kterou má oproti defaultnímu stavu předmětu. Může se negovat surovinou, která je třeba k výrobě.Stále je třeba mít alespoň počáteční úroveň talentu, aby byla možnost opravy předmětu.
+
+Více úspěchů při výrobě obnáší možnost vytvořit předmět vícekrát (pokud máš suroviny).
+
+Odpočinek a krátký odpočinek
+
+Během klasického odpočinku a spánku si doplnít pouze 1 ke všem atributům. Během čtvrtdne můžeš jednu směnu (15 min.) odpočívat a hodit si na kostku zdrojů a doplnit si přislušný artibut (nezávisle na tom jestli o zdroj přijdeš nebo ne).
+
+Atribut
+
+Zdroj
+
+Cena
+
+Dostupnost
+
+Síla
+
+Jídlo
+
+1 stříbrný
+
+Běžná
+
+Obratnost
+
+Voda
+
+1 stříbrný
+
+Běžná
+
+Bystrost
+
+Tabák/čaj
+
+1 stříbrný
+
+Neobvyklá
+
+Osobnost
+
+Alkohol
+
+1 stříbrný
+
+Běžná
+
+Pouze jedna bonusová kostka za talent
+
+Pokud talent přidává +k6, následně k8, k10 a k12, pouze se nahrazuje úroveň kostky nikoliv se přidává další kostka. (tj. na úrovní 2 alchymista neházíš +1k6 a +1k8 ale pouze k8)
+
+Jed na střelné zbraně
+
+Na šipky a šípy je možné dát jed, funguje pouze pro jeden výstřel. Na zásoby házíš normálně.
+
+
+
+Omezený počet kouzel
+
+Počet kouzel je celkový počet magických talentů * BYSTROST. Navíc za každou školu znáš jedno kouzlo vyšší úrovně než je tvoje úroveň dané školy (maximálně úrovně 3) - nazvané upcasting. Talentem kurátor magie upravuješ vzorec na:celkový počet magických talentů * (úroveň kurátora + BYSTROST).
+
+Nové kouzlo vyšší úrovně (upcasting), které vždy umíš se naučíš až se naučíš novou úroveň talentu.
+
+Nové učení se kouzel
+
+Naučení nového talentu školy magie ti dá pouze 1 kouzlo odpovídající úrovně z učené školy a buď 1 kouzlo obecné magie kouzlo odpovídající úrovně nebo 1 kouzlo nižší úrovně z učené školy.
+
+Nová kouzla se dají naučit pomocí hodu na BYSTROST. S bonusem za každé kouzlo, které již znáš z dané a vyšší úrovně a školy, které se právě učíš. Podle počtu úspěchů se můžeš naučit tolik kouzel. Zde můžeš také využít učitele, automaticky získáš jeden úspěch navíc (stále si ale můžeš hodit).
+
+
+
+Další nápady k doplnění:
+
+Talent, který bude fungovat i nějak s grimoarem a učit se můžeš během zapisování kouzel, dává bonusy k učení se nových kouzel
+
+Bonus k počtu naučených kouzel by se počítal i k obecné magii (tady pak budou ale obrovské bonusy pokud se učíš už 3. a 4. školu a nesedí do světa - nejlepší kouzelník má dvě, max tři školy), bylo by problematické v přidávání nových škol.
+
+Nějaká kouzla budou stát víc, tj. jako dvě kouzla (např. vznícení, vzkříšení atd. čistě z hlediska jejich síly k dalších) nebo to udělat podle úrovně magie, tj. magie urovně 3 stojí jako 3 kouzla.
+
+
+
+Errata a opravy pravidel
+
+Cesta zlata -> cesta pokladu
+
+Vyšší reputace přidává bonus +1 k manipulaci. Dvojnásobná přidává +2.
+
+“Zvedat” v souboji můžeš další postavy pouze pokud nemáš nepřítele na délku paže
+
+Připoutání magie permanentně k předmětu vyžaduje BV při jeho použití.
+
+Skřeti nedostávájí zranění za slunce (ignorovali jsme stejně)
+
+Úprava hodnot pro vrhací zbraně (sek +2, oštěp +2)
+
+
+
+Důvody ke změně
+
+Stejně jako další talenty by efekt měl být za utracený WP, tj. každý talent dává okamžitě efekt a ve většině případů si na něj nemusíš házet. Protože je magie mnohem silnější a nabízí větší množství řešení je třeba přidat omezení a smysluplná rizika. Omezený počet kouzel a nové učení se kouzel umožní přidání nové magie a zároveň zajistí, že být kouzelník nebude nejlepší cesta (protože se učit kouzla nějakou dobu trvá a pořád musíš ve světě přežít). Učit se kouzla postupně dává příběhově smysl než jen se stát nejlepším kouzelníkem světa po tom co mi to někdo řekne za 10 XP (cena XP pokud se učíš s učitelem). Zde by stačilo omezit množství kouzelníků ve světě nebo zamezit tomu, aby učil magii hráčské  postavy. Ani jedno řešení se mi nelíbí a rád vám co cesty budu házet kouzelníky a bude na vás jak s nimi budete jednat.
+
+Učení se:
+
+Učení se kouzel postupně bude těžké pro první kouzla, není zde bonus a první kouzlo vysoké úrovně vždy bude velký milník. Další kouzla pak jdou už snadno.(možná by stálo za to přidat ještě jeden talent, který přidává bonus k učení něco jako [+1;učení během odpočinku; stačí jeden úspěch a naučíš se i druhé kouzlo].Bezpečné:
+
+Stále je zde jistota, že kouzlo se stane, pouze to jestli dokážeš udržet “beznehodovost” dle úrovně závisí na tom, jak si dobrý v samotném kouzlení, tj. přidává se nějaký hod, kde jde o tvou dovednost než čistě náhoda. Souvisí s tím i změna nehod. Pokud si kouzelník co chce pouze nějaká podpůrná kouzla a bude většinu času bojovat, kouzlíš většinou pouze 1. stupen, takže rizika budou pořád minimální. Pokud chceš být velký kouzelník co bude sypat velké spelly, tak je musíš udržet a tvoje talenty a dovednosti věnovat do této magie (stále to nebude dnd wizard ale). Pomucka ti nejen zvýší úroveň, ale zároveň i přidává kostku k hodu na bezpečnost.
+
+Nehody:
+
+Nehody jsou závažné podle počtu 1 na kostce, tj. existuje rozdíl mezi malou a velkou nehodou, ty malé nejsou smrtelné, pokud jich máš ale hodně a zkusil si ohromné kouzlo, tak je to riskantnější. Pokud si ted upcastil, tak nebyl důvod tam poslat co nejvíce WP protože si stejně nehodu měl vždy. Nehody tedy budou častější a ovlivněné tvou postavou a jak je dobrá v kouzlení (vystupování, které je zatím málo využívaná dovednost), ale ty častější budou méně náročné.
+
+
+
+old, asi nepoužijeme:
+
+WIP: Kouzla se nedají učit přes talenty, ale pouze kouzla jako taková. Učit se kouzla vyšší úrovně můžeš pouze za podmínky, že máš alespoň 3 z této školy aktuální úrovně + 3 z obecné (případně 4/2, ale minimálně 3 kouzla z aktuální školy). Samotné učení je hod na BYSTROST
+
+Při naučení se nového kouzla hoď tolika k6, kolik kouzel této úrovně (z této školy) již umíš, při úspěchu se můžeš naučit kouzlo z této školy nebo obecné zdarma (této nebo nižší úrovně).
+
+nebo
+
+Hod na BYSTROST je s bonusem za každé již známé kouzlo z požadované školy učené úrovně + každé kouzlo požadované úrovně z obecné magie.
+
+nebo
+
+viz. 2 ale počet úspěchů značí počet naučených kouzel. (Zde bych to asi limitoval např na 2), jinak by celá mechanika mohla ztratit smysl (zase šance, že hodíš 3 a více úspěchů na kostce čistě za bystrost není vysoká - problém by byl až když budeš umět např 5. obecné magie a doučovat se školy dalších magií)..
+
+Učení s učitelem ti vždy navíc dá jedno bonusové kouzlo (plus si ještě házíš).
+
+Přiklad: Chci se naučit nové kouzlo 3. úrovně symboliky. Aktuálně mám 4 kouzla z 2. úrovně v symbolice a 3 kouzla v obecné magii. Za 10 bodů zkušeností (odpovídá talentu lvl 3.) Se tedy naučím jedno kouzlo a pak hodím
+
+ jednou k6 zda se mohu naučit druhé kouzlo ze symboliky 3. úrovně případně doplnit poslední chybějící k 2. úrovni nebo jedno obecné 3. úrovně.
+
+Na bystrost + počet kouzel co již umím z této úrovně. Za dva úspěchy se můžu naučit požadované kouzlo + jedno navíc.
+
+Proč bystrost:, protože bonus již dostáváme z počtu kouzel (navíc takhle funguje klasické učení talentů). Příběhy toho už mají moc. Flavor je takový, že čím více kouzel znáš tím víc ti jde učení a to, že máš učitele ještě neznamená, že tě naučí vše pokud ty nejsi schopný se dobře soustředit.
+
+Případně by nové učení šlo dělat tak, že se naučíš talent, k němu dostaneš 1 kouzlo + 1 obecné a zbytek se musíš doučit (už ale nestojí XP), s učitelem se cena stále nižší. Učení kouzla pak funguje identicky, pouze za něj nedáváš XP. (Problém, že se nedokážeš naučit magii 3. úrovně sám protože nikdy nemůžeš mít vice jak 30 zkušeností (max 25), takže by bylo třeba najít nějakou náhradu - např. knihy)
+
+Bezpečné kouzlení
+
+Bezpečné kouzlení je stále možné, grimoár odebírá jednu kostku, kouzla nižší úrovně se pak dají seslat úspěšným hodem na VYSTUPOVÁNÍ s bonusem za každé kouzlo z aktuální školy vyšší úrovně. Pokud budeš takto bezpečně chtít seslat kouzlo první úrovně a znáš 4 z 2. úrovně a 1 z 3. úrovně budeš házet na VYSTUPOVÁNÍ +5. V případě jednoho úspěchu budeš házet o 1 kostkou méně, v případě dvou úspěchů o 2 méně. Stále je rozdíl kouzla a maximálního naučeného kouzla 2, takže méně kostek házet nemůžeš (lze ještě snížit grimoarem). Pokud používáš pomůcku tak si přidej kostku za pomůcku, na 6 se nespotřebuje.
+
+Aktuálně funguje tak, že stačí mít úroveň 3 a automaticky můžeš downcastit (tj. házet o jednu kostku méně), kouzla 1. úrovně dokonce downcastit o 2 kostky. Samotné kouzlení tak funguje tak, že pouze řekneš co kouzlíš a nic víc se neděje, žádný hod není, magie má být to nejsložitější a přitom má downcastění 100% úspěšnost
+
+Proč vystupování: dovednost se téměř nikde nepoužívá, použití příběhů by už bylo příliš časté.
+
+Magické nehody
+
+Počet lebek při hodu na magické nehody ovlivňuje “závažnost “ samotné nehody. Pokud mas pouze jednu lebku, tak mas -10 k hodu (tj. Nemůžeš dostat nejhorší instakill). Při 2 zůstává číslo stejne a za každou se pak zveda o 10. Upcasting ti přidá 2.
+
+Upravené talenty
+
+https://docs.google.com/document/d/1ExeUKfNHesD3p2XaffHC6gxxBNR03pxc/edit

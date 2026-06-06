@@ -2,9 +2,9 @@ import React from 'react';
 import Card from '../common/Card';
 import MoneyInput from '../common/MoneyInput';
 
-const SheetBasicInfo = ({ char, updateField }) => {
+const SheetBasicInfo = ({ char, updateField, moneyRef }) => {
     return (
-        <Card className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+        <Card className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-4">
                 <div>
                     <label className="block text-[10px] font-bold uppercase text-fl-primary mb-1 tracking-wider">Jméno</label>
@@ -98,14 +98,16 @@ const SheetBasicInfo = ({ char, updateField }) => {
             </div>
             
             <div className="flex flex-col justify-between h-full space-y-4">
-                <MoneyInput 
-                    money={char.money} 
-                    onChange={(newMoney) => {
-                        updateField('money.gold', newMoney.gold);
-                        updateField('money.silver', newMoney.silver);
-                        updateField('money.copper', newMoney.copper);
-                    }} 
-                />
+                <div ref={moneyRef}>
+                    <MoneyInput
+                        money={char.money}
+                        onChange={(newMoney) => {
+                            updateField('money.gold', newMoney.gold);
+                            updateField('money.silver', newMoney.silver);
+                            updateField('money.copper', newMoney.copper);
+                        }}
+                    />
+                </div>
 
                 {/* Relationships (Vztahy k ostatním PC) */}
                 <div className="border border-fl-primary/20 bg-fl-paper-bright/20 p-3 rounded-sm space-y-2">

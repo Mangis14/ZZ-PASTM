@@ -15,7 +15,7 @@ const isArmorItem = (item) => item?.Category === 'Zbroj';
 
 const getItemName = (item) => item?.Předmět || item?.name || '';
 
-const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot }) => {
+const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, handleRemoveInventorySlot }) => {
     const { allItems } = useCatalog();
     const [swapRequest, setSwapRequest] = useState(null);
 
@@ -152,9 +152,9 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot }) 
 
                             <button
                                 type="button"
-                                onClick={() => handleClearItem(index)}
+                                onClick={() => handleRemoveInventorySlot(index)}
                                 className="w-6 h-6 flex items-center justify-center text-fl-border hover:text-red-700 opacity-50 group-hover:opacity-100 transition-all rounded hover:bg-red-900/30"
-                                title="Odstranit předmět"
+                                title="Odstranit slot"
                             >
                                 <X size={14} />
                             </button>

@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Soumar rank 3 now grants the correct +10 encumbrance capacity instead of repeating rank 2's +5 bonus.
+- Changing an attribute maximum now requires confirmation, including a warning when lowering it would also reduce the current value.
+- Restored the missing new-character choice dialog and Character Creation Wizard integration.
+- Talent and spell pickers now stay open after learning an entry, allowing multiple additions in one session.
+- Inventory rows can now be removed completely, including empty rows.
+- Character encumbrance limit is now calculated from maximum Strength instead of current Strength.
+
+### Changed
+- Added responsive multi-select spell school categories, rank filters, and known/unknown filtering to the spellbook.
+- Added spell school and rank filters to the learned-spell picker, plus search for learned spells directly in the Character Sheet.
+- Removed swipe navigation and horizontal slide transitions between the main app sections for smoother mobile navigation.
+- Replaced the time-of-day header control with an always-visible colored coin purse showing gold, silver, and copper counts.
+- Header status indicators and the coin purse now open and scroll to their relevant Character Sheet tile.
+- The new-character choice opens automatically when the app starts without any saved characters.
+- Goods browsing now exposes every catalog category separately instead of grouping them into broad equipment categories.
+- Added a mobile-friendly category grid with item counts, category-specific quick filters, additional filters, active filter chips, and visible result counts.
+- Goods categories and the combined list now preserve additional categories produced by the Google Drive catalog import instead of limiting results to the bundled category order.
+- Android and offline fallback now bundle the latest transformed import catalog, keeping phone builds aligned with the Google Drive source pipeline.
+- Goods browsing supports selecting multiple categories at once and persists the last category, search, filter, sorting, and filter-panel state across navigation and app restarts.
+- Character Sheet is now presented as a dashboard of collapsible tiles with compact summaries and per-character saved layout state.
+- Added dashboard controls for restoring the recommended game overview, collapsing all sections, or expanding all sections.
+- Character Sheet header now acts as a compact game status bar for damaged attributes, conditions, willpower, time of day, and encumbrance.
+- Character Sheet tile summaries now expose all attribute values and inventory encumbrance, with warning and danger highlighting for important states.
+- Character Sheet status bar now fits all four indicators responsively across narrow phone widths without horizontal scrolling.
+- Redesigned Character Sheet attributes into responsive game cards with prominent current values, clear damage states, dedicated roll buttons, and compact maximum controls.
+- Redesigned conditions, willpower, and experience into mobile-friendly one-tap controls with clear active-state feedback.
+- Character attribute cards now use the consistent SIL, OBR, OSO, BYS order and clearly distinguish healthy, damaged, and incapacitated states.
+- Added per-character Character Sheet personalization with saved tile order, saved open/collapsed state, custom preferred overview, reset controls, and long-press tile reordering.
+- Added Game mode, which keeps gameplay actions available while hiding editing controls and preventing accidental field changes.
+
 ## [1.8.3] - 2026-06-02
 
 ### Fixed
