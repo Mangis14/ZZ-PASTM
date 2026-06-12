@@ -2,6 +2,7 @@
   "appId": "com.zz.denik",
   "appName": "ZZ Deník",
   "webDir": "dist",
+  "backgroundColor": "#f7f1e6",
   "server": {
     "androidScheme": "https"
   }

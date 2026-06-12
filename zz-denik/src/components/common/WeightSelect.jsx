@@ -2,7 +2,8 @@ import React from 'react';
 
 const WeightSelect = ({ value, onChange }) => (
     <select
-        className="text-xs bg-transparent border-b border-transparent hover:border-fl-primary/50 focus:border-fl-primary focus:outline-none text-fl-text-muted focus:text-fl-surface cursor-pointer text-right w-14 py-1 transition-colors"
+        aria-label="Váha předmětu"
+        className="min-h-10 text-xs bg-transparent border-b border-transparent hover:border-fl-primary/50 focus:border-fl-primary focus:outline-none text-fl-text-muted focus:text-fl-surface cursor-pointer text-right w-14 py-1 transition-colors"
         value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
     >

@@ -7,10 +7,12 @@
    Warm parchment & leather tones
    ═══════════════════════════════════════════════════ */
 :root {
+  color-scheme: light;
+
   --fl-bg: #e8dece;           /* Tan sand — accent areas, tab bars */
   --fl-surface: #2c2419;      /* Dark espresso — primary text */
   --fl-surface-hover: #4a3d2e; /* Dark brown — secondary text */
-  --fl-text-muted: #7a6d5e;   /* Medium brown — muted text */
+  --fl-text-muted: #756753;   /* Medium brown — muted text (AA na kartách) */
   --fl-primary: #9c6b3c;      /* Rich amber leather — main accent */
   --fl-primary-hover: #b38050; /* Warmer amber — hover accent */
   --fl-border: #cdbfa6;       /* Sandy tan — borders */
@@ -20,6 +22,24 @@
   --fl-card: #fdfaf3;         /* Warm white — card surfaces */
   --fl-nav: #2e2318;          /* Dark leather — sidebars, nav */
   --fl-nav-hover: #443628;    /* Lighter leather — hover on nav */
+
+  /* Bezpečné zóny: env() funguje v moderných WebView (edge-to-edge),
+     --safe-area-inset-* injektuje Capacitor SystemBars na Androide 15+.
+     max() varianta sa uplatní tam, kde je podporovaná; inak ostáva env(). */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-top: max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px));
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px));
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-left: max(env(safe-area-inset-left, 0px), var(--safe-area-inset-left, 0px));
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-right: max(env(safe-area-inset-right, 0px), var(--safe-area-inset-right, 0px));
+
+  /* Skutočné rozmery fixných prvkov — merané za behu (ResizeObserver),
+     fallback zodpovedá bežnej veľkosti pri 100 % škálovaní písma. */
+  --app-header-height: 124px;
+  --app-bottom-nav-height: 84px;
+  --app-rail-width: 0px;
 }
 
 /* ═══════════════════════════════════════════════════
@@ -27,10 +47,12 @@
    Deep midnight blue + golden amber accents
    ═══════════════════════════════════════════════════ */
 .dark {
+  color-scheme: dark;
+
   --fl-bg: #0d1118;           /* Deep midnight — accent areas */
   --fl-surface: #e4ddd0;      /* Warm cream — primary text */
   --fl-surface-hover: #b8ad9c; /* Muted cream — secondary text */
-  --fl-text-muted: #6b6358;   /* Warm gray — muted text */
+  --fl-text-muted: #94897a;   /* Warm gray — muted text (AA na kartách) */
   --fl-primary: #c99a44;      /* Golden amber — main accent */
   --fl-primary-hover: #ddb055; /* Bright gold — hover accent */
   --fl-border: #252c38;       /* Dark blue-gray — borders */
@@ -42,42 +64,108 @@
   --fl-nav-hover: #1e2538;    /* Blue slate — hover on nav */
 }
 
-body {
-    background-color: var(--fl-paper-bright);
-    color: var(--fl-surface);
-    /* Podpora pre bezpečné zóny na iPhone X a novších */
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
+html {
+  background-color: var(--fl-paper-bright);
+  /* Plynulé prepnutie témy bez bieleho bliknutia */
+  transition: background-color 200ms ease;
 }
 
-/* Responsive main content padding for mobile/desktop layout heights */
+body {
+  background-color: var(--fl-paper-bright);
+  color: var(--fl-surface);
+  /* Žiadny "glow"/reťazenie skrolovania za okraj — natívny pocit */
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+}
+
+/* Otvorená modálna vrstva blokuje skrolovanie pozadia */
+body.fl-scroll-lock {
+  overflow: hidden;
+}
+
+/* Obsah pod fixným headerom a nad spodnou navigáciou.
+   Výšky sú merané, takže layout prežije aj systémové škálovanie písma. */
 .main-content-layout {
-    padding-top: calc(env(safe-area-inset-top) + 132px);
-    padding-bottom: calc(env(safe-area-inset-bottom) + 92px);
+  padding-top: calc(var(--app-header-height) + 12px);
+  padding-bottom: calc(var(--safe-bottom) + var(--app-bottom-nav-height) + 16px);
+  padding-left: max(1rem, var(--safe-left));
+  padding-right: max(1rem, var(--safe-right));
+}
+
+/* Na ≥768px nahrádza spodnú lištu navigation rail vľavo (M3) */
+@media (min-width: 768px) {
+  :root {
+    --app-rail-width: 5rem;
+  }
+
+  .main-content-layout {
+    padding-left: max(1rem, calc(var(--app-rail-width) + 1rem + var(--safe-left)));
+    padding-bottom: calc(var(--safe-bottom) + 24px);
+  }
 }
 
 .floating-cart-panel {
-    bottom: calc(env(safe-area-inset-bottom) + 92px);
+  bottom: calc(var(--safe-bottom) + var(--app-bottom-nav-height) + 8px);
+}
+
+@media (min-width: 768px) {
+  .floating-cart-panel {
+    bottom: calc(var(--safe-bottom) + 16px);
+    padding-left: max(1rem, calc(var(--app-rail-width) + 1rem + var(--safe-left)));
+  }
 }
 
 .toast-safe-bottom {
-    bottom: calc(env(safe-area-inset-bottom) + 96px);
+  bottom: calc(var(--safe-bottom) + var(--app-bottom-nav-height) + 12px);
 }
 
-/* Responsive top offset for inner character sheet navigation */
-.sticky-sheet-nav {
-    top: calc(env(safe-area-inset-top) + 80px);
+@media (min-width: 768px) {
+  .toast-safe-bottom {
+    bottom: calc(var(--safe-bottom) + 24px);
+  }
 }
 
 /* Game mode keeps play actions available while preventing sheet editing. */
 .sheet-game-mode .sheet-tile-content button:not([data-game-action]) {
-    display: none;
+  display: none;
 }
 
 .sheet-game-mode .sheet-tile-content input,
 .sheet-game-mode .sheet-tile-content select,
 .sheet-game-mode .sheet-tile-content textarea {
-    pointer-events: none;
+  pointer-events: none;
+}
+
+/* Viditeľný fokus pre klávesnicu a čítačky, bez rušenia dotykov */
+:focus-visible {
+  outline: 2px solid var(--fl-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Trasenie kociek (presunuté z inline <style> v DiceRollerModal) */
+@keyframes dice-shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.dice-shake {
+  animation: dice-shake 0.5s infinite;
+}
+
+/* Rešpektovanie systémového nastavenia obmedzeného pohybu (WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

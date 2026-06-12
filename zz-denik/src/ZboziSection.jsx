@@ -4,6 +4,7 @@ import Card from './components/common/Card';
 import SectionHeader from './components/common/SectionHeader';
 import MoneyInput from './components/common/MoneyInput';
 import { CATEGORY_ORDER, useCatalog } from './context/CatalogContext';
+import { registerBackHandler, hapticTick } from './native/platform';
 
 const ALL_CATEGORY = 'Vše';
 const BROWSE_STATE_KEY = 'fl_goods_browse_state';
@@ -118,6 +119,12 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
     const [isOpen, setIsOpen] = useState(false);
     const [agreedPrice, setAgreedPrice] = useState({ gold: 0, silver: 0, copper: 0 });
 
+    // Systémové Späť zatvorí rozbalený košík namiesto opustenia sekcie
+    useEffect(() => {
+        if (!isOpen) return undefined;
+        return registerBackHandler(() => setIsOpen(false));
+    }, [isOpen]);
+
     const totalCopper = useMemo(() => {
         return cart.reduce((sum, item) => sum + getCopperValue(item.price) * item.qty, 0);
     }, [cart]);
@@ -139,6 +146,7 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
         clearCart();
         setAgreedPrice({ gold: 0, silver: 0, copper: 0 });
         setIsOpen(false);
+        hapticTick(25);
     };
 
     if (cart.length === 0) return null;
@@ -148,20 +156,21 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="w-full bg-fl-nav text-white py-3 px-4 rounded-lg shadow-xl border border-fl-primary flex items-center justify-between hover:bg-fl-nav-hover transition-colors"
+                    aria-expanded={false}
+                    className="w-full min-h-14 bg-fl-nav text-white py-3 px-4 rounded-2xl shadow-xl border border-fl-primary flex items-center justify-between hover:bg-fl-nav-hover active:bg-fl-nav-hover transition-colors animate-in fade-in slide-in-from-bottom-2 duration-200"
                 >
                     <div className="flex items-center gap-3">
-                        <div className="relative">
+                        <div className="relative" aria-hidden="true">
                             <ShoppingCart size={22} />
                             <span className="absolute -top-2 -right-2 bg-fl-primary text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
                                 {itemCount}
                             </span>
                         </div>
-                        <span className="font-bold uppercase text-sm tracking-wider">Košík</span>
+                        <span className="font-bold uppercase text-sm tracking-wider">Košík ({itemCount})</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <PriceDisplay price={totalPrice} size="lg" />
-                        <ChevronUp size={18} />
+                        <ChevronUp size={18} aria-hidden="true" />
                     </div>
                 </button>
             )}
@@ -171,24 +180,24 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
                     className="bg-fl-card border border-fl-primary rounded-lg shadow-2xl overflow-hidden flex flex-col"
                     style={{ maxHeight: 'calc(100dvh - env(safe-area-inset-bottom) - 7.5rem)' }}
                 >
-                    <div className="bg-fl-nav p-3 flex items-center justify-between">
+                    <div className="bg-fl-nav p-2 pl-3 flex items-center justify-between">
                         <div className="flex items-center gap-2 text-white">
-                            <ShoppingCart size={20} />
+                            <ShoppingCart size={20} aria-hidden="true" />
                             <span className="font-bold uppercase text-sm tracking-wider">Košík ({itemCount})</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <button onClick={clearCart} className="text-red-400 hover:text-red-300 p-1" title="Vysypat košík">
+                        <div className="flex items-center gap-1">
+                            <button onClick={clearCart} aria-label="Vysypat košík" className="flex h-11 w-11 items-center justify-center rounded-full text-red-400 hover:text-red-300 hover:bg-white/10 active:bg-white/10 transition-colors" title="Vysypat košík">
                                 <Trash2 size={18} />
                             </button>
-                            <button onClick={() => setIsOpen(false)} className="text-white hover:text-fl-primary p-1">
+                            <button onClick={() => setIsOpen(false)} aria-label="Sbalit košík" className="flex h-11 w-11 items-center justify-center rounded-full text-white hover:text-fl-primary hover:bg-white/10 active:bg-white/10 transition-colors">
                                 <ChevronDown size={20} />
                             </button>
                         </div>
                     </div>
 
-                    <div className="min-h-0 flex-1 max-h-48 overflow-y-auto p-3 space-y-2">
+                    <div className="min-h-0 flex-1 max-h-56 overflow-y-auto overscroll-contain p-3 space-y-2">
                         {cart.map((item, idx) => (
-                            <div key={idx} className="flex items-center justify-between bg-fl-paper-bright p-2 rounded border border-fl-paper text-sm">
+                            <div key={idx} className="flex items-center justify-between bg-fl-paper-bright p-2 rounded-lg border border-fl-paper text-sm">
                                 <div className="flex-1 min-w-0">
                                     <span className="font-bold text-fl-surface truncate block">{item.Předmět}</span>
                                     <span className="text-[10px] text-fl-text-muted">
@@ -196,15 +205,15 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
                                         <PriceDisplay price={item.price} cena={item.Cena} />
                                     </span>
                                 </div>
-                                <div className="flex items-center gap-3 ml-2">
-                                    <div className="flex items-center bg-fl-paper-light rounded border border-fl-border">
-                                        <button onClick={() => removeFromCart(idx)} className="w-5 h-5 flex items-center justify-center text-fl-primary hover:bg-fl-primary hover:text-white transition-colors">-</button>
-                                        <span className="text-xs font-bold w-4 text-center">{item.qty}</span>
-                                        <button onClick={() => incrementCart(idx)} className="w-5 h-5 flex items-center justify-center text-fl-primary hover:bg-fl-primary hover:text-white transition-colors">+</button>
+                                <div className="flex items-center gap-2 ml-2">
+                                    <div className="flex items-center bg-fl-paper-light rounded-lg border border-fl-border overflow-hidden">
+                                        <button onClick={() => removeFromCart(idx)} aria-label={`Ubrat ${item.Předmět}`} className="h-10 w-10 flex items-center justify-center text-fl-primary hover:bg-fl-primary hover:text-white active:bg-fl-primary active:text-white transition-colors">−</button>
+                                        <span className="text-xs font-bold w-5 text-center tabular-nums">{item.qty}</span>
+                                        <button onClick={() => incrementCart(idx)} aria-label={`Přidat ${item.Předmět}`} className="h-10 w-10 flex items-center justify-center text-fl-primary hover:bg-fl-primary hover:text-white active:bg-fl-primary active:text-white transition-colors">+</button>
                                     </div>
-                                    <div className="text-right flex items-center gap-2">
+                                    <div className="text-right flex items-center gap-1">
                                         <PriceDisplay price={item.price ? { ...item.price, value: item.price.value * item.qty } : null} cena={item.Cena} />
-                                        <button onClick={() => completelyRemoveCart(idx)} className="text-red-500 hover:text-red-700 p-1">
+                                        <button onClick={() => completelyRemoveCart(idx)} aria-label={`Odstranit ${item.Předmět} z košíku`} className="flex h-10 w-10 items-center justify-center rounded-lg text-red-500 hover:text-red-700 hover:bg-red-900/15 active:bg-red-900/15 transition-colors">
                                             <X size={14} />
                                         </button>
                                     </div>
@@ -228,9 +237,9 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
 
                         <button
                             onClick={handleCheckout}
-                            className="w-full py-3 bg-green-700 dark:bg-green-800 text-white hover:bg-green-800 dark:hover:bg-green-700 rounded font-bold uppercase text-sm tracking-wider flex items-center justify-center gap-2 transition-colors shadow-md"
+                            className="w-full min-h-12 py-3 bg-green-700 dark:bg-green-800 text-white hover:bg-green-800 dark:hover:bg-green-700 rounded-xl font-bold uppercase text-sm tracking-wider flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-md"
                         >
-                            <Check size={18} />
+                            <Check size={18} aria-hidden="true" />
                             Přidat vše do batohu
                         </button>
                     </div>
@@ -279,7 +288,8 @@ const FilterPillGroup = ({ label, icon: Icon, options, selectedValues, onToggle,
                 <button
                     type="button"
                     onClick={onClear}
-                    className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition-colors ${
+                    aria-pressed={selectedValues.length === 0}
+                    className={`min-h-10 px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition-colors active:opacity-80 ${
                         selectedValues.length === 0
                             ? 'bg-fl-primary text-white border-fl-primary'
                             : 'bg-fl-paper text-fl-text-muted border-fl-border hover:bg-fl-border hover:text-fl-surface'
@@ -294,7 +304,8 @@ const FilterPillGroup = ({ label, icon: Icon, options, selectedValues, onToggle,
                             key={option}
                             type="button"
                             onClick={() => onToggle(option)}
-                            className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition-colors ${
+                            aria-pressed={isSelected}
+                            className={`min-h-10 px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition-colors active:opacity-80 ${
                                 isSelected
                                     ? 'bg-fl-nav text-white border-fl-nav-hover'
                                     : 'bg-fl-paper-bright text-fl-surface border-fl-border hover:bg-fl-paper hover:border-fl-primary'
@@ -652,23 +663,25 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
 
             <Card className="mb-6">
                 <div className="flex flex-col gap-3">
-                    <div className="flex gap-2 h-10">
+                    <div className="flex gap-2 h-12">
                         <div className="relative flex-1">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fl-primary" size={16} />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fl-primary" size={16} aria-hidden="true" />
                             <input
-                                type="text"
+                                type="search"
                                 placeholder={`Hledat v kategoriích ${categoryLabel}...`}
-                                className="w-full h-full pl-9 pr-3 bg-fl-paper-bright border border-fl-border rounded-sm focus:outline-none focus:border-fl-primary text-fl-surface text-sm placeholder:text-fl-border"
+                                aria-label="Hledat zboží"
+                                className="w-full h-full pl-9 pr-3 bg-fl-paper-bright border border-fl-border rounded-lg focus:outline-none focus:border-fl-primary text-fl-surface text-sm placeholder:text-fl-text-muted"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </div>
                         <button
                             onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
-                            className="px-3 border border-fl-border rounded-sm text-fl-surface-hover hover:bg-fl-border hover:text-fl-surface transition-colors flex items-center justify-center gap-1 font-bold text-xs uppercase tracking-wider min-w-[70px]"
+                            className="px-3 border border-fl-border rounded-lg text-fl-surface-hover hover:bg-fl-border hover:text-fl-surface active:bg-fl-border transition-colors flex items-center justify-center gap-1 font-bold text-xs uppercase tracking-wider min-w-[70px]"
                             title="Řadit podle ceny"
+                            aria-label={`Řadit podle ceny ${sortOrder === 'asc' ? 'vzestupně' : 'sestupně'}`}
                         >
-                            <ArrowUpDown size={14} />
+                            <ArrowUpDown size={14} aria-hidden="true" />
                             <span className="hidden sm:inline">Cena</span> {sortOrder === 'asc' ? '▲' : '▼'}
                         </button>
                         {additionalFilterGroups.length > 0 && (
@@ -786,19 +799,23 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
                     const isEquippable = ['Zbroj', 'Zbraně nablízko', 'Střelné zbraně'].includes(item.Category);
 
                     return (
-                        <div 
-                            key={index} 
-                            onClick={() => toggleExpand(item.Předmět)}
-                            className="bg-fl-card border border-fl-paper rounded-sm shadow-sm hover:border-fl-primary transition-colors cursor-pointer"
+                        <div
+                            key={index}
+                            className="bg-fl-card border border-fl-paper rounded-lg shadow-sm hover:border-fl-primary transition-colors overflow-hidden"
                         >
                             {/* CARD HEADER (Always Visible) */}
-                            <div className="p-3 flex justify-between items-center">
+                            <button
+                                type="button"
+                                onClick={() => toggleExpand(item.Předmět)}
+                                aria-expanded={isExpanded}
+                                className="w-full min-h-14 p-3 flex justify-between items-center text-left active:bg-fl-paper/40 transition-colors"
+                            >
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-baseline gap-2">
                                         <h3 className="font-bold text-fl-surface text-base truncate">{item.Předmět}</h3>
-                                        <span className="text-[9px] uppercase text-fl-primary/80 font-bold shrink-0">{item.Category}</span>
+                                        <span className="text-[10px] uppercase text-fl-primary/90 font-bold shrink-0">{item.Category}</span>
                                     </div>
-                                    <div className="text-[10px] text-fl-text-muted mt-0.5 flex gap-2">
+                                    <div className="text-[11px] text-fl-text-muted mt-0.5 flex gap-2">
                                         {item.Váha && item.Váha !== '–' && <span>Váha: {item.Váha}</span>}
                                         {item.Dostupnost && <span>• {item.Dostupnost}</span>}
                                     </div>
@@ -807,11 +824,11 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
                                     <div className="bg-fl-paper-light px-2 py-1 rounded text-xs border border-fl-paper font-bold shrink-0">
                                         <PriceDisplay price={item.price} cena={item.Cena} />
                                     </div>
-                                    <div className="text-fl-primary transition-transform duration-200">
-                                        {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                    <div className="text-fl-primary" aria-hidden="true">
+                                        <ChevronDown size={16} className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
                                     </div>
                                 </div>
-                            </div>
+                            </button>
 
                             {/* CARD BODY (Collapsible Details) */}
                             <div 
@@ -885,24 +902,24 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
                                                     });
                                                 }
                                             }}
-                                            className="flex-1 py-2 bg-fl-paper border border-fl-border text-fl-primary hover:text-white hover:border-fl-primary rounded text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                                            className="flex-1 min-h-11 bg-fl-paper border border-fl-border text-fl-primary hover:text-white hover:border-fl-primary hover:bg-fl-primary rounded-lg text-xs font-bold uppercase transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm"
                                         >
-                                            <ShoppingBag size={14} /> Do batohu
+                                            <ShoppingBag size={14} aria-hidden="true" /> Do batohu
                                         </button>
                                         <button
                                             onClick={() => addToCart(item)}
-                                            className="flex-1 py-2 bg-fl-nav text-white hover:bg-fl-nav-hover border border-fl-nav-hover rounded text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                                            className="flex-1 min-h-11 bg-fl-nav text-white hover:bg-fl-nav-hover border border-fl-nav-hover rounded-lg text-xs font-bold uppercase transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm"
                                         >
-                                            <ShoppingCart size={14} /> Do košíku
+                                            <ShoppingCart size={14} aria-hidden="true" /> Do košíku
                                         </button>
                                     </div>
-                                    
+
                                     {isEquippable && equipItem && (
                                         <button
                                             onClick={() => equipItem(item)}
-                                            className="w-full py-2 bg-fl-primary text-fl-bg hover:bg-fl-primary-hover rounded text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                                            className="w-full min-h-11 bg-fl-primary text-fl-bg hover:bg-fl-primary-hover rounded-lg text-xs font-bold uppercase transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm"
                                         >
-                                            <Shield size={14} /> Koupit & Vybavit
+                                            <Shield size={14} aria-hidden="true" /> Koupit & Vybavit
                                         </button>
                                     )}
                                 </div>
@@ -912,9 +929,19 @@ const ZboziSection = ({ addItemToInventory, equipItem }) => {
                 })}
 
                 {filteredData.length === 0 && (
-                    <div className="text-center py-12 text-fl-primary italic bg-fl-paper-bright rounded border border-fl-paper">
-                        <ShoppingBag size={48} className="mx-auto mb-4 opacity-20" />
-                        <p>Žádné předměty nenalezeny.</p>
+                    <div className="text-center py-12 px-4 text-fl-text-muted bg-fl-paper-bright rounded-lg border border-fl-paper">
+                        <ShoppingBag size={48} className="mx-auto mb-4 opacity-20" aria-hidden="true" />
+                        <p className="font-bold text-fl-surface">Žádné předměty nenalezeny</p>
+                        <p className="mt-1 text-sm">Zkuste upravit hledaný výraz nebo filtry.</p>
+                        {(search || activeFilterCount > 0) && (
+                            <button
+                                type="button"
+                                onClick={() => { setSearch(''); resetFilters(); }}
+                                className="mt-4 min-h-11 rounded-full border border-fl-primary/40 px-5 text-xs font-bold uppercase tracking-wider text-fl-primary transition-colors hover:bg-fl-primary hover:text-white active:bg-fl-primary/80"
+                            >
+                                Vymazat hledání a filtry
+                            </button>
+                        )}
                     </div>
                 )}
             </div>

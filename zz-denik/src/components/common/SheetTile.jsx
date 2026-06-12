@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import { ChevronDown, ChevronUp, GripVertical } from 'lucide-react';
+import { ChevronDown, GripVertical } from 'lucide-react';
 
 const SheetTileContext = createContext(false);
 
@@ -39,10 +39,10 @@ const SheetTile = ({ tileId, order, title, icon: Icon, summary, collapsed, onTog
                 <button
                     type="button"
                     onClick={onToggle}
-                    className="flex min-w-0 flex-1 items-center gap-3 p-4 text-left transition-colors hover:bg-fl-paper/40"
+                    className="flex min-h-14 min-w-0 flex-1 items-center gap-3 p-4 text-left transition-colors hover:bg-fl-paper/40 active:bg-fl-paper/60"
                     aria-expanded={!collapsed}
                 >
-                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${iconToneClasses[tone] || iconToneClasses.default}`}>
+                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${iconToneClasses[tone] || iconToneClasses.default}`} aria-hidden="true">
                     {Icon && <Icon size={20} />}
                 </div>
                 <div className="min-w-0 flex-1">
@@ -51,14 +51,14 @@ const SheetTile = ({ tileId, order, title, icon: Icon, summary, collapsed, onTog
                         <div className="mt-1 text-xs font-medium leading-tight text-fl-text-muted">{summary}</div>
                     )}
                 </div>
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-fl-border text-fl-primary">
-                    {collapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-fl-border text-fl-primary" aria-hidden="true">
+                    <ChevronDown size={16} className={`transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
                 </div>
                 </button>
             </div>
 
             {!collapsed && (
-                <div className="sheet-tile-content border-t border-fl-primary/20 p-4">
+                <div className="sheet-tile-content border-t border-fl-primary/20 p-4 animate-in fade-in duration-200">
                     <SheetTileContext.Provider value>
                         {children}
                     </SheetTileContext.Provider>

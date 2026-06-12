@@ -4,28 +4,35 @@ import Card from '../common/Card';
 import SectionHeader from '../common/SectionHeader';
 
 const SkillRow = ({ label, value, onChange, onRoll, attr }) => (
-    <div className="flex justify-between items-end border-b border-fl-border pb-1 group hover:bg-fl-paper-bright">
-        <span 
-            className="text-sm font-bold text-fl-surface-hover pb-1 cursor-pointer hover:text-fl-primary transition-colors" 
-            onClick={onRoll} 
+    <div className="flex min-h-11 items-center justify-between gap-2 border-b border-fl-border group hover:bg-fl-paper-bright">
+        <button
+            type="button"
+            data-game-action
+            className="min-w-0 flex-1 self-stretch py-1 text-left text-sm font-bold text-fl-surface-hover transition-colors hover:text-fl-primary active:text-fl-primary"
+            onClick={onRoll}
             title={`Hodit na dovednost ${label}`}
         >
             {label} <span className="text-[10px] font-normal text-fl-primary ml-1">({attr})</span>
-        </span>
-        <div className="flex items-center gap-1">
+        </button>
+        <div className="flex items-center">
             <button
                 onClick={() => onChange(Math.max(0, (value || 0) - 1))}
-                className="text-fl-border hover:text-fl-primary px-1 font-bold opacity-0 group-hover:opacity-100 transition-opacity"
-            >-</button>
+                disabled={(value || 0) <= 0}
+                aria-label={`Snížit dovednost ${label}`}
+                className="flex h-10 w-10 items-center justify-center rounded-lg font-bold text-fl-text-muted transition-colors hover:bg-fl-paper hover:text-fl-primary active:bg-fl-paper disabled:opacity-30"
+            >−</button>
             <input
-                type="number" autoComplete="off"
+                type="number" inputMode="numeric" autoComplete="off"
+                aria-label={`Hodnota dovednosti ${label}`}
                 className="w-8 text-center bg-transparent font-serif font-bold text-lg border-none focus:outline-none focus:ring-0 text-fl-surface p-0"
                 value={value || ''}
+                placeholder="0"
                 onChange={(e) => onChange(parseInt(e.target.value) || 0)}
             />
             <button
                 onClick={() => onChange((value || 0) + 1)}
-                className="text-fl-border hover:text-fl-primary px-1 font-bold opacity-0 group-hover:opacity-100 transition-opacity"
+                aria-label={`Zvýšit dovednost ${label}`}
+                className="flex h-10 w-10 items-center justify-center rounded-lg font-bold text-fl-text-muted transition-colors hover:bg-fl-paper hover:text-fl-primary active:bg-fl-paper"
             >+</button>
         </div>
     </div>

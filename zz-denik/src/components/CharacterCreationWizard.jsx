@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { X, ArrowRight, ArrowLeft, Shield, Sword, Brain, Smile, Check, Info, Dices, Search, Plus, Trash2 } from 'lucide-react';
 import { useCatalog } from '../context/CatalogContext';
 import Card from './common/Card';
+import useDialog from '../hooks/useDialog';
 
 const KIN_LIST = ['Člověk', 'Elf', 'Trpaslík', 'Půlelf', 'Půlčík', 'Vlken', 'Ork', 'Skřet'];
 
@@ -136,7 +137,8 @@ const PROF_GEAR_RECOMMENDED = {
   'Lupič': ['Dýka', 'Meč krátký', 'Kožená zbroj', 'Provaz', 'Tlumok']
 };
 
-export default function CharacterCreationWizard({ onComplete, onClose }) {
+export default function CharacterCreationWizard({ onComplete, onClose, showToast }) {
+  const notify = (message) => (showToast ? showToast(message, 'error') : window.alert(message));
   const { talents: catalogTalents, spells: catalogSpells, allItems } = useCatalog();
   const [step, setStep] = useState(1);
 
@@ -318,7 +320,7 @@ export default function CharacterCreationWizard({ onComplete, onClose }) {
     // Validation before moving next
     if (step === 1) {
       if (!name.trim()) {
-        alert("Prosím zadejte jméno postavy.");
+        notify("Prosím zadejte jméno postavy.");
         return;
       }
       // Initialize attributes to min limits when advancing
@@ -336,7 +338,7 @@ export default function CharacterCreationWizard({ onComplete, onClose }) {
 
     if (step === 2) {
       if (attrRemaining !== 0) {
-        alert(`Musíte rozdělit přesně všechny body vlastností. Zbývá rozdělit: ${attrRemaining} b.`);
+        notify(`Musíte rozdělit přesně všechny body vlastností. Zbývá rozdělit: ${attrRemaining} b.`);
         return;
       }
       // Initialize skills stealth bonus
@@ -351,7 +353,7 @@ export default function CharacterCreationWizard({ onComplete, onClose }) {
 
     if (step === 3) {
       if (skillsRemaining !== 0) {
-        alert(`Musíte rozdělit přesně všechny body dovedností. Zbývá rozdělit: ${skillsRemaining} b.`);
+        notify(`Musíte rozdělit přesně všechny body dovedností. Zbývá rozdělit: ${skillsRemaining} b.`);
         return;
       }
     }
@@ -360,7 +362,7 @@ export default function CharacterCreationWizard({ onComplete, onClose }) {
       // Validate general talents count
       const requiredGeneralCount = isProfRank2Selected ? pools.generalTalents - 1 : pools.generalTalents;
       if (selectedGeneralTalentIds.length !== requiredGeneralCount) {
-        alert(`Zvolte prosím přesně ${requiredGeneralCount} obecných talentů.`);
+        notify(`Zvolte prosím přesně ${requiredGeneralCount} obecných talentů.`);
         return;
       }
       // Pre-add selected spell choices if spellcaster
@@ -374,7 +376,7 @@ export default function CharacterCreationWizard({ onComplete, onClose }) {
 
     if (step === 5 && isSpellcaster) {
       if (selectedSpellIds.length !== 2) {
-        alert("Zvolte prosím přesně 2 startovní kouzla.");
+        notify("Zvolte prosím přesně 2 startovní kouzla.");
         return;
       }
     }
@@ -394,6 +396,12 @@ export default function CharacterCreationWizard({ onComplete, onClose }) {
       setStep(prev => prev - 1);
     }
   };
+
+  // Systémové Späť kráča po krokoch sprievodcu; z prvého kroku zavrie.
+  const panelRef = useDialog(() => {
+    if (step > 1) handlePrevStep();
+    else onClose();
+  });
 
   const adjustAttribute = (attr, delta) => {
     const lim = limits[attr];
@@ -589,28 +597,56 @@ export default function CharacterCreationWizard({ onComplete, onClose }) {
 
   // --- RENDERING KROKŮ ---
 
+  const stepCount = isSpellcaster ? 6 : 5;
+  const displayedStep = !isSpellcaster && step === 6 ? 5 : step;
+
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
-      <div className="bg-fl-card w-full max-w-3xl min-h-[90vh] sm:min-h-0 rounded-lg border-2 border-fl-primary shadow-2xl flex flex-col overflow-hidden max-h-[95vh]">
+    <div
+      className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200"
+      style={{ paddingTop: 'calc(var(--safe-top) + 0.5rem)', paddingBottom: 'calc(var(--safe-bottom) + 0.5rem)' }}
+    >
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Tvorba postavy"
+        className="bg-fl-card w-full max-w-3xl h-full sm:h-auto sm:max-h-full rounded-2xl border-2 border-fl-primary shadow-2xl flex flex-col overflow-hidden outline-none animate-in fade-in zoom-in-95 duration-200"
+      >
         {/* Header */}
         <div className="p-4 border-b border-fl-border bg-fl-card flex justify-between items-center">
-          <div>
+          <div className="min-w-0">
             <h2 className="text-xl sm:text-2xl font-serif font-bold text-fl-primary">Tvorba Postavy</h2>
-            <p className="text-xs text-fl-text-muted">Krok {step} z {isSpellcaster ? 6 : 5} • {
+            <p className="text-xs text-fl-text-muted">Krok {displayedStep} z {stepCount} • {
               step === 1 ? 'Základní informace' :
               step === 2 ? 'Atributy' :
               step === 3 ? 'Dovednosti' :
               step === 4 ? 'Talenty' :
               step === 5 ? 'Kouzla' : 'Výstroj a Detaily'
             }</p>
+            {/* Indikátor postupu */}
+            <div className="mt-2 flex gap-1" aria-hidden="true">
+              {Array.from({ length: stepCount }).map((_, i) => (
+                <span
+                  key={i}
+                  className={`h-1 flex-1 max-w-10 rounded-full transition-colors duration-300 ${
+                    i < displayedStep ? 'bg-fl-primary' : 'bg-fl-border'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
-          <button onClick={onClose} className="text-fl-text-muted hover:text-fl-primary p-2">
+          <button
+            onClick={onClose}
+            aria-label="Zavřít průvodce"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-fl-text-muted transition-colors hover:bg-fl-paper hover:text-fl-primary active:bg-fl-paper"
+          >
             <X size={24} />
           </button>
         </div>
 
         {/* Scrollable Step Body */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-fl-paper-bright space-y-4 text-fl-surface">
+        <div className="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6 bg-fl-paper-bright space-y-4 text-fl-surface">
 
           {/* STEP 1: Basic Info */}
           {step === 1 && (
@@ -1215,31 +1251,31 @@ export default function CharacterCreationWizard({ onComplete, onClose }) {
         </div>
 
         {/* Footer controls */}
-        <div className="p-4 border-t border-fl-border bg-fl-card flex justify-between items-center">
+        <div className="p-3 sm:p-4 border-t border-fl-border bg-fl-card flex justify-between items-center gap-3">
           <button
             type="button"
             onClick={handlePrevStep}
             disabled={step === 1}
-            className="flex items-center gap-2 px-4 py-2 border border-fl-border rounded text-sm text-fl-surface-hover hover:text-white hover:border-fl-primary disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="flex min-h-12 items-center gap-2 px-5 border border-fl-border rounded-full text-sm font-bold text-fl-surface-hover hover:text-fl-primary hover:border-fl-primary active:bg-fl-paper disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
-            <ArrowLeft size={16} /> Zpět
+            <ArrowLeft size={16} aria-hidden="true" /> Zpět
           </button>
 
-          {step === (isSpellcaster ? 6 : 6) ? (
+          {step === 6 ? (
             <button
               type="button"
               onClick={handleFinish}
-              className="flex items-center gap-2 px-6 py-2 bg-fl-primary hover:bg-fl-primary-hover text-fl-bg font-bold rounded shadow-lg transition-colors border border-fl-primary"
+              className="flex min-h-12 items-center gap-2 px-6 bg-fl-primary hover:bg-fl-primary-hover text-fl-bg font-bold rounded-full shadow-lg transition-all active:scale-[0.97] border border-fl-primary"
             >
-              <Check size={16} /> Vytvořit Postavu
+              <Check size={16} aria-hidden="true" /> Vytvořit Postavu
             </button>
           ) : (
             <button
               type="button"
               onClick={handleNextStep}
-              className="flex items-center gap-2 px-6 py-2 bg-fl-primary hover:bg-fl-primary-hover text-fl-bg font-bold rounded shadow-lg transition-colors border border-fl-primary"
+              className="flex min-h-12 items-center gap-2 px-6 bg-fl-primary hover:bg-fl-primary-hover text-fl-bg font-bold rounded-full shadow-lg transition-all active:scale-[0.97] border border-fl-primary"
             >
-              Dále <ArrowRight size={16} />
+              Dále <ArrowRight size={16} aria-hidden="true" />
             </button>
           )}
         </div>

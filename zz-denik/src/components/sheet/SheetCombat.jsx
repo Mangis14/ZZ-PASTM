@@ -61,13 +61,14 @@ const SheetCombat = ({ char, updateDeep, innerRef, handleAddWeaponSlot, addItemT
                                     <button
                                         type="button"
                                         onClick={() => setUnequipRequest({ type: 'armor', key, current: char[key] })}
-                                        className="text-red-500/60 hover:text-red-500 hover:bg-red-900/20 rounded p-0.5 transition-colors absolute right-1 top-1"
+                                        aria-label={`Odložit ${char[key].name}`}
+                                        className="absolute right-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg text-red-500/70 transition-colors hover:bg-red-900/20 hover:text-red-500 active:bg-red-900/20"
                                         title="Odložiť alebo zahodiť"
                                     >
-                                        <Trash2 size={12} strokeWidth={2.5} />
+                                        <Trash2 size={13} strokeWidth={2.5} />
                                     </button>
                                 ) : (
-                                    <Icon size={12} className="text-fl-border" />
+                                    <Icon size={12} className="text-fl-border" aria-hidden="true" />
                                 )}
                             </div>
                             <input
@@ -102,7 +103,7 @@ const SheetCombat = ({ char, updateDeep, innerRef, handleAddWeaponSlot, addItemT
             </div>
 
             <div className="space-y-2">
-                <div className="grid grid-cols-[1fr_30px_30px_40px_1fr_auto_auto] gap-2 text-[9px] font-bold uppercase text-fl-primary px-1">
+                <div className="grid grid-cols-[1fr_30px_30px_40px_1fr_auto_auto] gap-2 text-[10px] font-bold uppercase text-fl-primary px-1">
                     <span>Zbraň</span>
                     <span className="text-center">Bon</span>
                     <span className="text-center">Zran</span>
@@ -122,18 +123,19 @@ const SheetCombat = ({ char, updateDeep, innerRef, handleAddWeaponSlot, addItemT
                             <input type="text" className="bg-transparent text-center w-full focus:outline-none placeholder:text-fl-border" value={weapon.range} onChange={(event) => updateDeep('weapons', index, 'range', event.target.value)} />
                             <input type="text" className="bg-transparent text-xs w-full focus:outline-none text-fl-text-muted placeholder:text-fl-border" value={weapon.note} onChange={(event) => updateDeep('weapons', index, 'note', event.target.value)} />
                             <WeightSelect value={weapon.weight} onChange={(value) => updateDeep('weapons', index, 'weight', value)} />
-                            <div className="w-5 flex justify-center">
+                            <div className="w-10 flex justify-center">
                                 {hasItem ? (
                                     <button
                                         type="button"
                                         onClick={() => setUnequipRequest({ type: 'weapon', idx: index, current: weapon })}
-                                        className="w-5 h-5 flex items-center justify-center text-red-500/60 hover:text-red-500 hover:bg-red-900/30 rounded transition-colors"
+                                        aria-label={`Odložit zbraň ${weapon.name}`}
+                                        className="flex h-10 w-10 items-center justify-center rounded-lg text-red-500/70 transition-colors hover:bg-red-900/20 hover:text-red-500 active:bg-red-900/20"
                                         title="Odložiť zbraň"
                                     >
-                                        <Trash2 size={12} strokeWidth={2.5} />
+                                        <Trash2 size={13} strokeWidth={2.5} />
                                     </button>
                                 ) : (
-                                    <span className="w-5" />
+                                    <span className="w-10" />
                                 )}
                             </div>
                         </div>
@@ -143,9 +145,9 @@ const SheetCombat = ({ char, updateDeep, innerRef, handleAddWeaponSlot, addItemT
                 <button
                     type="button"
                     onClick={handleAddWeaponSlot}
-                    className="w-full mt-2 py-1.5 bg-fl-paper hover:bg-fl-border text-fl-primary font-bold uppercase text-xs tracking-widest rounded transition-colors flex items-center justify-center gap-2 border border-fl-primary/30"
+                    className="w-full mt-2 min-h-12 bg-fl-paper hover:bg-fl-border text-fl-primary font-bold uppercase text-xs tracking-widest rounded-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 border border-fl-primary/30"
                 >
-                    <Plus size={16} /> Přidat slot zbraně
+                    <Plus size={16} aria-hidden="true" /> Přidat slot zbraně
                 </button>
             </div>
 

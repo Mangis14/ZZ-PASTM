@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { Share } from '@capacitor/share';
 import { X, Download, Upload, Share2, Copy, Database, User, ClipboardCheck } from 'lucide-react';
+import useDialog from '../hooks/useDialog';
+import { confirmAction } from './common/ConfirmDialog';
 
 export default function DataManagementModal({
     char,
@@ -11,6 +13,7 @@ export default function DataManagementModal({
     onImportSingle,
     showToast
 }) {
+    const panelRef = useDialog(onClose);
     const [activeTab, setActiveTab] = useState('single'); // 'single' | 'bulk'
     const [importText, setImportText] = useState('');
     const [canShare, setCanShare] = useState(false);
@@ -108,7 +111,7 @@ export default function DataManagementModal({
 
     const processImportText = (text, type) => {
         if (!text.trim()) {
-            alert("Vložte text zálohy!");
+            showToast("Vložte text zálohy!", 'error');
             return;
         }
 
@@ -123,14 +126,14 @@ export default function DataManagementModal({
             } else {
                 // Validate single character structure
                 if (!parsed.name) {
-                    alert("Neplatný formát postavy (chybí jméno)!");
+                    showToast("Neplatný formát postavy (chybí jméno)!", 'error');
                     return;
                 }
                 onImportSingle(parsed);
             }
             setImportText('');
         } catch (err) {
-            alert("Chyba při zpracování JSON dat: " + err.message);
+            showToast("Chyba při zpracování JSON dat: " + err.message, 'error');
         }
     };
 
@@ -153,22 +156,33 @@ export default function DataManagementModal({
 
     return (
         <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center p-3 sm:p-4"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
             style={{
-                paddingTop: 'calc(env(safe-area-inset-top) + 0.75rem)',
-                paddingBottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)'
+                paddingTop: 'calc(var(--safe-top) + 0.75rem)',
+                paddingBottom: 'calc(var(--safe-bottom) + 0.75rem)'
             }}
+            onClick={onClose}
         >
             <div
-                className="bg-fl-card w-full max-w-lg rounded-lg border-2 border-fl-primary shadow-2xl flex flex-col overflow-hidden"
-                style={{ maxHeight: 'calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 1.5rem)' }}
+                ref={panelRef}
+                tabIndex={-1}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Správa dat postavy"
+                className="bg-fl-card w-full max-w-lg rounded-2xl border-2 border-fl-primary shadow-2xl flex flex-col overflow-hidden outline-none animate-in fade-in zoom-in-95 duration-200"
+                style={{ maxHeight: 'calc(100dvh - var(--safe-top) - var(--safe-bottom) - 1.5rem)' }}
+                onClick={e => e.stopPropagation()}
             >
                 {/* Header */}
                 <div className="p-4 border-b border-fl-border bg-fl-card flex justify-between items-center">
                     <h3 className="min-w-0 text-lg sm:text-xl font-serif font-bold text-fl-primary flex items-center gap-2 leading-tight">
-                        <Database size={20} /> Správa dat postavy
+                        <Database size={20} aria-hidden="true" /> Správa dat postavy
                     </h3>
-                    <button onClick={onClose} className="text-fl-primary hover:text-white p-1">
+                    <button
+                        onClick={onClose}
+                        aria-label="Zavřít"
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-fl-primary transition-colors hover:bg-fl-paper hover:text-fl-primary-hover active:bg-fl-paper"
+                    >
                         <X size={24} />
                     </button>
                 </div>
@@ -352,12 +366,16 @@ export default function DataManagementModal({
                                             className="w-full p-2 text-xs font-mono rounded border border-fl-border bg-fl-paper-bright text-fl-surface focus:outline-none focus:border-fl-primary"
                                         />
                                         <button
-                                            onClick={() => {
-                                                if (window.confirm("Opravdu chcete PŘEPSAT VŠECHNY postavy v tomto zařízení? Tato akce je nevratná!")) {
-                                                    processImportText(importText, 'all');
-                                                }
+                                            onClick={async () => {
+                                                const confirmed = await confirmAction({
+                                                    title: 'Přepsat všechny postavy?',
+                                                    message: 'Všechny stávající postavy v tomto zařízení budou nahrazeny daty ze zálohy. Tato akce je nevratná.',
+                                                    confirmLabel: 'Přepsat vše',
+                                                    danger: true
+                                                });
+                                                if (confirmed) processImportText(importText, 'all');
                                             }}
-                                            className="w-full py-2 bg-red-900 text-white font-bold rounded hover:bg-red-800 transition-colors text-xs uppercase"
+                                            className="w-full min-h-12 bg-red-900 text-white font-bold rounded-lg hover:bg-red-800 active:scale-[0.99] transition-all text-xs uppercase"
                                         >
                                             Obnovit celou zálohu (Přepsat)
                                         </button>

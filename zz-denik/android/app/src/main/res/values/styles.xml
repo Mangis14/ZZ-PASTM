@@ -13,6 +13,15 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
+        <!-- Android < 15 (bez vynúteného edge-to-edge): systémové lišty
+             v tmavej koženej farbe značky so svetlými ikonami — funguje
+             s oboma témami aplikácie. Na Androide 15+ sa ignoruje a štýl
+             riadi SystemBars podľa aktívnej témy. -->
+        <item name="android:statusBarColor">#2e2318</item>
+        <item name="android:navigationBarColor">#2e2318</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <!-- Viditeľné len v škárach pri animácii klávesnice / pred prvým paintom -->
+        <item name="android:windowBackground">#2c2419</item>
     </style>
 
 

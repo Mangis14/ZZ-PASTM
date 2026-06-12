@@ -5,6 +5,7 @@ import SectionHeader from '../common/SectionHeader';
 import WeightSelect from '../common/WeightSelect';
 import ItemAutocomplete from '../common/ItemAutocomplete';
 import { parseWeight } from '../../ZboziSection';
+import { confirmAction } from '../common/ConfirmDialog';
 
 const SheetMounts = ({ char, updateField }) => {
     const mounts = char.mounts || [];
@@ -14,8 +15,14 @@ const SheetMounts = ({ char, updateField }) => {
         updateField('mounts', newArr);
     };
 
-    const handleRemoveMount = (index) => {
-        if (!window.confirm("Opravdu smazat toto zvíře/sluhu? Všechny předměty v něm zmizí!")) return;
+    const handleRemoveMount = async (index) => {
+        const confirmed = await confirmAction({
+            title: `Propustit ${mounts[index]?.name || 'zvíře/sluhu'}?`,
+            message: 'Všechny předměty v jeho nákladu zmizí.',
+            confirmLabel: 'Propustit',
+            danger: true
+        });
+        if (!confirmed) return;
         const newArr = [...mounts];
         newArr.splice(index, 1);
         updateField('mounts', newArr);
@@ -54,8 +61,8 @@ const SheetMounts = ({ char, updateField }) => {
                         <PawPrint size={18} />
                         <span className="text-xs font-bold uppercase tracking-widest">Žádná zvířata / Sluhové</span>
                     </div>
-                    <button onClick={handleAddMount} className="p-1 border border-fl-border rounded text-fl-primary hover:bg-fl-paper transition-colors" title="Přidat zvíře">
-                        <Plus size={14} />
+                    <button onClick={handleAddMount} aria-label="Přidat zvíře" className="flex h-11 w-11 items-center justify-center border border-fl-border rounded-lg text-fl-primary hover:bg-fl-paper active:bg-fl-paper transition-colors" title="Přidat zvíře">
+                        <Plus size={16} />
                     </button>
                 </div>
             </Card>
@@ -66,7 +73,7 @@ const SheetMounts = ({ char, updateField }) => {
         <Card>
             <div className="flex justify-between items-center mb-4">
                 <SectionHeader title="Jízdní zvířata a Sluhové" icon={PawPrint} />
-                <button onClick={handleAddMount} className="p-1 border border-fl-border rounded text-fl-primary hover:bg-fl-paper transition-colors shadow-sm bg-fl-paper-bright" title="Přidat další">
+                <button onClick={handleAddMount} aria-label="Přidat další zvíře" className="flex h-11 w-11 items-center justify-center border border-fl-border rounded-lg text-fl-primary hover:bg-fl-paper active:bg-fl-paper transition-colors shadow-sm bg-fl-paper-bright" title="Přidat další">
                     <Plus size={16} />
                 </button>
             </div>
@@ -80,9 +87,10 @@ const SheetMounts = ({ char, updateField }) => {
 
                     return (
                         <div key={mountIdx} className="border-2 border-fl-primary/30 rounded p-3 bg-fl-bg shadow-inner relative">
-                            <button 
+                            <button
                                 onClick={() => handleRemoveMount(mountIdx)}
-                                className="absolute top-2 right-2 text-fl-primary hover:text-red-600 p-1"
+                                aria-label="Propustit zvíře"
+                                className="absolute right-1 top-1 flex h-11 w-11 items-center justify-center rounded-lg text-fl-primary transition-colors hover:bg-red-900/15 hover:text-red-600 active:bg-red-900/15"
                                 title="Propustit zvíře"
                             >
                                 <X size={16} />
@@ -102,11 +110,12 @@ const SheetMounts = ({ char, updateField }) => {
                                 <div className="flex gap-4">
                                     <div className="flex-1">
                                         <label className="block text-[10px] font-bold uppercase text-fl-primary mb-1 tracking-wider">Nosnost</label>
-                                        <input 
-                                            type="number" 
-                                            value={mount.encumbranceLimit} 
-                                            onChange={e => updateMount(mountIdx, 'encumbranceLimit', parseInt(e.target.value) || 0)} 
-                                            className="w-full bg-transparent border-b border-fl-border focus:border-fl-primary px-2 py-1 font-bold text-fl-surface focus:outline-none" 
+                                        <input
+                                            type="number"
+                                            inputMode="numeric"
+                                            value={mount.encumbranceLimit}
+                                            onChange={e => updateMount(mountIdx, 'encumbranceLimit', parseInt(e.target.value) || 0)}
+                                            className="w-full bg-transparent border-b border-fl-border focus:border-fl-primary px-2 py-1 font-bold text-fl-surface focus:outline-none"
                                         />
                                     </div>
                                     <div className={`flex-1 flex flex-col items-center justify-center p-1 rounded border ${overencumbered ? 'bg-red-900/20 border-red-800 text-red-500' : 'bg-fl-paper-bright border-fl-surface-hover text-fl-primary'}`}>
@@ -139,9 +148,10 @@ const SheetMounts = ({ char, updateField }) => {
                                         />
                                         <WeightSelect value={item.weight} onChange={(v) => updateMountItem(mountIdx, itemIdx, 'weight', v)} />
                                         
-                                        <button 
+                                        <button
                                             onClick={() => handleClearMountItem(mountIdx, itemIdx)}
-                                            className="w-6 h-6 flex items-center justify-center text-fl-border hover:text-red-700 opacity-0 group-hover:opacity-100 transition-all rounded hover:bg-red-900/30"
+                                            aria-label={`Odstranit ${item.name || 'předmět'}`}
+                                            className="flex h-10 w-10 items-center justify-center rounded-lg text-fl-text-muted transition-colors hover:bg-red-900/20 hover:text-red-700 active:bg-red-900/20"
                                             title="Odstranit předmět"
                                         >
                                             <X size={14} />

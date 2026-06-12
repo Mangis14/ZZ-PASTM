@@ -1,9 +1,24 @@
 import React from 'react';
 import { Backpack, Trash2, X } from 'lucide-react';
+import useDialog from '../../hooks/useDialog';
 
-const UnequipModal = ({ itemName, onStash, onDrop, onCancel }) => (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 p-4">
-        <div className="relative w-full max-w-sm rounded-xl border border-fl-primary bg-fl-card/95 backdrop-blur-xl shadow-2xl p-6">
+const UnequipModal = ({ itemName, onStash, onDrop, onCancel }) => {
+    const panelRef = useDialog(onCancel);
+
+    return (
+    <div
+        className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 p-4 animate-in fade-in duration-200"
+        onClick={onCancel}
+    >
+        <div
+            ref={panelRef}
+            tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Odložit ${itemName}`}
+            className="relative w-full max-w-sm rounded-2xl border border-fl-primary bg-fl-card/95 backdrop-blur-xl shadow-2xl p-6 outline-none animate-in fade-in zoom-in-95 duration-200"
+            onClick={e => e.stopPropagation()}
+        >
             <div className="mb-6 flex items-start justify-between">
                 <h2 className="font-serif text-2xl font-bold tracking-wider text-fl-surface">
                     ODLOŽIŤ VÝZBROJ
@@ -11,7 +26,8 @@ const UnequipModal = ({ itemName, onStash, onDrop, onCancel }) => (
                 <button
                     type="button"
                     onClick={onCancel}
-                    className="rounded p-1 text-fl-primary hover:bg-fl-primary/20 hover:text-white transition-colors"
+                    aria-label="Zrušit"
+                    className="-mr-2 -mt-2 flex h-12 w-12 items-center justify-center rounded-full text-fl-primary hover:bg-fl-primary/20 hover:text-white active:bg-fl-primary/20 transition-colors"
                 >
                     <X size={24} />
                 </button>
@@ -37,7 +53,7 @@ const UnequipModal = ({ itemName, onStash, onDrop, onCancel }) => (
                         <div className="text-sm font-bold text-fl-surface tracking-wide uppercase">
                             Do batohu
                         </div>
-                        <div className="text-[10px] text-fl-border">
+                        <div className="text-[11px] text-fl-text-muted">
                             Presunie predmet do inventára
                         </div>
                     </div>
@@ -55,7 +71,7 @@ const UnequipModal = ({ itemName, onStash, onDrop, onCancel }) => (
                         <div className="text-sm font-bold text-red-500 tracking-wide uppercase">
                             Zahodiť úplne
                         </div>
-                        <div className="text-[10px] text-fl-border">
+                        <div className="text-[11px] text-fl-text-muted">
                             Vymaže predmet bez návratu
                         </div>
                     </div>
@@ -65,12 +81,13 @@ const UnequipModal = ({ itemName, onStash, onDrop, onCancel }) => (
             <button
                 type="button"
                 onClick={onCancel}
-                className="mt-6 w-full flex items-center justify-center gap-2 py-3 bg-transparent hover:bg-white/5 border border-fl-border text-fl-border hover:text-white font-bold uppercase tracking-widest text-xs rounded transition-all"
+                className="mt-6 w-full min-h-12 flex items-center justify-center gap-2 bg-transparent hover:bg-fl-paper border border-fl-border text-fl-text-muted hover:text-fl-surface font-bold uppercase tracking-widest text-xs rounded-lg transition-all active:scale-[0.98]"
             >
                 Zrušiť
             </button>
         </div>
     </div>
-);
+    );
+};
 
 export default UnequipModal;

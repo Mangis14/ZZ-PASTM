@@ -15,6 +15,7 @@ import {
     Sword,
     Utensils
 } from 'lucide-react';
+import { confirmAction } from '../common/ConfirmDialog';
 
 const StepButton = ({ onClick, label, compact = false, disabled = false, gameAction = false }) => (
     <button
@@ -37,13 +38,16 @@ const AttributeCard = ({ label, shortLabel, value, onChange, onRoll, icon: Icon 
     const isDamaged = current < max;
     const isDepleted = max > 0 && current === 0;
     const damage = Math.max(0, max - current);
-    const confirmMaximumChange = (nextMax) => {
+    const confirmMaximumChange = async (nextMax) => {
         const lowersCurrent = nextMax < current;
-        const message = lowersCurrent
-            ? `Opravdu chcete změnit maximum vlastnosti ${label} z ${max} na ${nextMax}? Aktuální hodnota se zároveň sníží na ${nextMax}.`
-            : `Opravdu chcete změnit maximum vlastnosti ${label} z ${max} na ${nextMax}?`;
-
-        if (!window.confirm(message)) return;
+        const confirmed = await confirmAction({
+            title: `Změnit maximum vlastnosti ${label}?`,
+            message: lowersCurrent
+                ? `Maximum se změní z ${max} na ${nextMax}. Aktuální hodnota se zároveň sníží na ${nextMax}.`
+                : `Maximum se změní z ${max} na ${nextMax}.`,
+            confirmLabel: 'Změnit'
+        });
+        if (!confirmed) return;
         onChange({ ...value, max: nextMax, current: Math.min(current, nextMax) });
     };
 
@@ -63,7 +67,7 @@ const AttributeCard = ({ label, shortLabel, value, onChange, onRoll, icon: Icon 
                 </div>
                 <div className="min-w-0 flex-1">
                     <h3 className="truncate font-serif text-sm font-bold uppercase tracking-wide text-fl-surface">{label}</h3>
-                    <p className={`text-[9px] font-bold uppercase tracking-wide ${
+                    <p className={`text-[10px] font-bold uppercase tracking-wide ${
                         isDepleted ? 'text-red-700 dark:text-red-400' : isDamaged ? 'text-amber-700 dark:text-amber-400' : 'text-green-800 dark:text-green-400'
                     }`}>
                         {isDepleted ? 'Vyřazena' : isDamaged ? `Poškozena · ${damage}` : 'V pořádku'}
@@ -97,7 +101,7 @@ const AttributeCard = ({ label, shortLabel, value, onChange, onRoll, icon: Icon 
                             {current}
                             <span className="ml-1 text-lg text-fl-text-muted">/{max}</span>
                         </div>
-                        <div className="mt-1 text-[8px] font-bold uppercase tracking-widest text-fl-text-muted">{shortLabel}</div>
+                        <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-fl-text-muted">{shortLabel}</div>
                     </div>
                     <StepButton
                         label={`Zvýšit aktuální hodnotu ${label}`}
@@ -108,7 +112,7 @@ const AttributeCard = ({ label, shortLabel, value, onChange, onRoll, icon: Icon 
                 </div>
 
                 <div className="mt-3 flex items-center justify-between rounded-md bg-fl-paper/60 px-1.5 py-1.5">
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-fl-text-muted">Max</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-fl-text-muted">Max</span>
                     <div className="flex items-center gap-1">
                         <StepButton
                             compact
@@ -157,8 +161,8 @@ const ConditionButton = ({ condition, active, onToggle }) => {
                 {active ? <Check size={16} /> : <Icon size={15} />}
             </span>
             <span className="min-w-0">
-                <span className="block truncate text-[10px] font-bold uppercase tracking-wide">{condition.label}</span>
-                <span className="block text-[8px] font-bold uppercase tracking-wide opacity-70">{active ? 'Aktivní' : 'Neaktivní'}</span>
+                <span className="block truncate text-[11px] font-bold uppercase tracking-wide">{condition.label}</span>
+                <span className="block text-[10px] font-bold uppercase tracking-wide opacity-70">{active ? 'Aktivní' : 'Neaktivní'}</span>
             </span>
         </button>
     );
@@ -170,7 +174,7 @@ const ResourceCounter = ({ label, value, icon: Icon, onChange }) => (
             <Icon size={18} />
         </div>
         <div className="min-w-0 flex-1">
-            <div className="text-[9px] font-bold uppercase tracking-widest text-fl-text-muted">{label}</div>
+            <div className="text-[10px] font-bold uppercase tracking-widest text-fl-text-muted">{label}</div>
             <div className="font-serif text-3xl font-bold leading-none tabular-nums text-fl-surface">{value || 0}</div>
         </div>
         <div className="flex items-center gap-1.5">
@@ -204,9 +208,9 @@ const SheetAttributes = ({ char, updateField, onRoll, innerRef }) => {
                 <div className="mb-3 flex items-center justify-between gap-2">
                     <div>
                         <h3 className="font-serif text-sm font-bold uppercase tracking-wide text-fl-surface">Stavy</h3>
-                        <p className="text-[9px] font-bold uppercase tracking-wide text-fl-text-muted">Aktivní stavy blokují regeneraci</p>
+                        <p className="text-[10px] font-bold uppercase tracking-wide text-fl-text-muted">Aktivní stavy blokují regeneraci</p>
                     </div>
-                    <span className={`rounded-full px-2 py-1 text-[9px] font-bold uppercase tracking-wide ${
+                    <span className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wide ${
                         activeConditionCount > 0 ? 'bg-red-800 text-white' : 'bg-fl-paper text-fl-primary'
                     }`}>
                         {activeConditionCount} aktivní

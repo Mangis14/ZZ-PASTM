@@ -110,11 +110,11 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, ha
     return (
         <Card innerRef={innerRef}>
             <SectionHeader title="Vybavení" icon={Backpack} />
-            <div className="grid grid-cols-[1fr_auto_auto_auto] gap-1.5 text-[9px] font-bold uppercase text-fl-primary mb-2 px-1">
+            <div className="grid grid-cols-[1fr_auto_auto_auto] gap-1.5 text-[10px] font-bold uppercase text-fl-primary mb-2 px-1">
                 <span>Předmět</span>
                 <span className="text-center w-14">Váha</span>
-                <span className="w-7" />
-                <span className="w-6" />
+                <span className="w-10" />
+                <span className="w-10" />
             </div>
             <div className="space-y-2">
                 {char.inventory.map((item, index) => {
@@ -137,15 +137,16 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, ha
                             />
                             <WeightSelect value={item.weight} onChange={(value) => updateDeep('inventory', index, 'weight', value)} />
 
-                            <div className="w-7 flex justify-center">
+                            <div className="w-10 flex justify-center">
                                 {isEquipable && (
                                     <button
                                         type="button"
                                         onClick={() => handleEquip(dbItem, index)}
-                                        className="w-6 h-6 flex items-center justify-center text-fl-primary hover:text-fl-surface bg-fl-primary/10 hover:bg-fl-primary transition-all rounded shadow-sm"
+                                        aria-label={`Nasadit ${item.name}`}
+                                        className="flex h-10 w-10 items-center justify-center text-fl-primary hover:text-white bg-fl-primary/10 hover:bg-fl-primary active:bg-fl-primary active:text-white transition-colors rounded-lg shadow-sm"
                                         title="Nasadiť"
                                     >
-                                        <ArrowUpRight size={14} strokeWidth={2.5} />
+                                        <ArrowUpRight size={15} strokeWidth={2.5} />
                                     </button>
                                 )}
                             </div>
@@ -153,10 +154,11 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, ha
                             <button
                                 type="button"
                                 onClick={() => handleRemoveInventorySlot(index)}
-                                className="w-6 h-6 flex items-center justify-center text-fl-border hover:text-red-700 opacity-50 group-hover:opacity-100 transition-all rounded hover:bg-red-900/30"
+                                aria-label={`Odstranit slot ${item.name || index + 1}`}
+                                className="flex h-10 w-10 items-center justify-center rounded-lg text-fl-text-muted transition-colors hover:bg-red-900/20 hover:text-red-700 active:bg-red-900/20"
                                 title="Odstranit slot"
                             >
-                                <X size={14} />
+                                <X size={15} />
                             </button>
                         </div>
                     );
@@ -165,9 +167,9 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, ha
             <button
                 type="button"
                 onClick={handleAddInventorySlot}
-                className="w-full mt-3 py-2 bg-fl-paper hover:bg-fl-border text-fl-primary font-bold uppercase text-xs tracking-widest rounded transition-colors flex items-center justify-center gap-2 border border-fl-primary/30"
+                className="w-full mt-3 min-h-12 bg-fl-paper hover:bg-fl-border text-fl-primary font-bold uppercase text-xs tracking-widest rounded-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 border border-fl-primary/30"
             >
-                <Plus size={16} /> Přidat slot
+                <Plus size={16} aria-hidden="true" /> Přidat slot
             </button>
 
             {swapRequest && (

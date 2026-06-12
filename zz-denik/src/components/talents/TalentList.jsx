@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { X, ChevronDown, ChevronUp, Star } from 'lucide-react';
+import { X, Star } from 'lucide-react';
 import TalentDetailPopup from './TalentDetailPopup';
+import { confirmAction } from '../common/ConfirmDialog';
 
 const TalentList = ({ talents, onRemove, onOpenPicker, onUpgrade, onDowngrade, onShowFullTalent, onDetailOpenChange }) => {
     const [selectedTalentId, setSelectedTalentId] = useState(null);
@@ -28,32 +29,37 @@ const TalentList = ({ talents, onRemove, onOpenPicker, onUpgrade, onDowngrade, o
             {talents.map((talent, index) => (
                 <div
                     key={`${talent.id}-${index}`}
-                    className="bg-fl-paper-bright border border-fl-paper rounded relative group cursor-pointer hover:border-fl-primary/50 transition-colors"
-                    onClick={() => setSelectedTalentId(talent.id)}
+                    className="bg-fl-paper-bright border border-fl-paper rounded-lg relative flex items-center hover:border-fl-primary/50 transition-colors"
                 >
-                    <div className="flex justify-between items-center p-3">
-                        <div className="flex items-center gap-3">
-                            <div className="bg-fl-primary text-white w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-lg shadow-sm">
-                                {talent.rank}
-                            </div>
-                            <div>
-                                <h4 className="font-bold text-fl-surface text-sm uppercase tracking-wide">{talent.name}</h4>
-                                {talent.profession && <span className="text-[10px] text-fl-primary uppercase">{talent.profession}</span>}
-                            </div>
+                    <button
+                        type="button"
+                        onClick={() => setSelectedTalentId(talent.id)}
+                        className="flex min-h-14 min-w-0 flex-1 items-center gap-3 p-3 text-left active:bg-fl-paper/50 rounded-l-lg"
+                    >
+                        <div className="bg-fl-primary text-white w-8 h-8 shrink-0 rounded-full flex items-center justify-center font-serif font-bold text-lg shadow-sm" aria-hidden="true">
+                            {talent.rank}
                         </div>
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={(e) => { 
-                                    e.stopPropagation(); 
-                                    if(window.confirm(`Opravdu zapomenout talent ${talent.name}?`)) onRemove(index); 
-                                }}
-                                className="w-6 h-6 flex items-center justify-center text-fl-border hover:text-red-700 opacity-50 group-hover:opacity-100 transition-all rounded hover:bg-red-900/30"
-                                title="Zapomenout talent"
-                            >
-                                <X size={14} />
-                            </button>
+                        <div className="min-w-0">
+                            <h4 className="truncate font-bold text-fl-surface text-sm uppercase tracking-wide">{talent.name}</h4>
+                            {talent.profession && <span className="text-[10px] text-fl-primary uppercase">{talent.profession}</span>}
                         </div>
-                    </div>
+                    </button>
+                    <button
+                        onClick={async (e) => {
+                            e.stopPropagation();
+                            const confirmed = await confirmAction({
+                                title: `Zapomenout talent ${talent.name}?`,
+                                confirmLabel: 'Zapomenout',
+                                danger: true
+                            });
+                            if (confirmed) onRemove(index);
+                        }}
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg text-fl-text-muted transition-colors hover:bg-red-900/20 hover:text-red-700 active:bg-red-900/20"
+                        aria-label={`Zapomenout talent ${talent.name}`}
+                        title="Zapomenout talent"
+                    >
+                        <X size={16} />
+                    </button>
                 </div>
             ))}
 
@@ -67,9 +73,9 @@ const TalentList = ({ talents, onRemove, onOpenPicker, onUpgrade, onDowngrade, o
             {/* Add Button */}
             <button
                 onClick={onOpenPicker}
-                className="w-full py-3 bg-fl-paper hover:bg-fl-border text-fl-primary font-bold uppercase text-xs tracking-widest rounded transition-colors flex items-center justify-center gap-2 border border-fl-primary/30"
+                className="w-full min-h-12 bg-fl-paper hover:bg-fl-border text-fl-primary font-bold uppercase text-xs tracking-widest rounded-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 border border-fl-primary/30"
             >
-                <Star size={16} /> Přidat Talent
+                <Star size={16} aria-hidden="true" /> Přidat Talent
             </button>
 
             {/* Detail Popup */}

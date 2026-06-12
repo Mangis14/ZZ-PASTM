@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Skull, Activity, AlertTriangle, HeartPulse, X, Sword, Hammer, Ghost, ShieldAlert } from 'lucide-react';
+import React, { useState } from 'react';
+import { Skull, Activity, X, Sword, Hammer, Ghost, ShieldAlert } from 'lucide-react';
 import { CRIT_TABLES } from './data/crit_tables';
+import useDialog from './hooks/useDialog';
+import { hapticTick } from './native/platform';
 
 const CriticalInjuryModal = ({ onClose }) => {
+    const panelRef = useDialog(onClose);
     const [selectedType, setSelectedType] = useState(null);
     const [isRolling, setIsRolling] = useState(false);
     const [loadingText, setLoadingText] = useState("");
@@ -37,6 +40,7 @@ const CriticalInjuryModal = ({ onClose }) => {
 
             setResult({ roll, ...injury });
             setIsRolling(false);
+            hapticTick(40);
         }, 5000); // 5 seconds delay
     };
 
@@ -48,9 +52,27 @@ const CriticalInjuryModal = ({ onClose }) => {
     ];
 
     return (
-        <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
-            <div className="bg-fl-card w-full max-w-lg rounded shadow-2xl border-4 border-fl-primary p-6 relative min-h-[400px] flex flex-col" onClick={e => e.stopPropagation()}>
-                <button onClick={onClose} className="absolute top-2 right-2 text-fl-primary hover:text-red-600"><X size={24} /></button>
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm animate-in fade-in duration-200"
+            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)', paddingBottom: 'calc(var(--safe-bottom) + 1rem)' }}
+            onClick={onClose}
+        >
+            <div
+                ref={panelRef}
+                tabIndex={-1}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Kritické zranění"
+                className="relative flex max-h-full min-h-[400px] w-full max-w-lg flex-col overflow-y-auto overscroll-contain rounded-2xl border-2 border-fl-primary bg-fl-card p-6 shadow-2xl outline-none animate-in fade-in zoom-in-95 duration-200"
+                onClick={e => e.stopPropagation()}
+            >
+                <button
+                    onClick={onClose}
+                    aria-label="Zavřít"
+                    className="absolute right-2 top-2 flex h-12 w-12 items-center justify-center rounded-full text-fl-primary transition-colors hover:bg-fl-paper hover:text-red-600 active:bg-fl-paper"
+                >
+                    <X size={24} />
+                </button>
 
                 <h3 className="font-serif text-2xl font-bold uppercase text-center mb-6 text-fl-surface border-b-2 border-fl-primary pb-2 flex items-center justify-center gap-2">
                     <Skull className="text-red-800 dark:text-red-400" /> Kritické Zranění
@@ -58,15 +80,17 @@ const CriticalInjuryModal = ({ onClose }) => {
 
                 {!isRolling && !result && (
                     <div className="flex-1 flex flex-col gap-6">
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label="Typ zranění">
                             {types.map(t => (
                                 <button
                                     key={t.id}
                                     onClick={() => setSelectedType(t.id)}
-                                    className={`p-4 rounded border-2 flex flex-col items-center gap-2 transition-all hover:bg-fl-paper hover:shadow-md
-                    ${selectedType === t.id ? `${t.border} bg-fl-paper shadow-lg scale-105` : 'border-fl-border bg-fl-paper-bright opacity-80 hover:opacity-100'}`}
+                                    role="radio"
+                                    aria-checked={selectedType === t.id}
+                                    className={`flex min-h-24 flex-col items-center justify-center gap-2 rounded-xl border-2 p-4 transition-all hover:bg-fl-paper hover:shadow-md active:scale-[0.97]
+                    ${selectedType === t.id ? `${t.border} bg-fl-paper shadow-lg` : 'border-fl-border bg-fl-paper-bright opacity-80 hover:opacity-100'}`}
                                 >
-                                    <t.icon size={32} className={t.color} />
+                                    <t.icon size={32} className={t.color} aria-hidden="true" />
                                     <span className={`font-bold uppercase tracking-wider ${t.color}`}>{t.label}</span>
                                 </button>
                             ))}
@@ -75,19 +99,19 @@ const CriticalInjuryModal = ({ onClose }) => {
                         <button
                             onClick={handleRoll}
                             disabled={!selectedType}
-                            className={`w-full py-4 font-bold uppercase tracking-widest text-lg rounded shadow-lg transition-all
+                            className={`w-full min-h-14 rounded-xl font-bold uppercase tracking-widest text-lg shadow-lg transition-all
                 ${selectedType
-                                    ? 'bg-fl-primary text-white hover:bg-fl-primary-hover hover:scale-105'
-                                    : 'bg-fl-border text-fl-paper-light cursor-not-allowed'}`}
+                                    ? 'bg-fl-primary text-white hover:bg-fl-primary-hover active:scale-[0.98]'
+                                    : 'bg-fl-border text-fl-text-muted cursor-not-allowed opacity-60'}`}
                         >
-                            Hodit na tabulku
+                            {selectedType ? 'Hodit na tabulku' : 'Nejdřív zvolte typ zranění'}
                         </button>
                     </div>
                 )}
 
                 {isRolling && (
-                    <div className="flex-1 flex flex-col items-center justify-center text-center animate-in fade-in duration-500">
-                        <Activity size={64} className="text-red-800 dark:text-red-400 animate-pulse mb-6" />
+                    <div className="flex-1 flex flex-col items-center justify-center text-center animate-in fade-in duration-500" role="status">
+                        <Activity size={64} className="text-red-800 dark:text-red-400 animate-pulse mb-6" aria-hidden="true" />
                         <h2 className="font-serif text-3xl font-bold text-fl-surface mb-2 min-h-[2.5rem]">
                             {loadingText}
                         </h2>
@@ -96,7 +120,7 @@ const CriticalInjuryModal = ({ onClose }) => {
                 )}
 
                 {result && (
-                    <div className="flex-1 flex flex-col gap-4 animate-in zoom-in-95 duration-300">
+                    <div className="flex-1 flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-300">
                         <div className="text-center border-b border-fl-border pb-4">
                             <span className="text-4xl font-black text-fl-surface block mb-1">{result.roll}</span>
                             <h2 className="font-serif text-2xl font-bold text-red-800 dark:text-red-400 uppercase">{result.effect}</h2>
@@ -125,9 +149,9 @@ const CriticalInjuryModal = ({ onClose }) => {
 
                         <button
                             onClick={() => { setResult(null); setSelectedType(null); }}
-                            className="mt-auto w-full py-3 bg-fl-nav text-white font-bold uppercase tracking-wider hover:bg-fl-nav-hover rounded transition-colors"
+                            className="mt-auto w-full min-h-12 rounded-xl bg-fl-nav font-bold uppercase tracking-wider text-white transition-all hover:bg-fl-nav-hover active:scale-[0.98]"
                         >
-                            Zavřít
+                            Nový hod
                         </button>
                     </div>
                 )}

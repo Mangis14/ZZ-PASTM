@@ -81,18 +81,19 @@ const WeatherSection = () => {
     if (!state.isLoaded) return null;
 
     return (
-        <div className="space-y-6 animate-fadeIn">
+        <div className="space-y-6">
             {/* CONTROLS */}
             <Card>
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
 
                     {/* SEASON SELECTOR */}
-                    <div className="flex items-center gap-2 bg-fl-paper-bright p-2 rounded border border-fl-paper">
-                        <Calendar size={18} className="text-fl-primary" />
+                    <div className="flex min-h-12 items-center gap-2 bg-fl-paper-bright px-2 rounded-lg border border-fl-paper">
+                        <Calendar size={18} className="text-fl-primary" aria-hidden="true" />
                         <select
                             value={state.season}
                             onChange={(e) => updateState({ season: e.target.value })}
-                            className="bg-transparent font-bold text-fl-surface outline-none cursor-pointer"
+                            aria-label="Roční období"
+                            className="min-h-12 bg-transparent font-bold text-fl-surface outline-none cursor-pointer"
                         >
                             {SEASON_TYPES.map(s => (
                                 <option key={s.id} value={s.id}>{s.label} ({s.desc})</option>
@@ -114,7 +115,7 @@ const WeatherSection = () => {
 
                         <button
                             onClick={nextQuarterDay}
-                            className="bg-fl-nav text-white px-3 py-2 rounded hover:bg-fl-nav-hover transition-colors font-bold text-xs uppercase"
+                            className="min-h-12 bg-fl-nav text-white px-4 rounded-lg hover:bg-fl-nav-hover active:scale-[0.97] transition-all font-bold text-xs uppercase"
                         >
                             Další čtvrt-den
                         </button>
@@ -173,9 +174,9 @@ const WeatherSection = () => {
                         </div>
                         <button
                             onClick={rollWeather}
-                            className="flex items-center gap-2 bg-fl-primary text-white px-4 py-2 rounded hover:bg-fl-primary-hover transition-colors font-bold text-sm shadow-md"
+                            className="flex min-h-12 items-center gap-2 bg-fl-primary text-white px-4 rounded-lg hover:bg-fl-primary-hover active:scale-[0.97] transition-all font-bold text-sm shadow-md"
                         >
-                            <Dice5 size={18} /> Generovat (D66)
+                            <Dice5 size={18} aria-hidden="true" /> Generovat (D66)
                         </button>
                     </div>
                 </Card>

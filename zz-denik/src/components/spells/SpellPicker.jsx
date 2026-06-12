@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { Check, ChevronDown, ChevronUp, Flame, Plus, Search, X } from 'lucide-react';
 import { useCatalog } from '../../context/CatalogContext';
+import useDialog from '../../hooks/useDialog';
 
 const normalize = (value) => String(value || '').toLocaleLowerCase('cs-CZ').trim();
 const toggleValue = (values, value) => values.includes(value) ? values.filter(item => item !== value) : [...values, value];
 
 const SpellPicker = ({ char, onAdd, onClose }) => {
+    const panelRef = useDialog(onClose);
     const { spells: catalogSpells } = useCatalog();
     const schools = useMemo(
         () => Object.keys(catalogSpells).filter(school => catalogSpells[school]?.length > 0),
@@ -45,13 +47,30 @@ const SpellPicker = ({ char, onAdd, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 backdrop-blur-sm">
-            <div className="flex h-[90dvh] w-full max-w-2xl flex-col overflow-hidden rounded-lg border border-fl-primary bg-fl-card shadow-2xl">
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 backdrop-blur-sm animate-in fade-in duration-200"
+            style={{ paddingTop: 'calc(var(--safe-top) + 0.75rem)', paddingBottom: 'calc(var(--safe-bottom) + 0.75rem)' }}
+            onClick={onClose}
+        >
+            <div
+                ref={panelRef}
+                tabIndex={-1}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Vybrat kouzlo"
+                className="flex h-[88dvh] max-h-full w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-fl-primary bg-fl-card shadow-2xl outline-none animate-in fade-in zoom-in-95 duration-200"
+                onClick={e => e.stopPropagation()}
+            >
                 <div className="flex items-center justify-between border-b border-fl-border bg-fl-card p-4">
                     <h2 className="flex items-center gap-2 font-serif text-xl font-bold text-fl-primary">
-                        <Flame size={24} /> Vybrat kouzlo
+                        <Flame size={24} aria-hidden="true" /> Vybrat kouzlo
                     </h2>
-                    <button type="button" onClick={onClose} className="text-fl-text-muted hover:text-fl-primary" aria-label="Zavřít výběr kouzla">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-fl-text-muted transition-colors hover:bg-fl-paper hover:text-fl-primary active:bg-fl-paper"
+                        aria-label="Zavřít výběr kouzla"
+                    >
                         <X size={24} />
                     </button>
                 </div>
@@ -77,19 +96,19 @@ const SpellPicker = ({ char, onAdd, onClose }) => {
                                     type="button"
                                     onClick={() => setSelectedSchools(current => toggleValue(current, school))}
                                     aria-pressed={selected}
-                                    className={`flex min-w-0 items-center justify-between gap-2 rounded border px-2 py-1.5 text-left ${
+                                    className={`flex min-h-10 min-w-0 items-center justify-between gap-2 rounded-lg border px-2 py-1.5 text-left transition-colors active:opacity-80 ${
                                         selected ? 'border-fl-primary bg-fl-primary text-white' : 'border-fl-border bg-fl-paper-bright text-fl-surface'
                                     }`}
                                 >
-                                    <span className="truncate text-[9px] font-bold uppercase">{school}</span>
-                                    <span className="shrink-0 text-[9px] font-black opacity-75">{catalogSpells[school].length}</span>
+                                    <span className="truncate text-[10px] font-bold uppercase">{school}</span>
+                                    <span className="shrink-0 text-[10px] font-black opacity-75">{catalogSpells[school].length}</span>
                                 </button>
                             );
                         })}
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-fl-primary">Stupeň</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-fl-primary">Stupeň</span>
                         {ranks.map(rank => {
                             const selected = selectedRanks.includes(rank);
                             return (
@@ -98,17 +117,18 @@ const SpellPicker = ({ char, onAdd, onClose }) => {
                                     type="button"
                                     onClick={() => setSelectedRanks(current => toggleValue(current, rank))}
                                     aria-pressed={selected}
-                                    className={`h-8 min-w-8 rounded border text-xs font-black ${selected ? 'border-fl-primary bg-fl-primary text-white' : 'border-fl-border bg-fl-paper-bright text-fl-surface'}`}
+                                    aria-label={`Stupeň ${rank}`}
+                                    className={`h-10 min-w-10 rounded-lg border text-xs font-black transition-colors active:opacity-80 ${selected ? 'border-fl-primary bg-fl-primary text-white' : 'border-fl-border bg-fl-paper-bright text-fl-surface'}`}
                                 >
                                     {rank}
                                 </button>
                             );
                         })}
-                        <span className="ml-auto text-[10px] text-fl-text-muted">{filteredSpells.length} kouzel</span>
+                        <span className="ml-auto text-[10px] text-fl-text-muted" aria-live="polite">{filteredSpells.length} kouzel</span>
                     </div>
                 </div>
 
-                <div className="flex-1 space-y-2 overflow-y-auto bg-fl-paper-bright p-3">
+                <div className="flex-1 space-y-2 overflow-y-auto overscroll-contain bg-fl-paper-bright p-3">
                     {filteredSpells.map(spell => {
                         const known = knownIds.has(spell.id);
                         return (
@@ -140,10 +160,10 @@ const SpellPicker = ({ char, onAdd, onClose }) => {
                                             type="button"
                                             onClick={() => handleAdd(spell)}
                                             disabled={known}
-                                            className={`flex w-full items-center justify-center gap-1 rounded px-4 py-2 text-xs font-bold uppercase transition-colors ${
+                                            className={`flex min-h-12 w-full items-center justify-center gap-1 rounded-lg px-4 py-2 text-xs font-bold uppercase transition-all ${
                                                 known
                                                     ? 'cursor-not-allowed border border-green-900/30 bg-green-900/10 text-green-700'
-                                                    : 'bg-fl-primary text-white hover:bg-fl-primary-hover'
+                                                    : 'bg-fl-primary text-white hover:bg-fl-primary-hover active:scale-[0.98]'
                                             }`}
                                         >
                                             {known ? <><Check size={14} /> Naučeno</> : <><Plus size={14} /> Naučit se</>}

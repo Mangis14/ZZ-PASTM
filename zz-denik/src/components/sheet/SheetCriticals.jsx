@@ -25,8 +25,8 @@ const SheetCriticals = ({ char, updateField, updateDeep }) => {
                         <Skull size={18} />
                         <span className="text-xs font-bold uppercase tracking-widest">Žádná kritická zranění</span>
                     </div>
-                    <button onClick={handleAdd} className="p-1 border border-fl-border rounded text-fl-primary hover:bg-fl-paper transition-colors" title="Přidat zranění">
-                        <Plus size={14} />
+                    <button onClick={handleAdd} aria-label="Přidat zranění" className="flex h-11 w-11 items-center justify-center border border-fl-border rounded-lg text-fl-primary hover:bg-fl-paper active:bg-fl-paper transition-colors" title="Přidat zranění">
+                        <Plus size={16} />
                     </button>
                 </div>
             </Card>
@@ -37,13 +37,13 @@ const SheetCriticals = ({ char, updateField, updateDeep }) => {
         <Card>
             <div className="flex justify-between items-center mb-4">
                 <SectionHeader title="Kritická Zranění" icon={Skull} />
-                <button onClick={handleAdd} className="p-1 border border-fl-border rounded text-fl-primary hover:bg-fl-paper transition-colors shadow-sm bg-fl-paper-bright">
+                <button onClick={handleAdd} aria-label="Přidat zranění" className="flex h-11 w-11 items-center justify-center border border-fl-border rounded-lg text-fl-primary hover:bg-fl-paper active:bg-fl-paper transition-colors shadow-sm bg-fl-paper-bright">
                     <Plus size={16} />
                 </button>
             </div>
             
             <div className="space-y-3">
-                <div className="grid grid-cols-[1fr_auto_80px_auto] gap-2 text-[9px] font-bold uppercase text-fl-primary px-1 border-b border-fl-paper pb-1">
+                <div className="grid grid-cols-[1fr_auto_80px_auto] gap-2 text-[10px] font-bold uppercase text-fl-primary px-1 border-b border-fl-paper pb-1">
                     <span>Popis (Účinek)</span>
                     <span className="text-center w-14 text-red-700 dark:text-red-400">Smrtící</span>
                     <span className="text-center">Limit do<br/>Smrti</span>
@@ -59,12 +59,13 @@ const SheetCriticals = ({ char, updateField, updateDeep }) => {
                             value={crit.description} 
                             onChange={e => updateDeep('criticalInjuries', i, 'description', e.target.value)} 
                         />
-                        <label className="flex items-center justify-center w-14 cursor-pointer z-10">
-                            <input 
-                                type="checkbox" 
-                                className="w-4 h-4 accent-red-700"
+                        <label className="flex min-h-11 w-14 cursor-pointer items-center justify-center z-10">
+                            <input
+                                type="checkbox"
+                                className="w-5 h-5 accent-red-700"
                                 checked={crit.lethal}
                                 onChange={e => updateDeep('criticalInjuries', i, 'lethal', e.target.checked)}
+                                aria-label={`Smrtící zranění ${i + 1}`}
                             />
                         </label>
                         <input 
@@ -75,9 +76,10 @@ const SheetCriticals = ({ char, updateField, updateDeep }) => {
                             onChange={e => updateDeep('criticalInjuries', i, 'healingTime', e.target.value)} 
                         />
                         
-                        <button 
+                        <button
                             onClick={() => handleRemove(i)}
-                            className="w-6 h-6 flex items-center justify-center text-fl-border hover:text-red-700 opacity-50 group-hover:opacity-100 transition-all rounded hover:bg-red-900/30 z-10"
+                            aria-label="Zranění vyléčeno — odstranit"
+                            className="flex h-10 w-10 items-center justify-center rounded-lg text-fl-text-muted transition-colors hover:bg-red-900/20 hover:text-red-700 active:bg-red-900/20 z-10"
                             title="Zranění vyléčeno"
                         >
                             <X size={14} />

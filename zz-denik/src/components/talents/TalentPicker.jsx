@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { Search, X, Plus, ChevronDown, ChevronUp, Star } from 'lucide-react';
 import { useCatalog } from '../../context/CatalogContext';
+import useDialog from '../../hooks/useDialog';
 
 const TalentPicker = ({ char, onAdd, onClose }) => {
+    const panelRef = useDialog(onClose);
     const { talents: catalogTalents } = useCatalog();
     const [searchTerm, setSearchTerm] = useState("");
     const [activeTab, setActiveTab] = useState("profession"); // 'profession' | 'general'
@@ -36,49 +38,71 @@ const TalentPicker = ({ char, onAdd, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-fl-card w-full max-w-2xl h-[80vh] rounded-lg shadow-2xl border border-fl-primary flex flex-col">
-                <div className="p-4 border-b border-fl-border flex justify-between items-center bg-fl-card rounded-t-lg">
+        <div
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200"
+            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)', paddingBottom: 'calc(var(--safe-bottom) + 1rem)' }}
+            onClick={onClose}
+        >
+            <div
+                ref={panelRef}
+                tabIndex={-1}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Vybrat talent"
+                className="bg-fl-card w-full max-w-2xl h-[85dvh] max-h-full rounded-2xl shadow-2xl border border-fl-primary flex flex-col outline-none animate-in fade-in zoom-in-95 duration-200"
+                onClick={e => e.stopPropagation()}
+            >
+                <div className="p-4 border-b border-fl-border flex justify-between items-center bg-fl-card rounded-t-2xl">
                     <h2 className="text-xl font-serif font-bold text-fl-primary flex items-center gap-2">
-                        <Star size={24} /> Vybrat Talent
+                        <Star size={24} aria-hidden="true" /> Vybrat Talent
                     </h2>
-                    <button onClick={onClose} className="text-fl-text-muted hover:text-fl-primary">
+                    <button
+                        onClick={onClose}
+                        aria-label="Zavřít výběr talentu"
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-fl-text-muted transition-colors hover:bg-fl-paper hover:text-fl-primary active:bg-fl-paper"
+                    >
                         <X size={24} />
                     </button>
                 </div>
 
-                <div className="p-4 border-b border-fl-border bg-fl-paper-light flex flex-col gap-4">
-                    <div className="flex gap-2">
+                <div className="p-4 border-b border-fl-border bg-fl-paper-light flex flex-col gap-3">
+                    <div className="flex gap-2" role="tablist" aria-label="Kategorie talentů">
                         <button
-                            className={`flex-1 py-2 font-bold uppercase text-xs rounded transition-colors ${activeTab === 'profession' ? 'bg-fl-primary text-white' : 'bg-fl-paper-light text-fl-text-muted hover:bg-fl-border'}`}
+                            role="tab"
+                            aria-selected={activeTab === 'profession'}
+                            className={`min-h-12 flex-1 font-bold uppercase text-xs rounded-lg transition-colors active:opacity-80 ${activeTab === 'profession' ? 'bg-fl-primary text-white' : 'bg-fl-paper-light text-fl-text-muted hover:bg-fl-border'}`}
                             onClick={() => setActiveTab('profession')}
                         >
                             Povolání
                         </button>
                         <button
-                            className={`flex-1 py-2 font-bold uppercase text-xs rounded transition-colors ${activeTab === 'general' ? 'bg-fl-primary text-white' : 'bg-fl-paper-light text-fl-text-muted hover:bg-fl-border'}`}
+                            role="tab"
+                            aria-selected={activeTab === 'general'}
+                            className={`min-h-12 flex-1 font-bold uppercase text-xs rounded-lg transition-colors active:opacity-80 ${activeTab === 'general' ? 'bg-fl-primary text-white' : 'bg-fl-paper-light text-fl-text-muted hover:bg-fl-border'}`}
                             onClick={() => setActiveTab('general')}
                         >
                             Obecné
                         </button>
                     </div>
                     <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fl-primary" size={18} />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fl-primary" size={18} aria-hidden="true" />
                         <input
-                            type="text"
+                            type="search"
                             placeholder="Hledat talent..."
-                            className="w-full pl-10 pr-4 py-2 bg-fl-paper-bright border border-fl-border rounded text-fl-surface focus:border-fl-primary focus:outline-none"
+                            aria-label="Hledat talent"
+                            className="w-full min-h-12 pl-10 pr-4 py-2 bg-fl-paper-bright border border-fl-border rounded-lg text-fl-surface placeholder:text-fl-text-muted focus:border-fl-primary focus:outline-none"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-fl-paper-bright">
+                <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-2 bg-fl-paper-bright rounded-b-2xl">
                     {filteredTalents.map(talent => (
-                        <div key={talent.id} className="bg-fl-paper-bright border border-fl-border rounded overflow-hidden">
+                        <div key={talent.id} className="bg-fl-paper-bright border border-fl-border rounded-lg overflow-hidden">
                             <button
-                                className="w-full p-3 flex justify-between items-center hover:bg-fl-paper/50 transition-colors text-left"
+                                className="w-full min-h-14 p-3 flex justify-between items-center hover:bg-fl-paper/50 active:bg-fl-paper/70 transition-colors text-left"
+                                aria-expanded={expandedTalent === talent.id}
                                 onClick={() => setExpandedTalent(expandedTalent === talent.id ? null : talent.id)}
                             >
                                 <div>
@@ -112,12 +136,12 @@ const TalentPicker = ({ char, onAdd, onClose }) => {
                                                             <button
                                                                 onClick={() => handleAdd(talent, idx)}
                                                                 disabled={!canBuy}
-                                                                className={`px-3 py-1 rounded text-xs font-bold uppercase flex items-center gap-1 transition-colors
+                                                                className={`min-h-11 px-3 rounded-lg text-xs font-bold uppercase flex items-center gap-1 transition-all
                                                                     ${canBuy
-                                                                        ? 'bg-fl-primary text-white hover:bg-fl-primary-hover shadow-sm'
+                                                                        ? 'bg-fl-primary text-white hover:bg-fl-primary-hover active:scale-[0.96] shadow-sm'
                                                                         : 'bg-fl-border text-fl-text-muted cursor-not-allowed opacity-50'}`}
                                                             >
-                                                                <Plus size={14} /> Získat
+                                                                <Plus size={14} aria-hidden="true" /> Získat
                                                             </button>
                                                         )}
                                                     </div>

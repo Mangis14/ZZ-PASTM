@@ -1,14 +1,31 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Flame, Info, Plus, Search, X } from 'lucide-react';
+import useDialog from '../../hooks/useDialog';
+import { confirmAction } from '../common/ConfirmDialog';
 
 const normalize = (value) => String(value || '').toLocaleLowerCase('cs-CZ').trim();
 
-const SpellDetailPopup = ({ spell, onClose, onShowFull }) => (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm" onClick={onClose}>
-        <div className="w-full max-w-md overflow-hidden rounded-lg border border-fl-primary bg-fl-paper-bright shadow-2xl" onClick={event => event.stopPropagation()}>
+const SpellDetailPopup = ({ spell, onClose, onShowFull }) => {
+    const panelRef = useDialog(onClose);
+
+    return (
+    <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-in fade-in duration-200"
+        style={{ paddingTop: 'calc(var(--safe-top) + 1rem)', paddingBottom: 'calc(var(--safe-bottom) + 1rem)' }}
+        onClick={onClose}
+    >
+        <div
+            ref={panelRef}
+            tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Kouzlo ${spell.name}`}
+            className="w-full max-w-md max-h-full overflow-y-auto overscroll-contain rounded-2xl border border-fl-primary bg-fl-paper-bright shadow-2xl outline-none animate-in fade-in zoom-in-95 duration-200"
+            onClick={event => event.stopPropagation()}
+        >
             <div className="flex items-center justify-between border-b border-fl-primary bg-fl-nav p-4">
                 <div className="flex min-w-0 items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-fl-primary text-white shadow-md">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-fl-primary text-white shadow-md" aria-hidden="true">
                         <Flame size={20} />
                     </div>
                     <div className="min-w-0">
@@ -16,7 +33,13 @@ const SpellDetailPopup = ({ spell, onClose, onShowFull }) => (
                         <span className="text-[10px] uppercase tracking-wider text-fl-primary">{spell.school} · Stupeň {spell.rank}</span>
                     </div>
                 </div>
-                <button data-game-action type="button" onClick={onClose} className="text-fl-primary hover:text-fl-paper-light" aria-label="Zavřít detail kouzla">
+                <button
+                    data-game-action
+                    type="button"
+                    onClick={onClose}
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-fl-primary transition-colors hover:bg-fl-nav-hover hover:text-fl-paper-light active:bg-fl-nav-hover"
+                    aria-label="Zavřít detail kouzla"
+                >
                     <X size={22} />
                 </button>
             </div>
@@ -47,14 +70,15 @@ const SpellDetailPopup = ({ spell, onClose, onShowFull }) => (
                 <button
                     type="button"
                     onClick={() => { onShowFull(); onClose(); }}
-                    className="flex w-full items-center justify-center gap-2 rounded border border-fl-border py-2 text-xs font-bold uppercase tracking-wider text-fl-primary hover:bg-fl-paper"
+                    className="flex w-full min-h-12 items-center justify-center gap-2 rounded-lg border border-fl-border text-xs font-bold uppercase tracking-wider text-fl-primary hover:bg-fl-paper active:bg-fl-paper transition-colors"
                 >
-                    <Info size={14} /> Zobrazit kompletní knihu kouzel
+                    <Info size={14} aria-hidden="true" /> Zobrazit kompletní knihu kouzel
                 </button>
             </div>
         </div>
     </div>
-);
+    );
+};
 
 const SpellList = ({ spells, onRemove, onOpenPicker, onShowFullSpell, onDetailOpenChange }) => {
     const [selectedSpell, setSelectedSpell] = useState(null);
@@ -93,45 +117,39 @@ const SpellList = ({ spells, onRemove, onOpenPicker, onShowFullSpell, onDetailOp
 
             {filteredSpells.map(({ spell, index }) => (
                 <div
-                    role="button"
-                    tabIndex={0}
                     key={`${spell.id}-${index}`}
-                    className="group relative flex w-full items-center justify-between gap-2 rounded border border-fl-paper bg-fl-paper-bright p-3 text-left transition-colors hover:border-fl-primary/50"
-                    onClick={() => setSelectedSpell({ ...spell, _index: index })}
-                    onKeyDown={(event) => {
-                        if (event.key === 'Enter' || event.key === ' ') {
-                            event.preventDefault();
-                            setSelectedSpell({ ...spell, _index: index });
-                        }
-                    }}
+                    className="relative flex w-full items-center gap-1 rounded-lg border border-fl-paper bg-fl-paper-bright transition-colors hover:border-fl-primary/50"
                 >
-                    <div className="flex min-w-0 items-center gap-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-fl-nav text-white shadow-sm">
+                    <button
+                        type="button"
+                        onClick={() => setSelectedSpell({ ...spell, _index: index })}
+                        className="flex min-h-14 min-w-0 flex-1 items-center gap-3 rounded-l-lg p-3 text-left active:bg-fl-paper/50"
+                    >
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-fl-nav text-white shadow-sm" aria-hidden="true">
                             <Flame size={16} />
                         </div>
                         <div className="min-w-0">
                             <h4 className="truncate text-sm font-bold uppercase tracking-wide text-fl-surface">{spell.name}</h4>
                             <span className="text-[10px] uppercase text-fl-primary">{spell.school} · Stupeň {spell.rank}</span>
                         </div>
-                    </div>
-                    <span
-                        role="button"
-                        tabIndex={0}
-                        onClick={(event) => {
+                    </button>
+                    <button
+                        type="button"
+                        onClick={async (event) => {
                             event.stopPropagation();
-                            if (window.confirm(`Opravdu zapomenout kouzlo ${spell.name}?`)) onRemove(index);
+                            const confirmed = await confirmAction({
+                                title: `Zapomenout kouzlo ${spell.name}?`,
+                                confirmLabel: 'Zapomenout',
+                                danger: true
+                            });
+                            if (confirmed) onRemove(index);
                         }}
-                        onKeyDown={(event) => {
-                            if (event.key !== 'Enter' && event.key !== ' ') return;
-                            event.preventDefault();
-                            event.stopPropagation();
-                            if (window.confirm(`Opravdu zapomenout kouzlo ${spell.name}?`)) onRemove(index);
-                        }}
-                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-fl-border opacity-60 hover:bg-red-900/30 hover:text-red-700 group-hover:opacity-100"
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg text-fl-text-muted transition-colors hover:bg-red-900/20 hover:text-red-700 active:bg-red-900/20"
+                        aria-label={`Zapomenout kouzlo ${spell.name}`}
                         title="Zapomenout kouzlo"
                     >
-                        <X size={14} />
-                    </span>
+                        <X size={16} />
+                    </button>
                 </div>
             ))}
 
@@ -145,9 +163,9 @@ const SpellList = ({ spells, onRemove, onOpenPicker, onShowFullSpell, onDetailOp
             <button
                 type="button"
                 onClick={onOpenPicker}
-                className="flex w-full items-center justify-center gap-2 rounded border border-fl-primary/30 bg-fl-paper py-3 text-xs font-bold uppercase tracking-widest text-fl-primary transition-colors hover:bg-fl-border"
+                className="flex w-full min-h-12 items-center justify-center gap-2 rounded-lg border border-fl-primary/30 bg-fl-paper text-xs font-bold uppercase tracking-widest text-fl-primary transition-all hover:bg-fl-border active:scale-[0.99]"
             >
-                <Plus size={16} /> Přidat kouzlo
+                <Plus size={16} aria-hidden="true" /> Přidat kouzlo
             </button>
 
             {selectedSpell && (

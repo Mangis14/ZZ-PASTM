@@ -1,64 +1,64 @@
 import React, { useState } from 'react';
 import { X, BookOpen, Swords, Activity, Map, Award, AlertTriangle, Shield, Clock } from 'lucide-react';
+import useDialog from '../hooks/useDialog';
+
+const TABS = [
+    { id: 'combat', label: 'Boj', icon: Swords },
+    { id: 'conditions', label: 'Stavy', icon: Activity },
+    { id: 'journey', label: 'Cesta', icon: Map },
+    { id: 'skills', label: 'Dovednosti', icon: Award }
+];
 
 export default function RulesReferenceModal({ onClose }) {
+    const panelRef = useDialog(onClose);
     const [activeTab, setActiveTab] = useState('combat'); // 'combat' | 'conditions' | 'journey' | 'skills'
 
     return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-fl-card w-full max-w-lg rounded-lg border-2 border-fl-primary shadow-2xl flex flex-col h-[85vh] max-h-[85vh] overflow-hidden">
+        <div
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200"
+            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)', paddingBottom: 'calc(var(--safe-bottom) + 1rem)' }}
+            onClick={onClose}
+        >
+            <div
+                ref={panelRef}
+                tabIndex={-1}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Pravidla a tahák"
+                className="bg-fl-card w-full max-w-lg rounded-2xl border-2 border-fl-primary shadow-2xl flex flex-col h-[85dvh] max-h-full overflow-hidden outline-none animate-in fade-in zoom-in-95 duration-200"
+                onClick={e => e.stopPropagation()}
+            >
                 {/* Header */}
                 <div className="p-4 border-b border-fl-border bg-fl-card flex justify-between items-center">
                     <h3 className="text-xl font-serif font-bold text-fl-primary flex items-center gap-2">
-                        <BookOpen size={20} /> Pravidla & Tahák
+                        <BookOpen size={20} aria-hidden="true" /> Pravidla & Tahák
                     </h3>
-                    <button onClick={onClose} className="text-fl-primary hover:text-white p-1 transition-colors">
+                    <button
+                        onClick={onClose}
+                        aria-label="Zavřít"
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-fl-primary transition-colors hover:bg-fl-paper active:bg-fl-paper"
+                    >
                         <X size={24} />
                     </button>
                 </div>
 
                 {/* Tabs */}
-                <div className="flex border-b border-fl-border bg-fl-paper-light overflow-x-auto scrollbar-none">
-                    <button
-                        onClick={() => setActiveTab('combat')}
-                        className={`flex-1 min-w-[80px] py-3 text-[10px] uppercase font-bold tracking-wider transition-colors border-b-2 flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
-                            activeTab === 'combat'
-                                ? 'border-fl-primary text-fl-primary bg-fl-paper'
-                                : 'border-transparent text-fl-text-muted hover:text-fl-primary'
-                        }`}
-                    >
-                        <Swords size={14} /> Boj
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('conditions')}
-                        className={`flex-1 min-w-[80px] py-3 text-[10px] uppercase font-bold tracking-wider transition-colors border-b-2 flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
-                            activeTab === 'conditions'
-                                ? 'border-fl-primary text-fl-primary bg-fl-paper'
-                                : 'border-transparent text-fl-text-muted hover:text-fl-primary'
-                        }`}
-                    >
-                        <Activity size={14} /> Stavy
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('journey')}
-                        className={`flex-1 min-w-[80px] py-3 text-[10px] uppercase font-bold tracking-wider transition-colors border-b-2 flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
-                            activeTab === 'journey'
-                                ? 'border-fl-primary text-fl-primary bg-fl-paper'
-                                : 'border-transparent text-fl-text-muted hover:text-fl-primary'
-                        }`}
-                    >
-                        <Map size={14} /> Cesta
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('skills')}
-                        className={`flex-1 min-w-[80px] py-3 text-[10px] uppercase font-bold tracking-wider transition-colors border-b-2 flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
-                            activeTab === 'skills'
-                                ? 'border-fl-primary text-fl-primary bg-fl-paper'
-                                : 'border-transparent text-fl-text-muted hover:text-fl-primary'
-                        }`}
-                    >
-                        <Award size={14} /> Dovednosti
-                    </button>
+                <div className="flex border-b border-fl-border bg-fl-paper-light overflow-x-auto scrollbar-hide" role="tablist" aria-label="Kapitoly pravidel">
+                    {TABS.map(({ id, label, icon: Icon }) => (
+                        <button
+                            key={id}
+                            onClick={() => setActiveTab(id)}
+                            role="tab"
+                            aria-selected={activeTab === id}
+                            className={`min-h-12 flex-1 min-w-[80px] py-2.5 text-[11px] uppercase font-bold tracking-wider transition-colors border-b-2 flex flex-col sm:flex-row items-center justify-center gap-1.5 active:bg-fl-paper ${
+                                activeTab === id
+                                    ? 'border-fl-primary text-fl-primary bg-fl-paper'
+                                    : 'border-transparent text-fl-text-muted hover:text-fl-primary'
+                            }`}
+                        >
+                            <Icon size={14} aria-hidden="true" /> {label}
+                        </button>
+                    ))}
                 </div>
 
                 {/* Content */}
@@ -314,10 +314,10 @@ export default function RulesReferenceModal({ onClose }) {
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-fl-border bg-fl-paper flex justify-end">
+                <div className="p-3 border-t border-fl-border bg-fl-paper flex justify-end">
                     <button
                         onClick={onClose}
-                        className="px-4 py-2 bg-fl-primary text-fl-bg font-bold rounded hover:bg-fl-primary-hover transition-colors text-xs uppercase"
+                        className="min-h-12 px-6 bg-fl-primary text-fl-bg font-bold rounded-full hover:bg-fl-primary-hover active:scale-[0.97] transition-all text-xs uppercase"
                     >
                         Zavřít tahák
                     </button>

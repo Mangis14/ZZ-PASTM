@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { AlertTriangle, Backpack, CircleDollarSign, HeartPulse, Menu, Sparkles } from 'lucide-react';
 
 const StatusChip = ({ icon: Icon, label, shortLabel, value, tone = 'default', onClick }) => {
@@ -12,18 +12,18 @@ const StatusChip = ({ icon: Icon, label, shortLabel, value, tone = 'default', on
         <button
             type="button"
             onClick={onClick}
-            className={`flex min-w-0 flex-col items-center justify-center rounded-md border px-1 py-1.5 text-center transition-colors hover:border-fl-primary hover:bg-fl-primary/10 ${toneClasses[tone]}`}
+            className={`flex min-h-12 min-w-0 flex-col items-center justify-center rounded-lg border px-1 py-1.5 text-center transition-colors hover:border-fl-primary hover:bg-fl-primary/10 active:bg-fl-primary/15 ${toneClasses[tone]}`}
         >
             <div className="flex min-w-0 items-center justify-center gap-1">
-                <Icon size={12} className="shrink-0" />
-                <span className="hidden truncate text-[8px] font-bold uppercase tracking-wide opacity-75 min-[400px]:inline">
+                <Icon size={12} className="shrink-0" aria-hidden="true" />
+                <span className="hidden truncate text-[10px] font-bold uppercase tracking-wide opacity-75 min-[400px]:inline">
                     {label}
                 </span>
-                <span className="truncate text-[8px] font-bold uppercase tracking-wide opacity-75 min-[400px]:hidden">
+                <span className="truncate text-[10px] font-bold uppercase tracking-wide opacity-75 min-[400px]:hidden">
                     {shortLabel || label}
                 </span>
             </div>
-            <span className="mt-0.5 text-xs font-bold leading-none tabular-nums">{value}</span>
+            <span className="mt-0.5 text-sm font-bold leading-none tabular-nums">{value}</span>
         </button>
     );
 };
@@ -39,14 +39,14 @@ const MoneyPurse = ({ money, onClick }) => {
         <button
             type="button"
             onClick={onClick}
-            className="flex shrink-0 items-center gap-1 rounded-lg border border-amber-800/50 bg-amber-950/10 px-1.5 py-1.5 transition-colors hover:border-amber-700 hover:bg-amber-900/15"
+            className="flex min-h-12 shrink-0 items-center gap-1.5 rounded-lg border border-amber-800/50 bg-amber-950/10 px-2 py-1.5 transition-colors hover:border-amber-700 hover:bg-amber-900/15 active:bg-amber-900/20"
             aria-label="Otevřít měšec"
             title="Otevřít měšec"
         >
             {currencies.map(currency => (
                 <span key={currency.key} className="flex flex-col items-center gap-0.5">
-                    <CircleDollarSign size={16} className={`rounded-full border ${currency.color}`} />
-                    <span className="min-w-4 text-[9px] font-black leading-none tabular-nums text-fl-surface">
+                    <CircleDollarSign size={16} className={`rounded-full border ${currency.color}`} aria-hidden="true" />
+                    <span className="min-w-4 text-[10px] font-black leading-none tabular-nums text-fl-surface">
                         {money?.[currency.key] || 0}
                     </span>
                 </span>
@@ -64,6 +64,24 @@ const Header = ({
     isOverencumbered,
     onNavigate
 }) => {
+    const headerRef = useRef(null);
+
+    // Skutočná výška headera (mení sa so škálovaním písma aj šírkou)
+    // sa premieta do --app-header-height, z ktorej vychádza odsadenie obsahu.
+    useEffect(() => {
+        const element = headerRef.current;
+        if (!element) return undefined;
+
+        const updateHeight = () => {
+            document.documentElement.style.setProperty('--app-header-height', `${element.offsetHeight}px`);
+        };
+        updateHeight();
+
+        const observer = new ResizeObserver(updateHeight);
+        observer.observe(element);
+        return () => observer.disconnect();
+    }, []);
+
     const attributes = Object.values(char.attributes || {});
     const damagedAttributes = attributes.filter(attribute => Number(attribute.current) < Number(attribute.max)).length;
     const depletedAttributes = attributes.filter(attribute => Number(attribute.current) <= 0).length;
@@ -72,18 +90,24 @@ const Header = ({
 
     return (
         <header
+            ref={headerRef}
             data-mobile-header
             className="fixed left-0 right-0 top-0 z-40 border-b border-fl-primary bg-fl-card text-fl-surface shadow-xl"
-            style={{ paddingTop: 'calc(env(safe-area-inset-top) + 16px)' }}
+            style={{
+                paddingTop: 'calc(var(--safe-top) + 8px)',
+                paddingLeft: 'var(--safe-left)',
+                paddingRight: 'var(--safe-right)'
+            }}
         >
             <div className="mx-auto max-w-3xl px-3 pb-2">
                 <div className="flex min-h-12 items-center justify-between gap-2">
-                    <div className="flex min-w-0 items-center gap-2">
+                    <div className="flex min-w-0 items-center gap-1.5">
                         <button
                             type="button"
                             onClick={toggleMenu}
-                            className="shrink-0 rounded-md p-2 text-fl-text-muted transition-colors hover:bg-fl-paper/20 hover:text-fl-primary"
+                            className="-ml-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-fl-text-muted transition-colors hover:bg-fl-paper/40 hover:text-fl-primary active:bg-fl-paper/60"
                             aria-label="Otevřít menu"
+                            aria-haspopup="dialog"
                         >
                             <Menu size={22} />
                         </button>
@@ -93,7 +117,14 @@ const Header = ({
                                 <h1 className="truncate font-serif text-lg font-bold uppercase leading-none tracking-wider text-fl-surface">
                                     {char.name || 'Bezejmenný'}
                                 </h1>
-                                {isSaving && <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-green-500" title="Ukládám" />}
+                                {isSaving && (
+                                    <span
+                                        className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-green-500"
+                                        title="Ukládám"
+                                        role="status"
+                                        aria-label="Ukládám změny"
+                                    />
+                                )}
                             </div>
                             <div className="mt-1 truncate font-mono text-[10px] font-bold uppercase tracking-wide text-fl-primary">
                                 {char.kin || 'Rasa'} · {char.profession || 'Povolání'}

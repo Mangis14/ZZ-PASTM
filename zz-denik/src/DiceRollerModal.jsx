@@ -1,7 +1,40 @@
 import React, { useState } from 'react';
-import { Sword, Skull, Hammer, Dices, RefreshCw, Flame, X } from 'lucide-react';
+import { Sword, Skull, Hammer, Dices, RefreshCw, Flame, X, Minus, Plus } from 'lucide-react';
+import useDialog from './hooks/useDialog';
+import { hapticTick } from './native/platform';
+
+const Stepper = ({ value, onDecrement, onIncrement, decrementLabel, incrementLabel, compact = false }) => (
+    <div className="flex items-center justify-center gap-1.5">
+        <button
+            onClick={onDecrement}
+            disabled={value <= 0}
+            aria-label={decrementLabel}
+            className={`flex items-center justify-center rounded-lg border border-fl-border bg-fl-paper font-bold text-fl-primary transition-colors hover:bg-fl-paper-light active:bg-fl-border disabled:opacity-30 ${
+                compact ? 'h-9 w-9' : 'h-11 w-11'
+            }`}
+        >
+            <Minus size={compact ? 14 : 18} />
+        </button>
+        <span
+            className={`text-center font-mono font-bold tabular-nums text-fl-surface ${compact ? 'w-6 text-lg' : 'w-8 text-2xl'}`}
+            aria-live="polite"
+        >
+            {value}
+        </span>
+        <button
+            onClick={onIncrement}
+            aria-label={incrementLabel}
+            className={`flex items-center justify-center rounded-lg border border-fl-border bg-fl-paper font-bold text-fl-primary transition-colors hover:bg-fl-paper-light active:bg-fl-border ${
+                compact ? 'h-9 w-9' : 'h-11 w-11'
+            }`}
+        >
+            <Plus size={compact ? 14 : 18} />
+        </button>
+    </div>
+);
 
 const DiceRollerModal = ({ initialRoll, onClose }) => {
+    const panelRef = useDialog(onClose);
     const [counts, setCounts] = useState(() => {
         return initialRoll ? { ...initialRoll, d8: 0, d10: 0, d12: 0 } : { base: 0, skill: 0, gear: 0, d8: 0, d10: 0, d12: 0 };
     });
@@ -16,6 +49,7 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
         setIsRolling(true);
         setResults(null);
         setCanPush(false);
+        hapticTick(20);
 
         setTimeout(() => {
             const newResults = {
@@ -31,6 +65,7 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
             setResults(newResults);
             setCanPush(true);
             setIsRolling(false);
+            hapticTick(35);
         }, 600);
     };
 
@@ -44,12 +79,11 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
         }
     }, [initialRoll]);
 
-
-
     const handlePush = () => {
         if (!results) return;
         setIsRolling(true);
         setCanPush(false);
+        hapticTick(20);
 
         setTimeout(() => {
             const reroll = (dice, isSkill) => dice.map(d => {
@@ -65,6 +99,7 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
                 artifacts: results.artifacts
             });
             setIsRolling(false);
+            hapticTick(35);
         }, 600);
     };
 
@@ -127,76 +162,85 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
-            {/* Style pre animáciu trasenia */}
-            <style>{`
-            @keyframes shake {
-                0% { transform: translate(1px, 1px) rotate(0deg); }
-                10% { transform: translate(-1px, -2px) rotate(-1deg); }
-                20% { transform: translate(-3px, 0px) rotate(1deg); }
-                30% { transform: translate(3px, 2px) rotate(0deg); }
-                40% { transform: translate(1px, -1px) rotate(1deg); }
-                50% { transform: translate(-1px, 2px) rotate(-1deg); }
-                60% { transform: translate(-3px, 1px) rotate(0deg); }
-                70% { transform: translate(3px, 1px) rotate(-1deg); }
-                80% { transform: translate(-1px, -1px) rotate(1deg); }
-                90% { transform: translate(1px, 2px) rotate(0deg); }
-                100% { transform: translate(1px, -2px) rotate(-1deg); }
-            }
-            .dice-shake {
-                animation: shake 0.5s;
-                animation-iteration-count: infinite;
-            }
-        `}</style>
-
-            <div className="bg-fl-card w-full max-w-md rounded shadow-2xl border-4 border-fl-primary p-6 relative max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-                <button onClick={onClose} className="absolute top-2 right-2 text-fl-primary hover:text-red-600"><X size={24} /></button>
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm animate-in fade-in duration-200"
+            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)', paddingBottom: 'calc(var(--safe-bottom) + 1rem)' }}
+            onClick={onClose}
+        >
+            <div
+                ref={panelRef}
+                tabIndex={-1}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Hod kostkami"
+                className="relative max-h-full w-full max-w-md overflow-y-auto overscroll-contain rounded-2xl border-2 border-fl-primary bg-fl-card p-6 shadow-2xl outline-none animate-in fade-in zoom-in-95 duration-200"
+                onClick={e => e.stopPropagation()}
+            >
+                <button
+                    onClick={onClose}
+                    aria-label="Zavřít"
+                    className="absolute right-2 top-2 flex h-12 w-12 items-center justify-center rounded-full text-fl-primary transition-colors hover:bg-fl-paper hover:text-red-600 active:bg-fl-paper"
+                >
+                    <X size={24} />
+                </button>
                 <h3 className="font-serif text-2xl font-bold uppercase text-center mb-4 text-fl-surface border-b-2 border-fl-primary pb-2 flex items-center justify-center gap-2">
-                    <Dices /> Hod Kostkami
+                    <Dices aria-hidden="true" /> Hod Kostkami
                 </h3>
 
-                <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-3 gap-3 mb-5">
                     {[
                         { label: 'Vlastnost', key: 'base', color: 'text-fl-text-muted' },
-                        { label: 'Dovednost', key: 'skill', color: 'text-red-800' },
+                        { label: 'Dovednost', key: 'skill', color: 'text-red-800 dark:text-red-400' },
                         { label: 'Vybavení', key: 'gear', color: 'text-fl-surface' }
                     ].map(d => (
                         <div key={d.key} className="text-center">
-                            <label className={`block text-[10px] font-bold uppercase ${d.color} mb-1`}>{d.label}</label>
-                            <div className="flex items-center justify-center gap-2">
-                                <button onClick={() => setCounts(p => ({ ...p, [d.key]: Math.max(0, p[d.key] - 1) }))} className="w-8 h-8 bg-fl-paper border border-fl-border text-fl-primary rounded hover:bg-fl-paper-light font-bold text-xl pb-1">-</button>
-                                <span className="font-mono font-bold text-2xl w-8 text-fl-surface">{counts[d.key]}</span>
-                                <button onClick={() => setCounts(p => ({ ...p, [d.key]: p[d.key] + 1 }))} className="w-8 h-8 bg-fl-paper border border-fl-border text-fl-primary rounded hover:bg-fl-paper-light font-bold text-xl pb-1">+</button>
-                            </div>
+                            <span className={`block text-[10px] font-bold uppercase ${d.color} mb-1.5`}>{d.label}</span>
+                            <Stepper
+                                value={counts[d.key]}
+                                onDecrement={() => setCounts(p => ({ ...p, [d.key]: Math.max(0, p[d.key] - 1) }))}
+                                onIncrement={() => setCounts(p => ({ ...p, [d.key]: p[d.key] + 1 }))}
+                                decrementLabel={`Ubrat kostku — ${d.label}`}
+                                incrementLabel={`Přidat kostku — ${d.label}`}
+                            />
                         </div>
                     ))}
                 </div>
 
-                <div className="flex justify-center gap-6 mb-6 border-t border-fl-border pt-4">
+                <div className="flex justify-center gap-5 mb-5 border-t border-fl-border pt-4">
                     {['d8', 'd10', 'd12'].map(k => (
                         <div key={k} className="flex flex-col items-center">
-                            <span className="text-[9px] font-bold uppercase text-amber-700 mb-1">{k}</span>
-                            <div className="flex gap-1 items-center">
-                                <button onClick={() => setCounts(p => ({ ...p, [k]: Math.max(0, p[k] - 1) }))} className="w-6 h-6 bg-fl-paper border border-fl-border text-fl-primary rounded hover:bg-fl-paper-light">-</button>
-                                <span className="font-bold text-lg w-4 text-center text-fl-surface">{counts[k]}</span>
-                                <button onClick={() => setCounts(p => ({ ...p, [k]: p[k] + 1 }))} className="w-6 h-6 bg-fl-paper border border-fl-border text-fl-primary rounded hover:bg-fl-paper-light">+</button>
-                            </div>
+                            <span className="text-[10px] font-bold uppercase text-amber-700 dark:text-amber-500 mb-1.5">{k}</span>
+                            <Stepper
+                                compact
+                                value={counts[k]}
+                                onDecrement={() => setCounts(p => ({ ...p, [k]: Math.max(0, p[k] - 1) }))}
+                                onIncrement={() => setCounts(p => ({ ...p, [k]: p[k] + 1 }))}
+                                decrementLabel={`Ubrat artefaktovou kostku ${k}`}
+                                incrementLabel={`Přidat artefaktovou kostku ${k}`}
+                            />
                         </div>
                     ))}
                 </div>
 
                 <div className="flex gap-2 mb-6">
-                    <button onClick={handleRoll} disabled={isRolling} className="flex-1 py-4 bg-fl-nav text-white font-bold uppercase tracking-wider hover:bg-fl-nav-hover transition-colors rounded-sm flex items-center justify-center gap-2 shadow-lg">
-                        {isRolling ? 'Házím...' : <><RefreshCw size={18} /> Hodit</>}
+                    <button
+                        onClick={handleRoll}
+                        disabled={isRolling}
+                        className="flex min-h-14 flex-1 items-center justify-center gap-2 rounded-xl bg-fl-nav font-bold uppercase tracking-wider text-white shadow-lg transition-all hover:bg-fl-nav-hover active:scale-[0.98] disabled:opacity-60"
+                    >
+                        {isRolling ? 'Házím…' : <><RefreshCw size={18} aria-hidden="true" /> Hodit</>}
                     </button>
                     {canPush && !isRolling && (
-                        <button onClick={handlePush} className="flex-1 py-4 bg-amber-700 text-fl-paper-light font-bold uppercase tracking-wider hover:bg-amber-800 transition-colors rounded-sm flex items-center justify-center gap-2 shadow-lg border border-amber-900">
-                            <Flame size={18} /> Zkusit štěstí
+                        <button
+                            onClick={handlePush}
+                            className="flex min-h-14 flex-1 items-center justify-center gap-2 rounded-xl border border-amber-900 bg-amber-700 font-bold uppercase tracking-wider text-fl-paper-light shadow-lg transition-all hover:bg-amber-800 active:scale-[0.98] animate-in fade-in duration-200"
+                        >
+                            <Flame size={18} aria-hidden="true" /> Zkusit štěstí
                         </button>
                     )}
                 </div>
 
-                <div className="min-h-[8rem] bg-fl-paper rounded p-4 border-inner shadow-inner">
+                <div className="min-h-[8rem] rounded-xl border border-fl-border/50 bg-fl-paper p-4 shadow-inner" aria-live="polite">
                     {isRolling ? (
                         <div className="flex flex-wrap gap-3 justify-center opacity-50">
                             {/* Placeholder for animation - just showing some shaking squares */}
@@ -205,19 +249,19 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
                             ))}
                         </div>
                     ) : results ? (
-                        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
+                        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
                             <div className="flex justify-center gap-8 text-2xl font-black border-b-2 border-fl-border pb-3">
                                 <div className="flex flex-col items-center text-green-800 dark:text-green-400" title="Úspěchy">
-                                    <Sword className="mb-1" />
-                                    <span>{countSuccesses()}</span>
+                                    <Sword className="mb-1" aria-hidden="true" />
+                                    <span aria-label={`${countSuccesses()} úspěchů`}>{countSuccesses()}</span>
                                 </div>
                                 <div className="flex flex-col items-center text-stone-600 dark:text-stone-400" title="Zranění (Vlastnost)">
-                                    <Skull className="mb-1" />
-                                    <span>{countBanes('base')}</span>
+                                    <Skull className="mb-1" aria-hidden="true" />
+                                    <span aria-label={`${countBanes('base')} zranění vlastnosti`}>{countBanes('base')}</span>
                                 </div>
                                 <div className="flex flex-col items-center text-stone-900 dark:text-stone-300" title="Poškození (Vybavení)">
-                                    <Hammer className="mb-1" />
-                                    <span>{countBanes('gear')}</span>
+                                    <Hammer className="mb-1" aria-hidden="true" />
+                                    <span aria-label={`${countBanes('gear')} poškození vybavení`}>{countBanes('gear')}</span>
                                 </div>
                             </div>
 
@@ -230,7 +274,7 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
                         </div>
                     ) : (
                         <div className="text-center text-fl-text-muted italic pt-8">
-                            Zvolte počet kostek a hoďte...
+                            Zvolte počet kostek a hoďte…
                         </div>
                     )}
                 </div>

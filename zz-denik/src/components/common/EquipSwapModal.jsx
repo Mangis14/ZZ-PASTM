@@ -1,25 +1,39 @@
 import React from 'react';
 import { ArrowRightLeft, Shield, Sword, X } from 'lucide-react';
+import useDialog from '../../hooks/useDialog';
 
 const EquipSwapModal = ({ itemData, slotType, options, onConfirm, onCancel }) => {
+    const panelRef = useDialog(onCancel);
     const itemName = itemData?.Předmět || itemData?.name || 'predmet';
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 p-4">
-            <div className="relative w-full max-w-sm rounded-xl border border-fl-primary bg-fl-card/95 backdrop-blur-xl shadow-2xl p-6">
+        <div
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 p-4 animate-in fade-in duration-200"
+            onClick={onCancel}
+        >
+            <div
+                ref={panelRef}
+                tabIndex={-1}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Výmena výzbroje"
+                className="relative w-full max-w-sm rounded-2xl border border-fl-primary bg-fl-card/95 backdrop-blur-xl shadow-2xl p-6 outline-none animate-in fade-in zoom-in-95 duration-200"
+                onClick={e => e.stopPropagation()}
+            >
                 <div className="mb-6 flex items-start justify-between">
                     <div>
                         <h2 className="font-serif text-2xl font-bold tracking-wider text-fl-surface">
                             VÝMENA VÝZBROJE
                         </h2>
-                        <p className="mt-1 text-xs text-fl-border font-bold uppercase tracking-widest opacity-80">
+                        <p className="mt-1 text-xs text-fl-text-muted font-bold uppercase tracking-widest">
                             {slotType === 'weapon' ? 'Sloty zbraní sú plné' : 'Slot výstroje je obsadený'}
                         </p>
                     </div>
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="rounded p-1 text-fl-primary hover:bg-fl-primary/20 hover:text-white transition-colors"
+                        aria-label="Zrušit"
+                        className="-mr-2 -mt-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-fl-primary hover:bg-fl-primary/20 hover:text-white active:bg-fl-primary/20 transition-colors"
                     >
                         <X size={24} />
                     </button>
@@ -44,7 +58,7 @@ const EquipSwapModal = ({ itemData, slotType, options, onConfirm, onCancel }) =>
                                 <div className="text-sm font-bold text-fl-surface truncate">
                                     {option.current.name}
                                 </div>
-                                <div className="text-[10px] text-fl-border uppercase tracking-widest">
+                                <div className="text-[10px] text-fl-text-muted uppercase tracking-widest">
                                     {option.type === 'weapon'
                                         ? `Slot zbrane ${option.idx + 1}`
                                         : option.key === 'armor'
@@ -62,7 +76,7 @@ const EquipSwapModal = ({ itemData, slotType, options, onConfirm, onCancel }) =>
                 <button
                     type="button"
                     onClick={onCancel}
-                    className="mt-6 w-full flex items-center justify-center gap-2 py-3 bg-transparent hover:bg-white/5 border border-fl-border text-fl-border hover:text-white font-bold uppercase tracking-widest text-xs rounded transition-all"
+                    className="mt-6 w-full min-h-12 flex items-center justify-center gap-2 bg-transparent hover:bg-fl-paper border border-fl-border text-fl-text-muted hover:text-fl-surface font-bold uppercase tracking-widest text-xs rounded-lg transition-all active:scale-[0.98]"
                 >
                     Zrušiť
                 </button>

@@ -45,9 +45,10 @@ const SheetBasicInfo = ({ char, updateField, moneyRef }) => {
                         <label className="block text-[10px] font-bold uppercase text-fl-primary mb-1 tracking-wider">Věk</label>
                         <input
                             type="number"
+                            inputMode="numeric"
                             value={char.age || ''}
                             onChange={e => updateField('age', parseInt(e.target.value) || 0)}
-                            className="w-full bg-transparent border-b border-fl-border focus:border-fl-primary px-2 py-1 text-sm font-bold text-fl-surface-hover focus:outline-none"
+                            className="w-full bg-transparent border-b border-fl-border focus:border-fl-primary px-2 py-1 text-sm font-bold text-fl-surface-hover focus:outline-none placeholder:text-fl-text-muted"
                             placeholder="Věk"
                         />
                     </div>
@@ -55,9 +56,10 @@ const SheetBasicInfo = ({ char, updateField, moneyRef }) => {
                         <label className="block text-[10px] font-bold uppercase text-fl-primary mb-1 tracking-wider">Reputace</label>
                         <input
                             type="number"
+                            inputMode="numeric"
                             value={char.reputation || ''}
                             onChange={e => updateField('reputation', parseInt(e.target.value) || 0)}
-                            className="w-full bg-transparent border-b border-fl-border focus:border-fl-primary px-2 py-1 text-sm font-bold text-fl-surface-hover focus:outline-none"
+                            className="w-full bg-transparent border-b border-fl-border focus:border-fl-primary px-2 py-1 text-sm font-bold text-fl-surface-hover focus:outline-none placeholder:text-fl-text-muted"
                             placeholder="Reputace"
                         />
                     </div>

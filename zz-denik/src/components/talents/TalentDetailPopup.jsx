@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react';
-import { X, Star, ChevronUp, ChevronDown, Info, Plus, Minus } from 'lucide-react';
+import { X, Info, Plus, Minus } from 'lucide-react';
 import { useCatalog } from '../../context/CatalogContext';
+import useDialog from '../../hooks/useDialog';
 
 const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull }) => {
+    const panelRef = useDialog(onClose);
     const { talents: catalogTalents } = useCatalog();
 
     // Find the full talent data to show all rank descriptions
@@ -16,12 +18,24 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
     const canDowngrade = talent.rank > 1;
 
     return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
-            <div className="bg-fl-paper-bright w-full max-w-md rounded-lg shadow-2xl border border-fl-primary overflow-hidden" onClick={e => e.stopPropagation()}>
+        <div
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200"
+            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)', paddingBottom: 'calc(var(--safe-bottom) + 1rem)' }}
+            onClick={onClose}
+        >
+            <div
+                ref={panelRef}
+                tabIndex={-1}
+                role="dialog"
+                aria-modal="true"
+                aria-label={`Talent ${talent.name}`}
+                className="bg-fl-paper-bright w-full max-w-md max-h-full overflow-y-auto overscroll-contain rounded-2xl shadow-2xl border border-fl-primary outline-none animate-in fade-in zoom-in-95 duration-200"
+                onClick={e => e.stopPropagation()}
+            >
                 {/* Header */}
                 <div className="p-4 bg-fl-nav border-b border-fl-primary flex justify-between items-center">
                     <div className="flex items-center gap-3">
-                        <div className="bg-fl-primary text-white w-10 h-10 rounded-full flex items-center justify-center font-serif font-bold text-xl shadow-md">
+                        <div className="bg-fl-primary text-white w-10 h-10 rounded-full flex items-center justify-center font-serif font-bold text-xl shadow-md" aria-hidden="true">
                             {talent.rank}
                         </div>
                         <div>
@@ -29,7 +43,12 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
                             {talent.profession && <span className="text-[10px] uppercase text-fl-primary tracking-wider">{talent.profession}</span>}
                         </div>
                     </div>
-                    <button data-game-action onClick={onClose} className="text-fl-primary hover:text-fl-paper-light transition-colors">
+                    <button
+                        data-game-action
+                        onClick={onClose}
+                        aria-label="Zavřít detail talentu"
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-fl-primary transition-colors hover:bg-fl-nav-hover hover:text-fl-paper-light active:bg-fl-nav-hover"
+                    >
                         <X size={22} />
                     </button>
                 </div>
@@ -81,22 +100,22 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
                     <button
                         onClick={() => canDowngrade && onDowngrade(talent)}
                         disabled={!canDowngrade}
-                        className={`flex-1 py-3 rounded font-bold uppercase text-xs tracking-wider flex items-center justify-center gap-2 transition-colors border
+                        className={`flex-1 min-h-12 rounded-lg font-bold uppercase text-xs tracking-wider flex items-center justify-center gap-2 transition-all border
                             ${canDowngrade
-                                ? 'bg-red-900/10 text-red-800 border-red-800/30 hover:bg-red-900/20'
-                                : 'bg-fl-paper text-fl-border border-fl-paper cursor-not-allowed'}`}
+                                ? 'bg-red-900/10 text-red-800 dark:text-red-400 border-red-800/30 hover:bg-red-900/20 active:scale-[0.98]'
+                                : 'bg-fl-paper text-fl-text-muted border-fl-paper cursor-not-allowed opacity-60'}`}
                     >
-                        <Minus size={14} /> Snížit
+                        <Minus size={14} aria-hidden="true" /> Snížit
                     </button>
                     <button
                         onClick={() => canUpgrade && onUpgrade(talent)}
                         disabled={!canUpgrade}
-                        className={`flex-1 py-3 rounded font-bold uppercase text-xs tracking-wider flex items-center justify-center gap-2 transition-colors border
+                        className={`flex-1 min-h-12 rounded-lg font-bold uppercase text-xs tracking-wider flex items-center justify-center gap-2 transition-all border
                             ${canUpgrade
-                                ? 'bg-fl-primary text-white border-fl-primary hover:bg-fl-primary-hover shadow-sm'
-                                : 'bg-fl-paper text-fl-border border-fl-paper cursor-not-allowed'}`}
+                                ? 'bg-fl-primary text-white border-fl-primary hover:bg-fl-primary-hover active:scale-[0.98] shadow-sm'
+                                : 'bg-fl-paper text-fl-text-muted border-fl-paper cursor-not-allowed opacity-60'}`}
                     >
-                        <Plus size={14} /> Zvýšit ({talent.rank}/{maxRank})
+                        <Plus size={14} aria-hidden="true" /> Zvýšit ({talent.rank}/{maxRank})
                     </button>
                 </div>
 
@@ -105,9 +124,9 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
                     <div className="px-4 pb-4">
                         <button
                             onClick={() => onShowFull(talent)}
-                            className="w-full py-2 rounded text-fl-primary font-bold uppercase text-xs tracking-wider flex items-center justify-center gap-2 hover:bg-fl-paper transition-colors border border-fl-border"
+                            className="w-full min-h-12 rounded-lg text-fl-primary font-bold uppercase text-xs tracking-wider flex items-center justify-center gap-2 hover:bg-fl-paper active:bg-fl-paper transition-colors border border-fl-border"
                         >
-                            <Info size={14} /> Zobrazit plný popis všech úrovní
+                            <Info size={14} aria-hidden="true" /> Zobrazit plný popis všech úrovní
                         </button>
                     </div>
                 )}

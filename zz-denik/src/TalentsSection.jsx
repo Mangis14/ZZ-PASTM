@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, ChevronDown, ChevronUp, Star, Shield, Zap } from 'lucide-react';
+import { Search, ChevronDown, Star, Shield, Zap } from 'lucide-react';
 import { useCatalog } from './context/CatalogContext';
 
 const TalentCard = ({ talent, isExpanded, onToggle, knownTalent, onLearnTalent }) => {
@@ -13,13 +13,15 @@ const TalentCard = ({ talent, isExpanded, onToggle, knownTalent, onLearnTalent }
             : `Zvýšiť úroveň (${knownTalent.rank}/${maxRank})`;
 
     return (
-        <div className="bg-fl-paper-bright border border-fl-paper rounded mb-3 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-            <div
+        <div className="bg-fl-paper-bright border border-fl-paper rounded-lg mb-3 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <button
+                type="button"
                 onClick={onToggle}
-                className="p-3 flex items-center justify-between cursor-pointer bg-fl-paper-light border-b border-fl-paper"
+                aria-expanded={isExpanded}
+                className="w-full min-h-14 p-3 flex items-center justify-between text-left bg-fl-paper-light border-b border-fl-paper transition-colors hover:bg-fl-paper active:bg-fl-paper"
             >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                    <div className={`p-2 rounded-full shrink-0 ${talent.profession ? 'bg-fl-primary text-white' : 'bg-fl-border text-fl-surface'}`}>
+                    <div className={`p-2 rounded-full shrink-0 ${talent.profession ? 'bg-fl-primary text-white' : 'bg-fl-border text-fl-surface'}`} aria-hidden="true">
                         {talent.profession ? <Shield size={16} /> : <Star size={16} />}
                     </div>
                     <div className="min-w-0">
@@ -27,13 +29,13 @@ const TalentCard = ({ talent, isExpanded, onToggle, knownTalent, onLearnTalent }
                         {talent.profession && <span className="text-[10px] font-mono text-fl-primary uppercase">{talent.profession}</span>}
                     </div>
                 </div>
-                <button className="text-fl-primary shrink-0 ml-2">
-                    {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                </button>
-            </div>
+                <span className="text-fl-primary shrink-0 ml-2" aria-hidden="true">
+                    <ChevronDown size={20} className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                </span>
+            </button>
 
             {isExpanded && (
-                <div className="p-4 bg-fl-card">
+                <div className="p-4 bg-fl-card animate-in fade-in duration-200">
                     {talent.description && (
                         <p className="text-sm text-fl-surface-hover leading-relaxed font-serif italic mb-3 pb-3 border-b border-fl-paper">
                             {talent.description}
@@ -124,29 +126,34 @@ const TalentsSection = ({ char, onLearnTalent }) => {
                 <div className="relative mb-4">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fl-primary" size={18} />
                     <input
-                        type="text"
+                        type="search"
                         placeholder="Hledat talent ve všech kategoriích..."
+                        aria-label="Hledat talent"
                         value={search}
                         onChange={e => setSearch(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 bg-fl-card border border-fl-paper rounded text-fl-surface placeholder:text-fl-border focus:border-fl-primary focus:outline-none"
+                        className="w-full min-h-12 pl-10 pr-4 py-2 bg-fl-card border border-fl-paper rounded-lg text-fl-surface placeholder:text-fl-text-muted focus:border-fl-primary focus:outline-none"
                     />
                 </div>
 
                 {/* Tabs — dimmed when searching */}
-                <div className={`flex p-1 bg-fl-nav rounded border border-fl-nav-hover transition-opacity ${isSearching ? 'opacity-40 pointer-events-none' : ''}`}>
+                <div className={`flex p-1 bg-fl-nav rounded-lg border border-fl-nav-hover transition-opacity ${isSearching ? 'opacity-40 pointer-events-none' : ''}`} role="tablist" aria-label="Kategorie talentů">
                     <button
                         onClick={() => setActiveTab('profession')}
-                        className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded transition-all flex items-center justify-center gap-2
-                        ${activeTab === 'profession' ? 'bg-fl-primary text-white shadow-md' : 'text-fl-text-muted dark:text-fl-border hover:text-white'}`}
+                        role="tab"
+                        aria-selected={activeTab === 'profession'}
+                        className={`min-h-11 flex-1 text-xs font-bold uppercase tracking-wider rounded-md transition-all flex items-center justify-center gap-2 active:opacity-80
+                        ${activeTab === 'profession' ? 'bg-fl-primary text-white shadow-md' : 'text-fl-border hover:text-white'}`}
                     >
-                        <Shield size={14} /> Povolání
+                        <Shield size={14} aria-hidden="true" /> Povolání
                     </button>
                     <button
                         onClick={() => setActiveTab('general')}
-                        className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded transition-all flex items-center justify-center gap-2
-                        ${activeTab === 'general' ? 'bg-fl-primary text-white shadow-md' : 'text-fl-text-muted dark:text-fl-border hover:text-white'}`}
+                        role="tab"
+                        aria-selected={activeTab === 'general'}
+                        className={`min-h-11 flex-1 text-xs font-bold uppercase tracking-wider rounded-md transition-all flex items-center justify-center gap-2 active:opacity-80
+                        ${activeTab === 'general' ? 'bg-fl-primary text-white shadow-md' : 'text-fl-border hover:text-white'}`}
                     >
-                        <Star size={14} /> Obecné
+                        <Star size={14} aria-hidden="true" /> Obecné
                     </button>
                 </div>
 

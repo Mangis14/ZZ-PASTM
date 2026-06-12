@@ -17,6 +17,8 @@ import TalentPicker from './talents/TalentPicker';
 import SpellList from './spells/SpellList';
 import SpellPicker from './spells/SpellPicker';
 import { useCatalog } from '../context/CatalogContext';
+import { confirmAction } from './common/ConfirmDialog';
+import { hapticTick } from '../native/platform';
 
 const DEFAULT_COLLAPSED_SECTIONS = {
     profile: true,
@@ -124,8 +126,13 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, onR
         setLayout(prev => ({ ...prev, defaultCollapsed: { ...prev.collapsed } }));
     };
 
-    const resetLayout = () => {
-        if (!window.confirm('Obnovit výchozí pořadí a zbalení dlaždic?')) return;
+    const resetLayout = async () => {
+        const confirmed = await confirmAction({
+            title: 'Obnovit výchozí rozložení?',
+            message: 'Pořadí a zbalení dlaždic se vrátí do výchozího stavu.',
+            confirmLabel: 'Obnovit'
+        });
+        if (!confirmed) return;
         setLayout(prev => ({
             ...prev,
             order: DEFAULT_TILE_ORDER,
@@ -153,7 +160,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, onR
         dragState.current.timer = setTimeout(() => {
             dragState.current.activeId = tileId;
             setDraggingId(tileId);
-            navigator.vibrate?.(30);
+            hapticTick(30);
         }, 350);
     };
 
@@ -292,30 +299,33 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, onR
     const inventoryTone = isOverencumbered ? 'danger' : capacityRatio >= 0.8 ? 'warning' : 'default';
 
     return (
-        <div className={`flex flex-col gap-3 ${layout.gameMode ? 'sheet-game-mode' : ''}`}>
-            <div className="order-[-2] grid grid-cols-2 gap-2 rounded-lg border border-fl-paper bg-fl-card p-2 shadow-sm min-[380px]:grid-cols-4">
+        <div className={`grid grid-cols-1 items-start gap-3 lg:grid-cols-2 ${layout.gameMode ? 'sheet-game-mode' : ''}`}>
+            <div className="order-[-2] grid grid-cols-2 gap-2 rounded-lg border border-fl-paper bg-fl-card p-2 shadow-sm min-[380px]:grid-cols-4 lg:col-span-2">
                 <button
                     type="button"
                     onClick={applyPreferredOverview}
-                    className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-md bg-fl-primary/10 px-2 text-[9px] font-bold uppercase tracking-wide text-fl-primary hover:bg-fl-primary hover:text-white"
+                    className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-md bg-fl-primary/10 px-2 text-[10px] font-bold uppercase tracking-wide text-fl-primary transition-colors hover:bg-fl-primary hover:text-white active:bg-fl-primary/30"
                 >
-                    <LayoutDashboard size={15} />
+                    <LayoutDashboard size={15} aria-hidden="true" />
                     Herní přehled
                 </button>
                 <button
                     type="button"
                     onClick={() => setCustomizing(prev => !prev)}
-                    className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-md px-2 text-[9px] font-bold uppercase tracking-wide text-fl-text-muted hover:bg-fl-paper hover:text-fl-primary"
+                    aria-pressed={customizing}
+                    className={`flex min-h-12 flex-col items-center justify-center gap-1 rounded-md px-2 text-[10px] font-bold uppercase tracking-wide transition-colors active:bg-fl-paper ${
+                        customizing ? 'bg-fl-primary/15 text-fl-primary' : 'text-fl-text-muted hover:bg-fl-paper hover:text-fl-primary'
+                    }`}
                 >
-                    <Settings2 size={15} />
+                    <Settings2 size={15} aria-hidden="true" />
                     Upravit rozložení
                 </button>
                 <button
                     type="button"
                     onClick={() => setAllSections(!DEFAULT_TILE_ORDER.every(id => layout.collapsed[id]))}
-                    className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-md px-2 text-[9px] font-bold uppercase tracking-wide text-fl-text-muted hover:bg-fl-paper hover:text-fl-primary"
+                    className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-md px-2 text-[10px] font-bold uppercase tracking-wide text-fl-text-muted transition-colors hover:bg-fl-paper hover:text-fl-primary active:bg-fl-paper"
                 >
-                    {DEFAULT_TILE_ORDER.every(id => layout.collapsed[id]) ? <Maximize2 size={15} /> : <Minimize2 size={15} />}
+                    {DEFAULT_TILE_ORDER.every(id => layout.collapsed[id]) ? <Maximize2 size={15} aria-hidden="true" /> : <Minimize2 size={15} aria-hidden="true" />}
                     {DEFAULT_TILE_ORDER.every(id => layout.collapsed[id]) ? 'Rozbalit vše' : 'Zbalit vše'}
                 </button>
                 <button
@@ -324,27 +334,28 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, onR
                         setCustomizing(false);
                         setLayout(prev => ({ ...prev, gameMode: !prev.gameMode }));
                     }}
-                    className={`flex min-h-12 flex-col items-center justify-center gap-1 rounded-md px-2 text-[9px] font-bold uppercase tracking-wide transition-colors ${
+                    aria-pressed={layout.gameMode}
+                    className={`flex min-h-12 flex-col items-center justify-center gap-1 rounded-md px-2 text-[10px] font-bold uppercase tracking-wide transition-colors active:bg-fl-paper ${
                         layout.gameMode ? 'bg-green-800 text-white' : 'text-fl-text-muted hover:bg-fl-paper hover:text-fl-primary'
                     }`}
                 >
-                    <Gamepad2 size={15} />
+                    <Gamepad2 size={15} aria-hidden="true" />
                     {layout.gameMode ? 'Ukončit hru' : 'Režim Hra'}
                 </button>
             </div>
 
             {customizing && (
-                <div className="order-[-1] rounded-lg border border-fl-primary/30 bg-fl-card p-3 shadow-sm">
+                <div className="order-[-1] rounded-lg border border-fl-primary/30 bg-fl-card p-3 shadow-sm lg:col-span-2">
                     <div className="mb-3">
                         <h3 className="font-serif text-sm font-bold uppercase tracking-wide text-fl-surface">Personalizace deníku</h3>
                         <p className="mt-1 text-xs text-fl-text-muted">Podržte úchyt dlaždice a přesuňte ji. Otevřený a zbalený stav se ukládá automaticky.</p>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                        <button type="button" onClick={savePreferredOverview} className="rounded-md border border-fl-primary/30 bg-fl-primary/10 px-2 py-2 text-[9px] font-bold uppercase tracking-wide text-fl-primary">
+                        <button type="button" onClick={savePreferredOverview} className="min-h-12 rounded-md border border-fl-primary/30 bg-fl-primary/10 px-2 py-2 text-[10px] font-bold uppercase tracking-wide text-fl-primary transition-colors hover:bg-fl-primary/20 active:bg-fl-primary/30">
                             Uložit jako výchozí
                         </button>
-                        <button type="button" onClick={resetLayout} className="flex items-center justify-center gap-1 rounded-md border border-fl-border px-2 py-2 text-[9px] font-bold uppercase tracking-wide text-fl-text-muted">
-                            <RotateCcw size={13} /> Obnovit rozložení
+                        <button type="button" onClick={resetLayout} className="flex min-h-12 items-center justify-center gap-1 rounded-md border border-fl-border px-2 py-2 text-[10px] font-bold uppercase tracking-wide text-fl-text-muted transition-colors hover:bg-fl-paper active:bg-fl-paper">
+                            <RotateCcw size={13} aria-hidden="true" /> Obnovit rozložení
                         </button>
                     </div>
                 </div>

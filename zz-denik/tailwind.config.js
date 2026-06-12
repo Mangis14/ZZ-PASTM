@@ -1,3 +1,5 @@
+import animate from 'tailwindcss-animate';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
@@ -5,6 +7,10 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  future: {
+    // hover: štýly len na zariadeniach s kurzorom — žiadny „sticky hover" na dotyku
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     extend: {
       colors: {
@@ -28,5 +34,17 @@ export default {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    animate,
+    // Skrytie scrollbarov pri horizontálnych pill-filtroch (trieda sa už používa)
+    function scrollbarHide({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hide': {
+          '-ms-overflow-style': 'none',
+          'scrollbar-width': 'none',
+          '&::-webkit-scrollbar': { display: 'none' },
+        },
+      });
+    },
+  ],
 }
