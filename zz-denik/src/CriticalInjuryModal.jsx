@@ -1,21 +1,34 @@
 import React, { useState } from 'react';
-import { Skull, Activity, X, Sword, Hammer, Ghost, ShieldAlert } from 'lucide-react';
+import { Skull, Activity, X, Sword, Hammer, Ghost, ShieldAlert, BookmarkPlus, Check } from 'lucide-react';
 import { CRIT_TABLES } from './data/crit_tables';
 import useDialog from './hooks/useDialog';
 import { hapticTick } from './native/platform';
 
-const CriticalInjuryModal = ({ onClose }) => {
+const CriticalInjuryModal = ({ onClose, onSaveInjury }) => {
     const panelRef = useDialog(onClose);
     const [selectedType, setSelectedType] = useState(null);
     const [isRolling, setIsRolling] = useState(false);
     const [loadingText, setLoadingText] = useState("");
     const [result, setResult] = useState(null);
+    const [savedToJournal, setSavedToJournal] = useState(false);
+
+    const handleSaveToJournal = () => {
+        if (!result || !onSaveInjury || savedToJournal) return;
+        const isLethal = result.lethal !== 'Ne';
+        onSaveInjury({
+            description: result.effect || '',
+            lethal: isLethal,
+            healingTime: (isLethal && result.limit) ? result.limit : (result.heal || '')
+        });
+        setSavedToJournal(true);
+    };
 
     const handleRoll = () => {
         if (!selectedType) return;
         setIsRolling(true);
         setLoadingText("");
         setResult(null);
+        setSavedToJournal(false);
 
         const text = "Obdržel si zranění...";
         let i = 0;
@@ -53,8 +66,8 @@ const CriticalInjuryModal = ({ onClose }) => {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm animate-in fade-in duration-200"
-            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)', paddingBottom: 'calc(var(--safe-bottom) + 1rem)' }}
+            className="fixed inset-0 z-50 flex items-end justify-center bg-black/90 backdrop-blur-sm animate-in fade-in duration-200 sm:items-center sm:p-4"
+            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)' }}
             onClick={onClose}
         >
             <div
@@ -63,9 +76,11 @@ const CriticalInjuryModal = ({ onClose }) => {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Kritické zranění"
-                className="relative flex max-h-full min-h-[400px] w-full max-w-lg flex-col overflow-y-auto overscroll-contain rounded-2xl border-2 border-fl-primary bg-fl-card p-6 shadow-2xl outline-none animate-in fade-in zoom-in-95 duration-200"
+                className="relative flex max-h-full min-h-[400px] w-full max-w-lg flex-col overflow-y-auto overscroll-contain rounded-t-3xl border-2 border-b-0 border-fl-primary bg-fl-card p-6 shadow-2xl outline-none animate-in fade-in slide-in-from-bottom-8 duration-300 sm:rounded-2xl sm:border-b-2 sm:slide-in-from-bottom-0 sm:zoom-in-95 sm:duration-200"
+                style={{ paddingBottom: 'max(1.5rem, var(--safe-bottom))' }}
                 onClick={e => e.stopPropagation()}
             >
+                <div className="absolute left-1/2 top-2 h-1 w-10 -translate-x-1/2 rounded-full bg-fl-border sm:hidden" aria-hidden="true" />
                 <button
                     onClick={onClose}
                     aria-label="Zavřít"
@@ -147,12 +162,29 @@ const CriticalInjuryModal = ({ onClose }) => {
                             </div>
                         )}
 
-                        <button
-                            onClick={() => { setResult(null); setSelectedType(null); }}
-                            className="mt-auto w-full min-h-12 rounded-xl bg-fl-nav font-bold uppercase tracking-wider text-white transition-all hover:bg-fl-nav-hover active:scale-[0.98]"
-                        >
-                            Nový hod
-                        </button>
+                        <div className="mt-auto space-y-2">
+                            {onSaveInjury && (
+                                <button
+                                    onClick={handleSaveToJournal}
+                                    disabled={savedToJournal}
+                                    className={`flex w-full min-h-12 items-center justify-center gap-2 rounded-xl font-bold uppercase tracking-wider transition-all ${
+                                        savedToJournal
+                                            ? 'cursor-default border border-green-800/40 bg-green-900/15 text-green-700 dark:text-green-400'
+                                            : 'bg-fl-primary text-white hover:bg-fl-primary-hover active:scale-[0.98] shadow-md'
+                                    }`}
+                                >
+                                    {savedToJournal
+                                        ? <><Check size={17} aria-hidden="true" /> Zapsáno do deníku</>
+                                        : <><BookmarkPlus size={17} aria-hidden="true" /> Zapsat do deníku</>}
+                                </button>
+                            )}
+                            <button
+                                onClick={() => { setResult(null); setSelectedType(null); setSavedToJournal(false); }}
+                                className="w-full min-h-12 rounded-xl bg-fl-nav font-bold uppercase tracking-wider text-white transition-all hover:bg-fl-nav-hover active:scale-[0.98]"
+                            >
+                                Nový hod
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>

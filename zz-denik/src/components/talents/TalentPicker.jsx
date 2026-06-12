@@ -39,8 +39,8 @@ const TalentPicker = ({ char, onAdd, onClose }) => {
 
     return (
         <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200"
-            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)', paddingBottom: 'calc(var(--safe-bottom) + 1rem)' }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end justify-center animate-in fade-in duration-200 sm:items-center sm:p-4"
+            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)' }}
             onClick={onClose}
         >
             <div
@@ -49,10 +49,11 @@ const TalentPicker = ({ char, onAdd, onClose }) => {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Vybrat talent"
-                className="bg-fl-card w-full max-w-2xl h-[85dvh] max-h-full rounded-2xl shadow-2xl border border-fl-primary flex flex-col outline-none animate-in fade-in zoom-in-95 duration-200"
+                className="relative bg-fl-card w-full max-w-2xl h-[92dvh] max-h-full rounded-t-3xl border border-b-0 shadow-2xl border-fl-primary flex flex-col outline-none animate-in fade-in slide-in-from-bottom-8 duration-300 sm:h-[85dvh] sm:rounded-2xl sm:border-b sm:slide-in-from-bottom-0 sm:zoom-in-95 sm:duration-200"
                 onClick={e => e.stopPropagation()}
             >
-                <div className="p-4 border-b border-fl-border flex justify-between items-center bg-fl-card rounded-t-2xl">
+                <div className="absolute left-1/2 top-2 h-1 w-10 -translate-x-1/2 rounded-full bg-fl-border sm:hidden" aria-hidden="true" />
+                <div className="p-4 pt-5 sm:pt-4 border-b border-fl-border flex justify-between items-center bg-fl-card rounded-t-3xl sm:rounded-t-2xl">
                     <h2 className="text-xl font-serif font-bold text-fl-primary flex items-center gap-2">
                         <Star size={24} aria-hidden="true" /> Vybrat Talent
                     </h2>
@@ -97,7 +98,10 @@ const TalentPicker = ({ char, onAdd, onClose }) => {
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-2 bg-fl-paper-bright rounded-b-2xl">
+                <div
+                    className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-2 bg-fl-paper-bright rounded-b-none sm:rounded-b-2xl"
+                    style={{ paddingBottom: 'max(1rem, var(--safe-bottom))' }}
+                >
                     {filteredTalents.map(talent => (
                         <div key={talent.id} className="bg-fl-paper-bright border border-fl-border rounded-lg overflow-hidden">
                             <button

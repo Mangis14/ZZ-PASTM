@@ -156,11 +156,8 @@ export default function DataManagementModal({
 
     return (
         <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
-            style={{
-                paddingTop: 'calc(var(--safe-top) + 0.75rem)',
-                paddingBottom: 'calc(var(--safe-bottom) + 0.75rem)'
-            }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-end justify-center animate-in fade-in duration-200 sm:items-center sm:p-4"
+            style={{ paddingTop: 'calc(var(--safe-top) + 0.75rem)' }}
             onClick={onClose}
         >
             <div
@@ -169,12 +166,13 @@ export default function DataManagementModal({
                 role="dialog"
                 aria-modal="true"
                 aria-label="Správa dat postavy"
-                className="bg-fl-card w-full max-w-lg rounded-2xl border-2 border-fl-primary shadow-2xl flex flex-col overflow-hidden outline-none animate-in fade-in zoom-in-95 duration-200"
-                style={{ maxHeight: 'calc(100dvh - var(--safe-top) - var(--safe-bottom) - 1.5rem)' }}
+                className="relative bg-fl-card w-full max-w-lg rounded-t-3xl border-2 border-b-0 border-fl-primary shadow-2xl flex flex-col overflow-hidden outline-none animate-in fade-in slide-in-from-bottom-8 duration-300 sm:rounded-2xl sm:border-b-2 sm:slide-in-from-bottom-0 sm:zoom-in-95 sm:duration-200"
+                style={{ maxHeight: 'calc(100dvh - var(--safe-top) - 1.5rem)' }}
                 onClick={e => e.stopPropagation()}
             >
+                <div className="absolute left-1/2 top-2 h-1 w-10 -translate-x-1/2 rounded-full bg-fl-border sm:hidden" aria-hidden="true" />
                 {/* Header */}
-                <div className="p-4 border-b border-fl-border bg-fl-card flex justify-between items-center">
+                <div className="p-4 pt-5 sm:pt-4 border-b border-fl-border bg-fl-card flex justify-between items-center">
                     <h3 className="min-w-0 text-lg sm:text-xl font-serif font-bold text-fl-primary flex items-center gap-2 leading-tight">
                         <Database size={20} aria-hidden="true" /> Správa dat postavy
                     </h3>
@@ -212,7 +210,10 @@ export default function DataManagementModal({
                 </div>
 
                 {/* Content */}
-                <div className="min-h-0 flex-1 overflow-y-auto space-y-6 p-4 pb-6 sm:p-5">
+                <div
+                    className="min-h-0 flex-1 overflow-y-auto overscroll-contain space-y-6 p-4 pb-6 sm:p-5"
+                    style={{ paddingBottom: 'max(1.5rem, var(--safe-bottom))' }}
+                >
                     {activeTab === 'single' ? (
                         /* SINGLE CHARACTER ACTIONS */
                         <div className="space-y-5">

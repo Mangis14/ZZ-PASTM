@@ -1,18 +1,9 @@
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, lazy, Suspense } from 'react';
 import { X } from 'lucide-react';
 
 import Toaster from './components/common/Toast';
 import { ConfirmHost, confirmAction } from './components/common/ConfirmDialog';
-import ZboziSection from './ZboziSection';
-import TalentsSection from './TalentsSection';
-import SpellsSection from './SpellsSection';
-import WeatherSection from './WeatherSection';
-import DiceRollerModal from './DiceRollerModal';
-import CriticalInjuryModal from './CriticalInjuryModal';
-import CharacterCreationWizard from './components/CharacterCreationWizard';
-import DataManagementModal from './components/DataManagementModal';
-import RulesReferenceModal from './components/RulesReferenceModal';
 
 import Header from './components/layout/Header';
 import BottomNav from './components/layout/BottomNav';
@@ -21,6 +12,26 @@ import CharacterSheet from './components/CharacterSheet';
 import useDialog from './hooks/useDialog';
 import { registerBackHandler, syncSystemBars } from './native/platform';
 import { TALENTS_DATA } from './data/talents_data';
+
+/* Denník je domovská obrazovka a načítava sa hneď; ostatné sekcie
+   a veľké modály sa doťahujú až pri prvom použití — skracuje to
+   štart aplikácie na slabších zariadeniach. Chunk-y sú lokálne
+   v APK, takže prvé otvorenie je prakticky okamžité. */
+const ZboziSection = lazy(() => import('./ZboziSection'));
+const TalentsSection = lazy(() => import('./TalentsSection'));
+const SpellsSection = lazy(() => import('./SpellsSection'));
+const WeatherSection = lazy(() => import('./WeatherSection'));
+const DiceRollerModal = lazy(() => import('./DiceRollerModal'));
+const CriticalInjuryModal = lazy(() => import('./CriticalInjuryModal'));
+const CharacterCreationWizard = lazy(() => import('./components/CharacterCreationWizard'));
+const DataManagementModal = lazy(() => import('./components/DataManagementModal'));
+const RulesReferenceModal = lazy(() => import('./components/RulesReferenceModal'));
+
+const SectionFallback = () => (
+  <div className="flex justify-center py-16" role="status" aria-label="Načítám sekci">
+    <div className="h-8 w-8 animate-spin rounded-full border-4 border-fl-paper border-t-fl-primary" aria-hidden="true" />
+  </div>
+);
 
 // --- DEFINÍCIE A DÁTA (MUSIA BYŤ NA ZAČIATKU) ---
 
@@ -79,7 +90,8 @@ const NewCharacterChoiceDialog = ({ onClose, onWizard, onBlank }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200 sm:items-center sm:p-4"
+      style={{ paddingTop: 'calc(var(--safe-top) + 1rem)' }}
       onClick={onClose}
     >
       <div
@@ -88,9 +100,11 @@ const NewCharacterChoiceDialog = ({ onClose, onWizard, onBlank }) => {
         role="dialog"
         aria-modal="true"
         aria-labelledby="fl-new-char-title"
-        className="w-full max-w-md rounded-2xl border border-fl-primary/60 bg-fl-card p-6 shadow-2xl outline-none animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-md max-h-full overflow-y-auto overscroll-contain rounded-t-3xl border border-b-0 border-fl-primary/60 bg-fl-card p-6 shadow-2xl outline-none animate-in fade-in slide-in-from-bottom-8 duration-300 sm:rounded-2xl sm:border-b sm:slide-in-from-bottom-0 sm:zoom-in-95 sm:duration-200"
+        style={{ paddingBottom: 'max(1.5rem, var(--safe-bottom))' }}
         onClick={e => e.stopPropagation()}
       >
+        <div className="absolute left-1/2 top-2 h-1 w-10 -translate-x-1/2 rounded-full bg-fl-border sm:hidden" aria-hidden="true" />
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
             <h2 id="fl-new-char-title" className="font-serif text-2xl font-bold text-fl-primary">Nová postava</h2>
@@ -157,11 +171,28 @@ const App = () => {
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDarkMode);
-    localStorage.setItem('fl_theme', isDarkMode ? 'dark' : 'light');
     document.querySelector('meta[name="theme-color"]')
       ?.setAttribute('content', isDarkMode ? THEME_META_COLORS.dark : THEME_META_COLORS.light);
     syncSystemBars(isDarkMode);
   }, [isDarkMode]);
+
+  // Voľba sa ukladá len pri ručnom prepnutí; bez nej aplikácia
+  // živo sleduje systémový svetlý/tmavý režim.
+  const toggleTheme = () => {
+    const next = !isDarkMode;
+    localStorage.setItem('fl_theme', next ? 'dark' : 'light');
+    setIsDarkMode(next);
+  };
+
+  useEffect(() => {
+    const media = window.matchMedia?.('(prefers-color-scheme: dark)');
+    if (!media) return undefined;
+    const followSystem = (event) => {
+      if (!localStorage.getItem('fl_theme')) setIsDarkMode(event.matches);
+    };
+    media.addEventListener('change', followSystem);
+    return () => media.removeEventListener('change', followSystem);
+  }, []);
 
   const refs = {
     profile: useRef(null),
@@ -256,10 +287,16 @@ const App = () => {
     }
   }, [char, isLoaded]);
 
-  const showToast = (msg, type = 'success') => {
+  const showToast = (msg, type = 'success', action = null) => {
     clearTimeout(toastTimer.current);
-    setToast({ message: msg, type });
-    toastTimer.current = setTimeout(() => setToast(null), 3000);
+    setToast({ message: msg, type, action });
+    // S akciou (napr. Vrátit) necháme viac času na reakciu
+    toastTimer.current = setTimeout(() => setToast(null), action ? 5000 : 3000);
+  };
+
+  const dismissToast = () => {
+    clearTimeout(toastTimer.current);
+    setToast(null);
   };
 
   const createNewDirect = () => {
@@ -527,6 +564,35 @@ const App = () => {
     });
   };
 
+  // Odstránenie slotu inventára s možnosťou vrátenia cez toast
+  // (rýchlejšie než potvrdzovací dialóg, bez rizika straty dát).
+  const removeInventorySlot = (index) => {
+    const removed = char.inventory[index];
+    const newInv = [...char.inventory];
+    newInv.splice(index, 1);
+    updateField('inventory', newInv);
+
+    if (removed?.name?.trim()) {
+      showToast(`Odstraněno: ${removed.name}`, 'info', {
+        label: 'Vrátit',
+        onAction: () => setChar(prev => {
+          const restored = [...prev.inventory];
+          restored.splice(Math.min(index, restored.length), 0, removed);
+          return { ...prev, inventory: restored };
+        })
+      });
+    }
+  };
+
+  // Zápis hodeného kritického zranenia priamo do denníka postavy
+  const saveCriticalInjury = (injury) => {
+    setChar(prev => ({
+      ...prev,
+      criticalInjuries: [...(prev.criticalInjuries || []), injury]
+    }));
+    showToast('Zranění zapsáno do deníku');
+  };
+
   const updateDeep = (section, index, field, value) => {
     setChar(prev => {
       if (index === null) { // For armor, helmet, shield which are objects, not arrays
@@ -590,22 +656,48 @@ const App = () => {
   return (
     <div className="min-h-screen bg-fl-bg text-fl-surface font-sans selection:bg-fl-primary selection:text-white">
       <ConfirmHost />
-      {toast && <Toaster message={toast.message} type={toast.type} />}
-      {showDiceModal && <DiceRollerModal initialRoll={initialDice} onClose={() => setShowDiceModal(false)} />}
-      {showCritModal && <CriticalInjuryModal onClose={() => setShowCritModal(false)} />}
-      {showDataModal && (
-        <DataManagementModal
-          char={char}
-          savedChars={savedChars}
-          onClose={() => setShowDataModal(false)}
-          onImportAll={importAllCharacters}
-          onImportSingle={importSingleCharacter}
-          showToast={showToast}
+      {toast && (
+        <Toaster
+          message={toast.message}
+          type={toast.type}
+          action={toast.action ? {
+            label: toast.action.label,
+            onAction: () => {
+              dismissToast();
+              toast.action.onAction();
+            }
+          } : null}
         />
       )}
-      {showRulesModal && (
-        <RulesReferenceModal onClose={() => setShowRulesModal(false)} />
-      )}
+      <Suspense fallback={null}>
+        {showDiceModal && <DiceRollerModal initialRoll={initialDice} onClose={() => setShowDiceModal(false)} />}
+        {showCritModal && (
+          <CriticalInjuryModal
+            onClose={() => setShowCritModal(false)}
+            onSaveInjury={char.id ? saveCriticalInjury : null}
+          />
+        )}
+        {showDataModal && (
+          <DataManagementModal
+            char={char}
+            savedChars={savedChars}
+            onClose={() => setShowDataModal(false)}
+            onImportAll={importAllCharacters}
+            onImportSingle={importSingleCharacter}
+            showToast={showToast}
+          />
+        )}
+        {showRulesModal && (
+          <RulesReferenceModal onClose={() => setShowRulesModal(false)} />
+        )}
+        {showCreationWizard && (
+          <CharacterCreationWizard
+            onComplete={createFromWizard}
+            onClose={() => setShowCreationWizard(false)}
+            showToast={showToast}
+          />
+        )}
+      </Suspense>
       {showNewCharChoice && (
         <NewCharacterChoiceDialog
           onClose={() => setShowNewCharChoice(false)}
@@ -614,13 +706,6 @@ const App = () => {
             setShowCreationWizard(true);
           }}
           onBlank={createNewDirect}
-        />
-      )}
-      {showCreationWizard && (
-        <CharacterCreationWizard
-          onComplete={createFromWizard}
-          onClose={() => setShowCreationWizard(false)}
-          showToast={showToast}
         />
       )}
 
@@ -639,7 +724,7 @@ const App = () => {
         <MenuDrawer
           onClose={() => setShowMenu(false)}
           isDarkMode={isDarkMode}
-          onToggleTheme={() => setIsDarkMode(!isDarkMode)}
+          onToggleTheme={toggleTheme}
           savedChars={savedChars}
           currentCharId={char.id}
           onCreateNew={createNew}
@@ -656,12 +741,14 @@ const App = () => {
       {/* MAIN CONTENT */}
       <main className="max-w-3xl mx-auto space-y-6 min-h-[80vh] main-content-layout">
         <div key={currentView} className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <Suspense fallback={<SectionFallback />}>
         {currentView === 'sheet' ? (
             <CharacterSheet
             char={char}
             updateField={updateField}
             updateDeep={updateDeep}
             addItemToInventory={addItemToInventory}
+            removeInventorySlot={removeInventorySlot}
             onRoll={startRoll}
             refs={refs}
             scrollToSection={scrollToSection}
@@ -680,6 +767,7 @@ const App = () => {
         ) : (
           <WeatherSection />
         )}
+        </Suspense>
         </div>
       </main>
 

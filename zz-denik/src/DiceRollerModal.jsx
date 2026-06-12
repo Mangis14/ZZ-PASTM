@@ -163,8 +163,8 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm animate-in fade-in duration-200"
-            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)', paddingBottom: 'calc(var(--safe-bottom) + 1rem)' }}
+            className="fixed inset-0 z-50 flex items-end justify-center bg-black/85 backdrop-blur-sm animate-in fade-in duration-200 sm:items-center sm:p-4"
+            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)' }}
             onClick={onClose}
         >
             <div
@@ -173,9 +173,11 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Hod kostkami"
-                className="relative max-h-full w-full max-w-md overflow-y-auto overscroll-contain rounded-2xl border-2 border-fl-primary bg-fl-card p-6 shadow-2xl outline-none animate-in fade-in zoom-in-95 duration-200"
+                className="relative max-h-full w-full max-w-md overflow-y-auto overscroll-contain rounded-t-3xl border-2 border-b-0 border-fl-primary bg-fl-card p-6 shadow-2xl outline-none animate-in fade-in slide-in-from-bottom-8 duration-300 sm:rounded-2xl sm:border-b-2 sm:slide-in-from-bottom-0 sm:zoom-in-95 sm:duration-200"
+                style={{ paddingBottom: 'max(1.5rem, var(--safe-bottom))' }}
                 onClick={e => e.stopPropagation()}
             >
+                <div className="absolute left-1/2 top-2 h-1 w-10 -translate-x-1/2 rounded-full bg-fl-border sm:hidden" aria-hidden="true" />
                 <button
                     onClick={onClose}
                     aria-label="Zavřít"

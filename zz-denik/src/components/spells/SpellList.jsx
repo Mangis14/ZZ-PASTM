@@ -10,8 +10,8 @@ const SpellDetailPopup = ({ spell, onClose, onShowFull }) => {
 
     return (
     <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-in fade-in duration-200"
-        style={{ paddingTop: 'calc(var(--safe-top) + 1rem)', paddingBottom: 'calc(var(--safe-bottom) + 1rem)' }}
+        className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 sm:items-center sm:p-4"
+        style={{ paddingTop: 'calc(var(--safe-top) + 1rem)' }}
         onClick={onClose}
     >
         <div
@@ -20,7 +20,8 @@ const SpellDetailPopup = ({ spell, onClose, onShowFull }) => {
             role="dialog"
             aria-modal="true"
             aria-label={`Kouzlo ${spell.name}`}
-            className="w-full max-w-md max-h-full overflow-y-auto overscroll-contain rounded-2xl border border-fl-primary bg-fl-paper-bright shadow-2xl outline-none animate-in fade-in zoom-in-95 duration-200"
+            className="w-full max-w-md max-h-full overflow-y-auto overscroll-contain rounded-t-3xl border border-b-0 border-fl-primary bg-fl-paper-bright shadow-2xl outline-none animate-in fade-in slide-in-from-bottom-8 duration-300 sm:rounded-2xl sm:border-b sm:slide-in-from-bottom-0 sm:zoom-in-95 sm:duration-200"
+            style={{ paddingBottom: 'max(0.5rem, var(--safe-bottom))' }}
             onClick={event => event.stopPropagation()}
         >
             <div className="flex items-center justify-between border-b border-fl-primary bg-fl-nav p-4">

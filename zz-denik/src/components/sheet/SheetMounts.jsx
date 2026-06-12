@@ -4,7 +4,7 @@ import Card from '../common/Card';
 import SectionHeader from '../common/SectionHeader';
 import WeightSelect from '../common/WeightSelect';
 import ItemAutocomplete from '../common/ItemAutocomplete';
-import { parseWeight } from '../../ZboziSection';
+import { parseWeight } from '../../utils/items';
 import { confirmAction } from '../common/ConfirmDialog';
 
 const SheetMounts = ({ char, updateField }) => {

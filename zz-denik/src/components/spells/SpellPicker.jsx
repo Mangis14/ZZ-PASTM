@@ -48,8 +48,8 @@ const SpellPicker = ({ char, onAdd, onClose }) => {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 backdrop-blur-sm animate-in fade-in duration-200"
-            style={{ paddingTop: 'calc(var(--safe-top) + 0.75rem)', paddingBottom: 'calc(var(--safe-bottom) + 0.75rem)' }}
+            className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 sm:items-center sm:p-3"
+            style={{ paddingTop: 'calc(var(--safe-top) + 0.75rem)' }}
             onClick={onClose}
         >
             <div
@@ -58,10 +58,11 @@ const SpellPicker = ({ char, onAdd, onClose }) => {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Vybrat kouzlo"
-                className="flex h-[88dvh] max-h-full w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-fl-primary bg-fl-card shadow-2xl outline-none animate-in fade-in zoom-in-95 duration-200"
+                className="relative flex h-[92dvh] max-h-full w-full max-w-2xl flex-col overflow-hidden rounded-t-3xl border border-b-0 border-fl-primary bg-fl-card shadow-2xl outline-none animate-in fade-in slide-in-from-bottom-8 duration-300 sm:h-[88dvh] sm:rounded-2xl sm:border-b sm:slide-in-from-bottom-0 sm:zoom-in-95 sm:duration-200"
                 onClick={e => e.stopPropagation()}
             >
-                <div className="flex items-center justify-between border-b border-fl-border bg-fl-card p-4">
+                <div className="absolute left-1/2 top-2 h-1 w-10 -translate-x-1/2 rounded-full bg-fl-border sm:hidden" aria-hidden="true" />
+                <div className="flex items-center justify-between border-b border-fl-border bg-fl-card p-4 pt-5 sm:pt-4">
                     <h2 className="flex items-center gap-2 font-serif text-xl font-bold text-fl-primary">
                         <Flame size={24} aria-hidden="true" /> Vybrat kouzlo
                     </h2>
@@ -128,7 +129,10 @@ const SpellPicker = ({ char, onAdd, onClose }) => {
                     </div>
                 </div>
 
-                <div className="flex-1 space-y-2 overflow-y-auto overscroll-contain bg-fl-paper-bright p-3">
+                <div
+                    className="flex-1 space-y-2 overflow-y-auto overscroll-contain bg-fl-paper-bright p-3"
+                    style={{ paddingBottom: 'max(0.75rem, var(--safe-bottom))' }}
+                >
                     {filteredSpells.map(spell => {
                         const known = knownIds.has(spell.id);
                         return (

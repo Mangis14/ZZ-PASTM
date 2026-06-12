@@ -15,8 +15,8 @@ export default function RulesReferenceModal({ onClose }) {
 
     return (
         <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200"
-            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)', paddingBottom: 'calc(var(--safe-bottom) + 1rem)' }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end justify-center animate-in fade-in duration-200 sm:items-center sm:p-4"
+            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)' }}
             onClick={onClose}
         >
             <div
@@ -25,11 +25,12 @@ export default function RulesReferenceModal({ onClose }) {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Pravidla a tahák"
-                className="bg-fl-card w-full max-w-lg rounded-2xl border-2 border-fl-primary shadow-2xl flex flex-col h-[85dvh] max-h-full overflow-hidden outline-none animate-in fade-in zoom-in-95 duration-200"
+                className="relative bg-fl-card w-full max-w-lg rounded-t-3xl border-2 border-b-0 border-fl-primary shadow-2xl flex flex-col h-[92dvh] max-h-full overflow-hidden outline-none animate-in fade-in slide-in-from-bottom-8 duration-300 sm:h-[85dvh] sm:rounded-2xl sm:border-b-2 sm:slide-in-from-bottom-0 sm:zoom-in-95 sm:duration-200"
                 onClick={e => e.stopPropagation()}
             >
+                <div className="absolute left-1/2 top-2 h-1 w-10 -translate-x-1/2 rounded-full bg-fl-border sm:hidden" aria-hidden="true" />
                 {/* Header */}
-                <div className="p-4 border-b border-fl-border bg-fl-card flex justify-between items-center">
+                <div className="p-4 pt-5 sm:pt-4 border-b border-fl-border bg-fl-card flex justify-between items-center">
                     <h3 className="text-xl font-serif font-bold text-fl-primary flex items-center gap-2">
                         <BookOpen size={20} aria-hidden="true" /> Pravidla & Tahák
                     </h3>
@@ -62,7 +63,7 @@ export default function RulesReferenceModal({ onClose }) {
                 </div>
 
                 {/* Content */}
-                <div className="p-5 flex-1 overflow-y-auto space-y-6">
+                <div className="p-5 flex-1 overflow-y-auto overscroll-contain space-y-6">
                     {activeTab === 'combat' && (
                         /* COMBAT RULES */
                         <div className="space-y-5">
@@ -314,7 +315,10 @@ export default function RulesReferenceModal({ onClose }) {
                 </div>
 
                 {/* Footer */}
-                <div className="p-3 border-t border-fl-border bg-fl-paper flex justify-end">
+                <div
+                    className="p-3 border-t border-fl-border bg-fl-paper flex justify-end"
+                    style={{ paddingBottom: 'max(0.75rem, var(--safe-bottom))' }}
+                >
                     <button
                         onClick={onClose}
                         className="min-h-12 px-6 bg-fl-primary text-fl-bg font-bold rounded-full hover:bg-fl-primary-hover active:scale-[0.97] transition-all text-xs uppercase"

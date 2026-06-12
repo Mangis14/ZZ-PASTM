@@ -6,7 +6,7 @@ import ItemAutocomplete from '../common/ItemAutocomplete';
 import SectionHeader from '../common/SectionHeader';
 import WeightSelect from '../common/WeightSelect';
 import { useCatalog } from '../../context/CatalogContext';
-import { parseWeight } from '../../ZboziSection';
+import { parseWeight } from '../../utils/items';
 
 const weaponCategories = new Set(['Zbraně nablízko', 'Střelné zbraně', 'Zbraně na dálku']);
 

@@ -135,7 +135,7 @@ const Header = ({
                     <MoneyPurse money={char.money} onClick={() => onNavigate('money')} />
                 </div>
 
-                <div className="grid grid-cols-4 gap-1">
+                <div className="grid grid-cols-4 gap-1" data-header-chips>
                     <StatusChip
                         icon={HeartPulse}
                         label="Vlastnosti"

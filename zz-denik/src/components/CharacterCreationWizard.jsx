@@ -602,8 +602,8 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
 
   return (
     <div
-      className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200"
-      style={{ paddingTop: 'calc(var(--safe-top) + 0.5rem)', paddingBottom: 'calc(var(--safe-bottom) + 0.5rem)' }}
+      className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-end justify-center animate-in fade-in duration-200 sm:items-center sm:p-4"
+      style={{ paddingTop: 'calc(var(--safe-top) + 0.5rem)' }}
     >
       <div
         ref={panelRef}
@@ -611,10 +611,11 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
         role="dialog"
         aria-modal="true"
         aria-label="Tvorba postavy"
-        className="bg-fl-card w-full max-w-3xl h-full sm:h-auto sm:max-h-full rounded-2xl border-2 border-fl-primary shadow-2xl flex flex-col overflow-hidden outline-none animate-in fade-in zoom-in-95 duration-200"
+        className="relative bg-fl-card w-full max-w-3xl h-full sm:h-auto sm:max-h-full rounded-t-3xl border-2 border-b-0 border-fl-primary shadow-2xl flex flex-col overflow-hidden outline-none animate-in fade-in slide-in-from-bottom-8 duration-300 sm:rounded-2xl sm:border-b-2 sm:slide-in-from-bottom-0 sm:zoom-in-95 sm:duration-200"
       >
+        <div className="absolute left-1/2 top-2 h-1 w-10 -translate-x-1/2 rounded-full bg-fl-border sm:hidden" aria-hidden="true" />
         {/* Header */}
-        <div className="p-4 border-b border-fl-border bg-fl-card flex justify-between items-center">
+        <div className="p-4 pt-5 sm:pt-4 border-b border-fl-border bg-fl-card flex justify-between items-center">
           <div className="min-w-0">
             <h2 className="text-xl sm:text-2xl font-serif font-bold text-fl-primary">Tvorba Postavy</h2>
             <p className="text-xs text-fl-text-muted">Krok {displayedStep} z {stepCount} • {
@@ -737,6 +738,7 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
                   <label className="block text-xs font-bold uppercase text-fl-primary mb-1 tracking-wider">Přesný věk (let)</label>
                   <input
                     type="number"
+                    inputMode="numeric"
                     value={ageValue}
                     onChange={e => setAgeValue(e.target.value)}
                     className="w-full bg-fl-card border border-fl-border rounded px-3 py-2 text-sm text-fl-surface focus:border-fl-primary focus:outline-none"
@@ -1133,6 +1135,7 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
                   <label className="block text-xs font-bold uppercase text-fl-primary mb-1 tracking-wider">Počáteční Reputace</label>
                   <input
                     type="number"
+                    inputMode="numeric"
                     value={reputation}
                     onChange={e => setReputation(e.target.value)}
                     className="w-full bg-fl-card border border-fl-border rounded px-3 py-2 text-xs text-fl-surface focus:border-fl-primary focus:outline-none"
@@ -1220,6 +1223,7 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
                     <label className="block text-[9px] font-bold text-fl-primary uppercase">Zlaťáky</label>
                     <input
                       type="number"
+                    inputMode="numeric"
                       value={startingGold}
                       onChange={e => setStartingGold(parseInt(e.target.value) || 0)}
                       className="w-full bg-fl-card border border-fl-border rounded px-2 py-1 text-xs text-fl-surface focus:outline-none"
@@ -1229,6 +1233,7 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
                     <label className="block text-[9px] font-bold text-fl-primary uppercase">Stříbrňáky</label>
                     <input
                       type="number"
+                    inputMode="numeric"
                       value={startingSilver}
                       onChange={e => setStartingSilver(parseInt(e.target.value) || 0)}
                       className="w-full bg-fl-card border border-fl-border rounded px-2 py-1 text-xs text-fl-surface focus:outline-none"
@@ -1238,6 +1243,7 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
                     <label className="block text-[9px] font-bold text-fl-primary uppercase">Měďáky</label>
                     <input
                       type="number"
+                    inputMode="numeric"
                       value={startingCopper}
                       onChange={e => setStartingCopper(parseInt(e.target.value) || 0)}
                       className="w-full bg-fl-card border border-fl-border rounded px-2 py-1 text-xs text-fl-surface focus:outline-none"
@@ -1251,7 +1257,10 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
         </div>
 
         {/* Footer controls */}
-        <div className="p-3 sm:p-4 border-t border-fl-border bg-fl-card flex justify-between items-center gap-3">
+        <div
+          className="p-3 sm:p-4 border-t border-fl-border bg-fl-card flex justify-between items-center gap-3"
+          style={{ paddingBottom: 'max(0.75rem, var(--safe-bottom))' }}
+        >
           <button
             type="button"
             onClick={handlePrevStep}

@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { Capacitor } from '@capacitor/core';
 
 import { TALENTS_DATA } from '../data/talents_data';
 import { SPELLS_DATA } from '../data/spells_data';
@@ -170,6 +171,13 @@ export function CatalogProvider({ children }) {
   }, [loadCatalog]);
 
   useEffect(() => {
+    // V natívnej aplikácii backend neexistuje — katalóg sa berie rovno
+    // z pribaleného JSON-u (rýchlejší štart, žiadny neúspešný request).
+    if (Capacitor.isNativePlatform()) {
+      setState(createFallbackCatalog());
+      return undefined;
+    }
+
     const controller = new AbortController();
 
     loadCatalog({ signal: controller.signal, fallbackOnError: true }).catch(() => {});

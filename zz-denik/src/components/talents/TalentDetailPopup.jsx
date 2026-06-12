@@ -19,8 +19,8 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
 
     return (
         <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200"
-            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)', paddingBottom: 'calc(var(--safe-bottom) + 1rem)' }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end justify-center animate-in fade-in duration-200 sm:items-center sm:p-4"
+            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)' }}
             onClick={onClose}
         >
             <div
@@ -29,7 +29,8 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
                 role="dialog"
                 aria-modal="true"
                 aria-label={`Talent ${talent.name}`}
-                className="bg-fl-paper-bright w-full max-w-md max-h-full overflow-y-auto overscroll-contain rounded-2xl shadow-2xl border border-fl-primary outline-none animate-in fade-in zoom-in-95 duration-200"
+                className="bg-fl-paper-bright w-full max-w-md max-h-full overflow-y-auto overscroll-contain rounded-t-3xl border border-b-0 shadow-2xl border-fl-primary outline-none animate-in fade-in slide-in-from-bottom-8 duration-300 sm:rounded-2xl sm:border-b sm:slide-in-from-bottom-0 sm:zoom-in-95 sm:duration-200"
+                style={{ paddingBottom: 'max(0.5rem, var(--safe-bottom))' }}
                 onClick={e => e.stopPropagation()}
             >
                 {/* Header */}

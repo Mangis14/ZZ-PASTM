@@ -5,6 +5,7 @@ import SectionHeader from './components/common/SectionHeader';
 import MoneyInput from './components/common/MoneyInput';
 import { CATEGORY_ORDER, useCatalog } from './context/CatalogContext';
 import { registerBackHandler, hapticTick } from './native/platform';
+import { parseWeight } from './utils/items';
 
 const ALL_CATEGORY = 'Vše';
 const BROWSE_STATE_KEY = 'fl_goods_browse_state';
@@ -75,17 +76,6 @@ const getCopperValue = (price) => {
     if (price.currency === 'gold') val *= 100;
     if (price.currency === 'silver') val *= 10;
     return val;
-};
-
-export const parseWeight = (w) => {
-    if (!w) return 0;
-    const str = String(w).toLowerCase().trim();
-    if (['–', '-', 'drobné', 'drobný', 'drobná', '', '0'].includes(str)) return 0;
-    if (str.includes('lehk') || str.includes('1/2') || str.includes('½')) return 0.5;
-    if (str.includes('normální') || str.includes('běžn')) return 1;
-    if (str.includes('těžk')) return 2;
-    const num = parseFloat(str.replace(',', '.'));
-    return isNaN(num) ? 0 : num;
 };
 
 const formatPrice = (copperTotal) => {

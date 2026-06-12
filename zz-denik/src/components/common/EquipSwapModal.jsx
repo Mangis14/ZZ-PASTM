@@ -8,7 +8,8 @@ const EquipSwapModal = ({ itemData, slotType, options, onConfirm, onCancel }) =>
 
     return (
         <div
-            className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 p-4 animate-in fade-in duration-200"
+            className="fixed inset-0 z-[9999] flex items-end justify-center bg-slate-950/80 animate-in fade-in duration-200 sm:items-center sm:p-4"
+            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)' }}
             onClick={onCancel}
         >
             <div
@@ -17,9 +18,11 @@ const EquipSwapModal = ({ itemData, slotType, options, onConfirm, onCancel }) =>
                 role="dialog"
                 aria-modal="true"
                 aria-label="Výmena výzbroje"
-                className="relative w-full max-w-sm rounded-2xl border border-fl-primary bg-fl-card/95 backdrop-blur-xl shadow-2xl p-6 outline-none animate-in fade-in zoom-in-95 duration-200"
+                className="relative w-full max-w-sm max-h-full overflow-y-auto overscroll-contain rounded-t-3xl border border-b-0 border-fl-primary bg-fl-card/95 backdrop-blur-xl shadow-2xl p-6 outline-none animate-in fade-in slide-in-from-bottom-8 duration-300 sm:rounded-2xl sm:border-b sm:slide-in-from-bottom-0 sm:zoom-in-95 sm:duration-200"
+                style={{ paddingBottom: 'max(1.5rem, var(--safe-bottom))' }}
                 onClick={e => e.stopPropagation()}
             >
+                <div className="absolute left-1/2 top-2 h-1 w-10 -translate-x-1/2 rounded-full bg-fl-border sm:hidden" aria-hidden="true" />
                 <div className="mb-6 flex items-start justify-between">
                     <div>
                         <h2 className="font-serif text-2xl font-bold tracking-wider text-fl-surface">

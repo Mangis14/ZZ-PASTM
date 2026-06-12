@@ -68,7 +68,7 @@ const loadSheetLayout = (characterId) => {
     }
 };
 
-const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, onRoll, refs, scrollToSection, setCurrentView, onModalStateChange, totalWeight, encumbranceLimit, isOverencumbered }) => {
+const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, removeInventorySlot, onRoll, refs, scrollToSection, setCurrentView, onModalStateChange, totalWeight, encumbranceLimit, isOverencumbered }) => {
     const { talents: catalogTalents } = useCatalog();
     const [layout, setLayout] = useState(() => loadSheetLayout(char.id));
     const [customizing, setCustomizing] = useState(false);
@@ -268,12 +268,6 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, onR
         updateField('inventory', newInv);
     };
 
-    const handleRemoveInventorySlot = (index) => {
-        const newInv = [...char.inventory];
-        newInv.splice(index, 1);
-        updateField('inventory', newInv);
-    };
-
     const handleAddWeaponSlot = () => {
         const newWeapons = [
             ...char.weapons,
@@ -382,7 +376,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, onR
             </SheetTile>
 
             <SheetTile {...tileProps('inventory')} title="Inventář" icon={Backpack} summary={`Zátěž ${totalWeight}/${encumbranceLimit} · ${filledInventory} předmětů · ${char.inventory.length} slotů`} innerRef={refs.inventory} tone={inventoryTone}>
-                <SheetInventory char={char} updateDeep={updateDeep} updateField={updateField} handleAddInventorySlot={handleAddInventorySlot} handleRemoveInventorySlot={handleRemoveInventorySlot} />
+                <SheetInventory char={char} updateDeep={updateDeep} updateField={updateField} handleAddInventorySlot={handleAddInventorySlot} handleRemoveInventorySlot={removeInventorySlot} />
             </SheetTile>
 
             <SheetTile {...tileProps('mounts')} title="Zvířata a sluhové" icon={Shield} summary={mountCount === 0 ? 'Žádná zvířata ani sluhové' : `${mountCount} záznamů`}>

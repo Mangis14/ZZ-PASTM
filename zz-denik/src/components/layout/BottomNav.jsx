@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { User, ShoppingBag, Sparkles, Wand2 } from 'lucide-react';
+import { hapticTick } from '../../native/platform';
 
 const ITEMS = [
     { key: 'sheet', label: 'Denník', icon: User },
@@ -75,6 +76,16 @@ const BottomNav = ({ activeSection, onSectionChange, hidden = false }) => {
     const barRef = useRef(null);
     const isHidden = hidden || keyboardOpen;
 
+    // Android konvencia: ťuknutie na už aktívnu položku skroluje na začiatok
+    const handleSelect = (key) => {
+        if (key === activeSection) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+        }
+        hapticTick(8);
+        onSectionChange?.(key);
+    };
+
     // Skutočná výška lišty → --app-bottom-nav-height (odsadenie obsahu, košíka, toastov)
     useEffect(() => {
         const element = barRef.current;
@@ -134,7 +145,7 @@ const BottomNav = ({ activeSection, onSectionChange, hidden = false }) => {
                         key={item.key}
                         item={item}
                         isActive={activeSection === item.key}
-                        onSelect={onSectionChange}
+                        onSelect={handleSelect}
                         rail
                     />
                 ))}

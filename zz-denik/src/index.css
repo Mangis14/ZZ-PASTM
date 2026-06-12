@@ -158,6 +158,14 @@ body.fl-scroll-lock {
   animation: dice-shake 0.5s infinite;
 }
 
+/* Na šírku s nízkou výškou (telefón v landscape) sa header zhustí —
+   stavové čipy sa skryjú, aby obsahu zostala väčšina obrazovky. */
+@media (orientation: landscape) and (max-height: 480px) {
+  [data-header-chips] {
+    display: none;
+  }
+}
+
 /* Rešpektovanie systémového nastavenia obmedzeného pohybu (WCAG 2.3.3) */
 @media (prefers-reduced-motion: reduce) {
   *,
