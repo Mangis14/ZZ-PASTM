@@ -84,7 +84,7 @@ const Header = ({
 
     const attributes = Object.values(char.attributes || {});
     const damagedAttributes = attributes.filter(attribute => Number(attribute.current) < Number(attribute.max)).length;
-    const depletedAttributes = attributes.filter(attribute => Number(attribute.current) <= 0).length;
+    const depletedAttributes = attributes.filter(attribute => Number(attribute.max) > 0 && Number(attribute.current) <= 0).length;
     const activeConditions = Object.values(char.conditions || {}).filter(Boolean).length;
     const capacityRatio = encumbranceLimit > 0 ? totalWeight / encumbranceLimit : 0;
 

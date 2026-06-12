@@ -287,7 +287,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, onR
     const activeConditions = Object.values(char.conditions || {}).filter(Boolean).length;
     const attributes = Object.values(char.attributes || {});
     const damagedAttributes = attributes.filter(attribute => Number(attribute.current) < Number(attribute.max)).length;
-    const depletedAttributes = attributes.filter(attribute => Number(attribute.current) <= 0).length;
+    const depletedAttributes = attributes.filter(attribute => Number(attribute.max) > 0 && Number(attribute.current) <= 0).length;
     const developedSkills = Object.values(char.skills || {}).filter(value => Number(value) > 0).length;
     const activeResources = Object.values(char.consumables || {}).filter(Boolean).length;
     const criticalCount = (char.criticalInjuries || []).length;
