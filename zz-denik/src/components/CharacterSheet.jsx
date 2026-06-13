@@ -74,7 +74,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
     const [customizing, setCustomizing] = useState(false);
     const [draggingId, setDraggingId] = useState(null);
     const loadedLayoutKey = useRef(getLayoutStorageKey(char.id));
-    const dragState = useRef({ timer: null, activeId: null });
+    const dragState = useRef({ activeId: null, lastTargetId: null });
     const [showTalentPicker, setShowTalentPicker] = useState(false);
     const [showSpellPicker, setShowSpellPicker] = useState(false);
     const [isTalentDetailOpen, setIsTalentDetailOpen] = useState(false);
@@ -155,13 +155,13 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
 
     const startTileDrag = (tileId, event) => {
         if (!customizing) return;
-        clearTimeout(dragState.current.timer);
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        event.preventDefault();
         event.currentTarget.setPointerCapture?.(event.pointerId);
-        dragState.current.timer = setTimeout(() => {
-            dragState.current.activeId = tileId;
-            setDraggingId(tileId);
-            hapticTick(30);
-        }, 350);
+        dragState.current.activeId = tileId;
+        dragState.current.lastTargetId = null;
+        setDraggingId(tileId);
+        hapticTick(30);
     };
 
     const moveTileDrag = (event) => {
@@ -171,12 +171,15 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
         if (event.clientY < 100) window.scrollBy(0, -18);
         if (event.clientY > window.innerHeight - 100) window.scrollBy(0, 18);
         const targetId = document.elementFromPoint(event.clientX, event.clientY)?.closest('[data-sheet-tile-id]')?.dataset.sheetTileId;
-        if (targetId && targetId !== activeId) reorderTile(activeId, targetId);
+        if (targetId && targetId !== activeId && targetId !== dragState.current.lastTargetId) {
+            dragState.current.lastTargetId = targetId;
+            reorderTile(activeId, targetId);
+        }
     };
 
     const endTileDrag = () => {
-        clearTimeout(dragState.current.timer);
         dragState.current.activeId = null;
+        dragState.current.lastTargetId = null;
         setDraggingId(null);
     };
 
@@ -191,7 +194,9 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
             onPointerDown: (event) => startTileDrag(tileId, event),
             onPointerMove: moveTileDrag,
             onPointerUp: endTileDrag,
-            onPointerCancel: endTileDrag
+            onPointerCancel: endTileDrag,
+            onLostPointerCapture: endTileDrag,
+            onContextMenu: (event) => event.preventDefault()
         }
     });
 
@@ -268,6 +273,18 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
         updateField('inventory', newInv);
     };
 
+    const handleClearInventory = async () => {
+        const confirmed = await confirmAction({
+            title: 'Vyčistit celý inventář?',
+            message: 'Všechny předměty z inventáře budou odstraněny. Prázdné sloty zůstanou zachované.',
+            confirmLabel: 'Vyčistit vše',
+            cancelLabel: 'Ponechat',
+            danger: true
+        });
+        if (!confirmed) return;
+        updateField('inventory', char.inventory.map(() => ({ name: '', weight: 1 })));
+    };
+
     const handleAddWeaponSlot = () => {
         const newWeapons = [
             ...char.weapons,
@@ -293,7 +310,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
     const inventoryTone = isOverencumbered ? 'danger' : capacityRatio >= 0.8 ? 'warning' : 'default';
 
     return (
-        <div className={`grid grid-cols-1 items-start gap-3 lg:grid-cols-2 ${layout.gameMode ? 'sheet-game-mode' : ''}`}>
+        <div className={`grid grid-cols-1 items-start gap-3 lg:grid-cols-2 ${layout.gameMode ? 'sheet-game-mode' : ''} ${customizing ? 'select-none' : ''}`}>
             <div className="order-[-2] grid grid-cols-2 gap-2 rounded-lg border border-fl-paper bg-fl-card p-2 shadow-sm min-[380px]:grid-cols-4 lg:col-span-2">
                 <button
                     type="button"
@@ -376,7 +393,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
             </SheetTile>
 
             <SheetTile {...tileProps('inventory')} title="Inventář" icon={Backpack} summary={`Zátěž ${totalWeight}/${encumbranceLimit} · ${filledInventory} předmětů · ${char.inventory.length} slotů`} innerRef={refs.inventory} tone={inventoryTone}>
-                <SheetInventory char={char} updateDeep={updateDeep} updateField={updateField} handleAddInventorySlot={handleAddInventorySlot} handleRemoveInventorySlot={removeInventorySlot} />
+                <SheetInventory char={char} updateDeep={updateDeep} handleAddInventorySlot={handleAddInventorySlot} handleRemoveInventorySlot={removeInventorySlot} handleClearInventory={handleClearInventory} />
             </SheetTile>
 
             <SheetTile {...tileProps('mounts')} title="Zvířata a sluhové" icon={Shield} summary={mountCount === 0 ? 'Žádná zvířata ani sluhové' : `${mountCount} záznamů`}>

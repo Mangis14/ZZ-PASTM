@@ -84,6 +84,17 @@ body.fl-scroll-lock {
   overflow: hidden;
 }
 
+/* Každá modálna vrstva používa useDialog, ktorý pridá fl-scroll-lock.
+   Navigácia sa tak skryje automaticky aj pri vnorených a budúcich popupoch. */
+body.fl-scroll-lock .fl-bottom-nav {
+  pointer-events: none;
+  transform: translateY(100%);
+}
+
+body.fl-scroll-lock .fl-navigation-rail {
+  display: none;
+}
+
 /* Obsah pod fixným headerom a nad spodnou navigáciou.
    Výšky sú merané, takže layout prežije aj systémové škálovanie písma. */
 .main-content-layout {

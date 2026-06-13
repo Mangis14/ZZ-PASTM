@@ -27,6 +27,10 @@ function dispatchBack() {
     return false;
 }
 
+export function exitApp() {
+    if (isNativePlatform) CapacitorApp.exitApp();
+}
+
 export function initNativePlatform() {
     if (isNativePlatform) {
         CapacitorApp.addListener('backButton', () => {

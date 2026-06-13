@@ -5,7 +5,7 @@ Mobilný a webový denník postavy pre stolovú RPG hru Forbidden Lands / Zapov�
 ![Stack](https://img.shields.io/badge/React%20%2B%20Vite%20%2B%20Capacitor-Android-green.svg)
 ![Main](https://img.shields.io/badge/main-aktu%C3%A1lny%20v%C3%BDvoj-blue.svg)
 
-> Aktuálny stav vetvy `main` obsahuje nové funkcie a opravy vytvorené po poslednom publikovanom APK `1.8.3`.
+> Aktuálna publikovaná verzia je `1.8.5`.
 
 ## Najnovšie funkcie
 
@@ -17,12 +17,15 @@ Mobilný a webový denník postavy pre stolovú RPG hru Forbidden Lands / Zapov�
   - uloženie preferovaného herného prehľadu,
   - obnovenie predvoleného rozloženia,
   - režim Hra, ktorý skryje editačné tlačidlá.
+- Opravené plynulé presúvanie dlaždíc bez nechceného označovania textu.
+- Android tlačidlo Späť najprv presunie stránku hore, potom sa vráti na Denník a na úvodnej obrazovke ponúkne úplné ukončenie aplikácie.
+- Spodná navigácia sa automaticky skryje pri každom otvorenom dialógu alebo module, aby neblokovala spodné tlačidlá.
 - Karty vlastností v poradí `SIL`, `OBR`, `OSO`, `BYS` s jasným zdravým, poškodeným a vyradeným stavom.
 - Klikateľný horný panel s vlastnosťami, stavmi, vôľou, záťažou a farebným mešcom.
 - Kliknutie na horný indikátor otvorí a presunie používateľa na príslušnú dlaždicu.
 - Automatické otvorenie menu Nová postava, ak ešte nie je vytvorená žiadna postava.
 - Opravený výpočet záťaže z maximálnej Sily; Soumar úrovne 3 pridáva `+10`.
-- Možnosť odstrániť aj prázdne sloty inventára.
+- Možnosť odstrániť aj prázdne sloty inventára a bezpečne vyčistiť celý inventár po potvrdení.
 - Potvrdenie pred zmenou maximálnej hodnoty vlastnosti.
 - Výber talentov a kúziel zostáva otvorený pri pridávaní viacerých položiek.
 - Odstránená swipe navigácia a horizontálne slide animácie pre plynulejšie používanie na telefóne.
@@ -113,7 +116,7 @@ Výsledné debug APK:
 zz-denik/android/app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Posledné publikované APK v koreňovom adresári je [`FL_1.8.3.apk`](FL_1.8.3.apk). Aktuálny `main` už obsahuje ďalšie zmeny uvedené vyššie.
+Posledné publikované APK v koreňovom adresári je [`FL_1.8.5.apk`](FL_1.8.5.apk).
 
 ## Technológie
 

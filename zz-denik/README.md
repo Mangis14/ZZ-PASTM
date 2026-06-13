@@ -13,9 +13,12 @@ Mobilný a webový denník postavy pre stolovú RPG hru Forbidden Lands / Zapov�
   - zmena poradia dlaždíc podržaním,
   - obnovenie predvoleného rozloženia,
   - režim Hra, ktorý skryje editačné prvky.
+- Plynulé presúvanie dlaždíc bez nechceného označovania textu.
+- Android tlačidlo Späť najprv presunie stránku hore, potom sa vráti na Denník a na úvodnej obrazovke ponúkne úplné ukončenie aplikácie.
+- Spodná navigácia sa automaticky skryje pri každom otvorenom dialógu alebo module.
 - Klikateľný horný stavový panel s vlastnosťami, stavmi, vôľou, záťažou a farebným mešcom.
 - Výpočet záťaže z maximálnej Sily a bonusov talentu Soumar.
-- Odstraňovanie použitých aj prázdnych slotov inventára.
+- Odstraňovanie použitých aj prázdnych slotov inventára a potvrdené vyčistenie celého inventára.
 - Prehľad zboží s viacnásobným výberom kategórií, vyhľadávaním, filtrami, radením a uložením posledného filtra.
 - Kniha kúziel s kategóriami podľa školy mágie, viacnásobným výberom škôl, filtrami stupňa a naučených kúziel.
 - Vyhľadávanie medzi naučenými kúzlami priamo v Denníku.

@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.8.5] - 2026-06-13
+
+### Added
+- Added a confirmed action for clearing every item from the character inventory while preserving its slots.
+- Added an exit confirmation when pressing Android Back from the top of the main Character Sheet.
+
 ### Fixed
+- Android Back now scrolls the current page fully to the top before navigating away or offering to exit.
+- Custom Character Sheet tile reordering now starts immediately from the drag handle, avoids repeated target swaps, and no longer selects text during dragging.
+- Bottom navigation and the tablet navigation rail now hide automatically whenever any dialog or modal module is open, keeping bottom actions accessible.
 - Soumar rank 3 now grants the correct +10 encumbrance capacity instead of repeating rank 2's +5 bonus.
 - Changing an attribute maximum now requires confirmation, including a warning when lowering it would also reduce the current value.
 - Restored the missing new-character choice dialog and Character Creation Wizard integration.

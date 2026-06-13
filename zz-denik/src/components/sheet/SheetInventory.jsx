@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowUpRight, Backpack, Plus, X } from 'lucide-react';
+import { ArrowUpRight, Backpack, Plus, Trash2, X } from 'lucide-react';
 import Card from '../common/Card';
 import EquipSwapModal from '../common/EquipSwapModal';
 import ItemAutocomplete from '../common/ItemAutocomplete';
@@ -15,7 +15,7 @@ const isArmorItem = (item) => item?.Category === 'Zbroj';
 
 const getItemName = (item) => item?.Předmět || item?.name || '';
 
-const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, handleRemoveInventorySlot }) => {
+const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, handleRemoveInventorySlot, handleClearInventory }) => {
     const { allItems } = useCatalog();
     const [swapRequest, setSwapRequest] = useState(null);
 
@@ -164,13 +164,25 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, ha
                     );
                 })}
             </div>
-            <button
-                type="button"
-                onClick={handleAddInventorySlot}
-                className="w-full mt-3 min-h-12 bg-fl-paper hover:bg-fl-border text-fl-primary font-bold uppercase text-xs tracking-widest rounded-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 border border-fl-primary/30"
-            >
-                <Plus size={16} aria-hidden="true" /> Přidat slot
-            </button>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+                <button
+                    type="button"
+                    onClick={handleAddInventorySlot}
+                    className="min-h-12 bg-fl-paper hover:bg-fl-border text-fl-primary font-bold uppercase text-[10px] tracking-widest rounded-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 border border-fl-primary/30"
+                >
+                    <Plus size={16} aria-hidden="true" /> Přidat slot
+                </button>
+                <button
+                    type="button"
+                    onClick={handleClearInventory}
+                    disabled={!char.inventory.some(item => item.name?.trim())}
+                    className="min-h-12 rounded-lg border border-red-900/30 bg-red-900/10 text-[10px] font-bold uppercase tracking-widest text-red-700 transition-all hover:bg-red-900/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40 dark:text-red-400"
+                >
+                    <span className="flex items-center justify-center gap-2">
+                        <Trash2 size={15} aria-hidden="true" /> Vyčistit vše
+                    </span>
+                </button>
+            </div>
 
             {swapRequest && (
                 <EquipSwapModal

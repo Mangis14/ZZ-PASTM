@@ -109,7 +109,7 @@ const BottomNav = ({ activeSection, onSectionChange, hidden = false }) => {
             <nav
                 ref={barRef}
                 aria-label="Hlavní navigace"
-                className={`fixed inset-x-0 bottom-0 z-50 border-t border-fl-primary/30 bg-fl-nav/95 backdrop-blur-md transition-transform duration-200 ease-out md:hidden ${
+                className={`fl-bottom-nav fixed inset-x-0 bottom-0 z-50 border-t border-fl-primary/30 bg-fl-nav/95 backdrop-blur-md transition-transform duration-200 ease-out md:hidden ${
                     isHidden ? 'translate-y-full' : 'translate-y-0'
                 }`}
                 style={{
@@ -133,7 +133,7 @@ const BottomNav = ({ activeSection, onSectionChange, hidden = false }) => {
             {/* Tablety / na šírku / foldables: navigation rail (M3) */}
             <nav
                 aria-label="Hlavní navigace"
-                className="fixed bottom-0 left-0 z-30 hidden w-20 flex-col items-stretch justify-center gap-2 border-r border-fl-primary/30 bg-fl-nav px-1.5 md:flex"
+                className="fl-navigation-rail fixed bottom-0 left-0 z-30 hidden w-20 flex-col items-stretch justify-center gap-2 border-r border-fl-primary/30 bg-fl-nav px-1.5 md:flex"
                 style={{
                     top: 'var(--app-header-height)',
                     paddingLeft: 'max(0.375rem, var(--safe-left))',

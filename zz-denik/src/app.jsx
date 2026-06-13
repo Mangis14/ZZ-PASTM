@@ -10,7 +10,7 @@ import BottomNav from './components/layout/BottomNav';
 import MenuDrawer from './components/layout/MenuDrawer';
 import CharacterSheet from './components/CharacterSheet';
 import useDialog from './hooks/useDialog';
-import { registerBackHandler, syncSystemBars } from './native/platform';
+import { registerBackHandler, syncSystemBars, exitApp, isNativePlatform } from './native/platform';
 import { TALENTS_DATA } from './data/talents_data';
 
 /* Denník je domovská obrazovka a načítava sa hneď; ostatné sekcie
@@ -166,6 +166,7 @@ const App = () => {
   const [showRulesModal, setShowRulesModal] = useState(false);
   const [currentView, setCurrentViewRaw] = useState('sheet');
   const toastTimer = useRef(null);
+  const exitConfirmOpen = useRef(false);
 
   const [isDarkMode, setIsDarkMode] = useState(getInitialDarkMode);
 
@@ -211,16 +212,38 @@ const App = () => {
     setCurrentViewRaw(newView);
   };
 
-  // Systémové Späť na koreni aplikácie: z inej sekcie vráti na denník,
-  // z denníka nechá aplikáciu minimalizovať (Android konvencia).
+  // Systémové Späť na koreni aplikácie (keď nie je otvorený žiadny dialóg):
+  // 1. odskrolovaná stránka → najprv návrat úplne hore,
+  // 2. iná sekcia → návrat na denník,
+  // 3. denník hore → potvrdenie a úplné ukončenie aplikácie.
   const viewRef = useRef(currentView);
   viewRef.current = currentView;
   useEffect(() => registerBackHandler(() => {
+    if (window.scrollY > 10) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return true;
+    }
     if (viewRef.current !== 'sheet') {
       setCurrentViewRaw('sheet');
       return true;
     }
-    return false;
+    if (!isNativePlatform) return false;
+    if (exitConfirmOpen.current) return true;
+    exitConfirmOpen.current = true;
+    (async () => {
+      try {
+        const confirmed = await confirmAction({
+          title: 'Ukončit aplikaci?',
+          message: 'Všechny postavy jsou uložené v zařízení.',
+          confirmLabel: 'Ukončit',
+          cancelLabel: 'Zůstat'
+        });
+        if (confirmed) exitApp();
+      } finally {
+        exitConfirmOpen.current = false;
+      }
+    })();
+    return true;
   }), []);
 
   useEffect(() => {
