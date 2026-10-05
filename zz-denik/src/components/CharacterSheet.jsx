@@ -376,7 +376,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
                 <SheetBasicInfo char={char} updateField={updateField} moneyRef={refs.money} />
             </SheetTile>
 
-            <SheetTile {...tileProps('attributes')} title="Vlastnosti a stavy" icon={Sparkles} summary={`SIL ${char.attributes.strength.current}/${char.attributes.strength.max} · OBR ${char.attributes.agility.current}/${char.attributes.agility.max} · OSO ${char.attributes.empathy.current}/${char.attributes.empathy.max} · BYS ${char.attributes.wits.current}/${char.attributes.wits.max} · ${activeConditions} stavů`} innerRef={refs.attributes} tone={attributeTone}>
+            <SheetTile {...tileProps('attributes')} title="Vlastnosti a stavy" icon={Sparkles} summary={`SIL ${char.attributes.strength.current}/${char.attributes.strength.max} · OBR ${char.attributes.agility.current}/${char.attributes.agility.max} · BYS ${char.attributes.wits.current}/${char.attributes.wits.max} · OSO ${char.attributes.empathy.current}/${char.attributes.empathy.max} · ${activeConditions} stavů`} innerRef={refs.attributes} tone={attributeTone}>
                 <SheetAttributes char={char} updateField={updateField} onRoll={onRoll} />
             </SheetTile>
 

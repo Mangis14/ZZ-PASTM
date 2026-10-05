@@ -2,24 +2,30 @@ import React, { useState, useMemo } from 'react';
 import { Search, X, Plus, ChevronDown, ChevronUp, Star } from 'lucide-react';
 import { useCatalog } from '../../context/CatalogContext';
 import useDialog from '../../hooks/useDialog';
+import { KIN_TALENTS } from '../../data/kin_talents';
+import { confirmKinTalent } from '../../utils/kin';
 
 const TalentPicker = ({ char, onAdd, onClose }) => {
     const panelRef = useDialog(onClose);
     const { talents: catalogTalents } = useCatalog();
     const [searchTerm, setSearchTerm] = useState("");
-    const [activeTab, setActiveTab] = useState("profession"); // 'profession' | 'general'
+    const [activeTab, setActiveTab] = useState("profession"); // 'profession' | 'general' | 'kin'
     const [expandedTalent, setExpandedTalent] = useState(null);
 
     const filteredTalents = useMemo(() => {
-        const data = activeTab === 'profession' ? catalogTalents.profession : catalogTalents.general;
+        const data = activeTab === 'kin'
+            ? KIN_TALENTS
+            : activeTab === 'profession' ? catalogTalents.profession : catalogTalents.general;
         if (!searchTerm) return data;
         return data.filter(t =>
             t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (t.profession && t.profession.toLowerCase().includes(searchTerm.toLowerCase()))
+            (t.profession && t.profession.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (t.kin && t.kin.toLowerCase().includes(searchTerm.toLowerCase()))
         );
     }, [activeTab, catalogTalents, searchTerm]);
 
-    const handleAdd = (talent, rankIndex) => {
+    const handleAdd = async (talent, rankIndex) => {
+        if (!(await confirmKinTalent(char, talent))) return;
         onAdd({
             id: talent.id,
             name: talent.name,
@@ -84,6 +90,14 @@ const TalentPicker = ({ char, onAdd, onClose }) => {
                         >
                             Obecné
                         </button>
+                        <button
+                            role="tab"
+                            aria-selected={activeTab === 'kin'}
+                            className={`min-h-12 flex-1 font-bold uppercase text-xs rounded-lg transition-colors active:opacity-80 ${activeTab === 'kin' ? 'bg-fl-primary text-white' : 'bg-fl-paper-light text-fl-text-muted hover:bg-fl-border'}`}
+                            onClick={() => setActiveTab('kin')}
+                        >
+                            Rodové
+                        </button>
                     </div>
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fl-primary" size={18} aria-hidden="true" />
@@ -111,7 +125,7 @@ const TalentPicker = ({ char, onAdd, onClose }) => {
                             >
                                 <div>
                                     <div className="font-bold text-fl-surface">{talent.name}</div>
-                                    {talent.profession && <div className="text-[10px] uppercase text-fl-primary">{talent.profession}</div>}
+                                    {(talent.profession || talent.kin) && <div className="text-[10px] uppercase text-fl-primary">{talent.profession || `Rodový – ${talent.kin}`}</div>}
                                 </div>
                                 {expandedTalent === talent.id ? <ChevronUp size={20} className="text-fl-text-muted" /> : <ChevronDown size={20} className="text-fl-text-muted" />}
                             </button>

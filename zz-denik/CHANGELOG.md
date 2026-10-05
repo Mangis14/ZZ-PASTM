@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.8.6] - 2026-10-05
+
+### Added
+- Goods browser has a dedicated Cesta mnoha věcí (Path of Many Things) filter for ranks I–III with a willpower selector; it hides heavy items, limits categories by rank (weapons from rank II), caps the price per willpower point (silver, gold from rank III) and shows the willpower cost on every item.
+- Half-elf Duševní síla (Psychic Power) is applied automatically: the first spent willpower point counts as two, so Cesta mnoha věcí reaches e.g. 2 gold for 1 willpower.
+- Kin talents are assigned automatically from the character's kin (including feminine, Slovak and English spellings) and swapped when the kin changes.
+- New Rodové (Kin) tab in the Talents section and the talent picker; adding another kin's talent asks for confirmation.
+- Homebrew goods (marked * in the source table) show a Homebrew badge instead of an asterisk in the name.
+
+### Fixed
+- Goods catalog revision against the Czech Player's Guide (Průvodce hráče): Šavle and Trojzubec damage 2, Lehká kuše bonus +1, Velký dřevěný kyj "těžká, tupá", Hůl reaches Krátká range, missing ranges for the long bow and crossbows, wooden arrows need only a Bowyer.
+- Goods internal consistency: Kniha price above its material cost, shifted columns (Med, Palivové dřevo, Černé uhlí, Odrážecí dýka), missing weight and crafting data for Páčidlo, typos and duplicated values; corrections are skipped automatically once the Google Drive table is fixed.
+- Raw materials listed in both material tables (Železná ruda, Železo, Stříbro, Zlato) appear only once; multi-paragraph table cells no longer glue words together.
+- Kin talent names and descriptions now follow the Czech Player's Guide (Hlava žulová, Nepolapitelný, Instinkt lovce, Nezlomný, Duševní síla…); existing characters are updated on load.
+- Availability filter orders Epická after Vzácná.
+
+### Changed
+- Attribute cards are ordered Síla, Obratnost, Bystrost, Osobnost, including the tile summary.
+
 ## [1.8.5] - 2026-06-13
 
 ### Added

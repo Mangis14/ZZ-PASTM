@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { KIN_TALENT_BY_KIN } from '../data/kin_talents';
 import { X, ArrowRight, ArrowLeft, Shield, Sword, Brain, Smile, Check, Info, Dices, Search, Plus, Trash2 } from 'lucide-react';
 import { useCatalog } from '../context/CatalogContext';
 import Card from './common/Card';
@@ -22,16 +23,10 @@ const KIN_AGE_RANGES = {
   'Elf': { Dospělá: 'Vždy dospělá' }
 };
 
-const KIN_TALENT_MAP = {
-  'Člověk': { id: 'prizpusobivy', name: 'Přizpůsobivý', description: 'Umožňuje ti naučit se talenty jiných povolání nebo získat bonus ke všem hodům při plnění úkolu spojeného s učením.' },
-  'Elf': { id: 'vnitrni_klid', name: 'Vnitřní klid', description: 'Umožňuje ti meditovat a čerpat sílu přímo ze své elfí podstaty (obnova bodů vlastností bez jídla/pití).' },
-  'Trpaslík': { id: 'houzevnatost', name: 'Houževnatost', description: 'Když utrpíš poškození, které by tě vyřadilo, můžeš utratit body vůle k ignorování zranění.' },
-  'Půlelf': { id: 'magicka_sila', name: 'Magická síla', description: 'Můžeš čerpat sílu z obou svých původů a získat body vůle z cizích zdrojů.' },
-  'Půlčík': { id: 'tezko_polapitelny', name: 'Těžko polapitelný', description: 'Díky své malé výšce a mrštnosti máš bonus při úhybu v boji.' },
-  'Vlken': { id: 'divoky_lov', name: 'Divoký lov', description: 'Můžeš použít své zvířecí smysly ke stopování pachu nebo získání výhody při útoku.' },
-  'Ork': { id: 'nesmiritelny', name: 'Nesmiřitelný', description: 'Když jsi zraněný a útočíš na nepřítele, který ti zranění způsobil, tvůj útok je silnější.' },
-  'Skřet': { id: 'nocni_tvor', name: 'Noční tvor', description: 'Získáváš výhodu a lépe vidíš ve tmě a šeru, sluneční svit ti ale může překážet.' }
-};
+const KIN_TALENT_MAP = Object.fromEntries(Object.entries(KIN_TALENT_BY_KIN).map(([kin, talent]) => [
+  kin,
+  { id: talent.id, name: talent.name, description: talent.ranks[0].description }
+]));
 
 const PROF_SKILLS_MAP = {
   'Válečník': ['might', 'endurance', 'melee', 'crafting', 'move'],
@@ -541,7 +536,8 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
         name: kinTalent.name,
         rank: 1,
         description: kinTalent.description,
-        profession: ''
+        profession: '',
+        autoKin: true
       });
     }
 

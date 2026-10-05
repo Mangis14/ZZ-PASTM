@@ -4,6 +4,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import mammoth from 'mammoth';
 import * as cheerio from 'cheerio';
 import { recordImportRun } from './catalogHistory.js';
+import { goodsCorrections, goodsReviewNotes } from './goodsCorrections.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -139,7 +140,12 @@ function getRowCells($, row) {
   $(row)
     .find('td, th')
     .each((_, cell) => {
-      const text = normalizeText($(cell).text());
+      // Víc odstavců v jedné buňce mammoth slepí bez mezery („bronzHvězdný“).
+      $(cell).find('br').replaceWith(' ');
+      const paragraphs = $(cell).find('p').toArray();
+      const text = paragraphs.length > 1
+        ? normalizeText(paragraphs.map((paragraph) => normalizeText($(paragraph).text())).filter(Boolean).join(' '))
+        : normalizeText($(cell).text());
       const colspan = Number.parseInt($(cell).attr('colspan') || '1', 10);
       cells.push(text);
       for (let i = 1; i < colspan; i += 1) cells.push('');
@@ -163,14 +169,43 @@ async function readCatalogFromDisk() {
   }
 }
 
-function normalizeGoodsRow(row, config) {
-  const name = emptyToNull(row.Předmět);
-  if (!name || name === 'Předmět') return null;
+function applyGoodsCorrection(row, config, name, report) {
+  const correction = goodsCorrections[`${config.subtype}|${name}`];
+  if (!correction) return { row, name };
+
+  const corrected = { ...row };
+  const applied = [];
+  for (const [field, [from, to]] of Object.entries(correction.fields || {})) {
+    const current = normalizeText(corrected[field]);
+    if (current === normalizeText(from)) {
+      corrected[field] = to;
+      applied.push(`${field}: „${from || '–'}“ → „${to}“`);
+    } else if (current !== normalizeText(to)) {
+      report.warnings.push(`Oprava zboží ${name}/${field} přeskočena – dokument má „${current}“ místo „${from}“.`);
+    }
+  }
+
+  const nextName = correction.rename || name;
+  if (nextName !== name) applied.push(`název: „${name}“ → „${nextName}“`);
+  if (applied.length > 0) {
+    report.sources.goods.corrections.push({ item: nextName, reason: correction.reason, changes: applied });
+  }
+  return { row: corrected, name: nextName };
+}
+
+function normalizeGoodsRow(sourceRow, config, report) {
+  const sourceName = emptyToNull(sourceRow.Předmět);
+  if (!sourceName || sourceName === 'Předmět') return null;
+
+  // Hvězdička v dokumentu označuje domácí (homebrew) položky.
+  const homebrew = sourceName.startsWith('*');
+  const { row, name } = applyGoodsCorrection(sourceRow, config, sourceName.replace(/^\*\s*/, ''), report);
 
   const raw = compactObject(row);
   return {
     id: slugify(`${config.category}-${config.subtype}-${name}`),
     sourceType: 'goods',
+    homebrew: homebrew || undefined,
     category: config.category,
     subtype: config.subtype,
     name,
@@ -213,7 +248,11 @@ async function parseGoods(report, importRoot) {
     file: path.relative(rootDir, sourcePath),
     tables: tables.length,
     tableCounts: [],
+    corrections: [],
+    mergedDuplicates: [],
+    reviewNotes: goodsReviewNotes,
   };
+  const itemsByCategoryName = new Map();
 
   for (const config of goodsTables) {
     const table = tables[config.tableIndex];
@@ -232,11 +271,24 @@ async function parseGoods(report, importRoot) {
       headers.forEach((header, index) => {
         if (header) rawRow[header] = cells[index] || '';
       });
-      const item = normalizeGoodsRow(rawRow, config);
-      if (item) {
-        items.push(item);
-        count += 1;
+      const item = normalizeGoodsRow(rawRow, config, report);
+      if (!item) continue;
+
+      // Stejná surovina ve dvou tabulkách (základní i speciální) – ponecháme první
+      // a doplníme jí efekt z duplicitního řádku, aby se v seznamu neopakovala.
+      const duplicateKey = `${item.category}|${item.name.toLocaleLowerCase('cs-CZ')}`;
+      const original = itemsByCategoryName.get(duplicateKey);
+      if (original) {
+        const extra = item.effect || item.notes;
+        if (extra && extra !== original.notes && extra !== original.effect) {
+          original.notes = original.notes ? `${original.notes} ${extra}` : extra;
+        }
+        report.sources.goods.mergedDuplicates.push(`${item.category}: ${item.name} (${config.subtype})`);
+        continue;
       }
+      itemsByCategoryName.set(duplicateKey, item);
+      items.push(item);
+      count += 1;
     }
 
     report.sources.goods.tableCounts.push({
