@@ -17,6 +17,8 @@ const ARMOR_SLOTS = [
     { label: 'Štít', valueLabel: 'Bonus štítu', emptyLabel: 'Bez štítu', key: 'shield' }
 ];
 
+const FIELD_WEIGHT = 'h-11 border border-fl-border bg-fl-card px-3';
+
 const COMPACT_INPUT = 'min-h-10 w-full min-w-0 rounded-lg border border-fl-border bg-fl-card px-2 text-center text-sm font-bold text-fl-surface focus:border-fl-primary focus:outline-none';
 
 const SheetCombat = ({ char, updateDeep, innerRef, handleAddWeaponSlot, addItemToInventory, onResetFight, onEndBerserking, onReceiveFearAttack, onCoupDeGrace, onActivateBladeOption, onCombatAttack, onRoll }) => {
@@ -395,7 +397,7 @@ const SheetCombat = ({ char, updateDeep, innerRef, handleAddWeaponSlot, addItemT
                                 </div>
                                 <label className="flex shrink-0 flex-col gap-1">
                                     <span className="text-[10px] font-bold uppercase tracking-wide text-fl-primary">Váha</span>
-                                    <WeightSelect value={slot.weight} onChange={(value) => updateDeep(key, null, 'weight', value)} />
+                                    <WeightSelect value={slot.weight} onChange={(value) => updateDeep(key, null, 'weight', value)} className={FIELD_WEIGHT} />
                                 </label>
                             </div>
                         </div>
@@ -468,7 +470,7 @@ const SheetCombat = ({ char, updateDeep, innerRef, handleAddWeaponSlot, addItemT
                                         </label>
                                         <label className="flex shrink-0 flex-col gap-1">
                                             <span className="text-[10px] font-bold uppercase tracking-wide text-fl-primary">Váha</span>
-                                            <WeightSelect value={weapon.weight} onChange={(value) => updateDeep('weapons', index, 'weight', value)} />
+                                            <WeightSelect value={weapon.weight} onChange={(value) => updateDeep('weapons', index, 'weight', value)} className={FIELD_WEIGHT} />
                                         </label>
                                     </div>
                                 </>

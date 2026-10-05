@@ -182,6 +182,12 @@ body.fl-scroll-lock .fl-navigation-rail {
   display: none;
 }
 
+/* Zátěž předmětů zůstává v režimu Hra vidět, jen ji nejde měnit. */
+.sheet-game-mode .sheet-tile-content button[data-readonly-in-game] {
+  display: flex;
+  pointer-events: none;
+}
+
 .sheet-game-mode .sheet-tile-content input,
 .sheet-game-mode .sheet-tile-content select,
 .sheet-game-mode .sheet-tile-content textarea {

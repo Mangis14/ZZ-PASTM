@@ -7,7 +7,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Combat: armor, helmet, shield and weapon slots are phone-friendly cards with readable inputs; armor rating, shield bonus and weapon bonus are shown as current/MAX with a −/+ stepper (damage lowers the current value, the maximum stays for repairs).
 - Equipping from the inventory or goods stores the maximum value and a proper weapon range (Paže, Krátká, Střední, Dlouhá) instead of "Blízká" or the full property text.
-- Inventory shows each item's load as a readable value (½ lehká, 1 norm.…) plus a load bar with pack and equipped-gear totals.
+- Item load is a compact four-dot indicator (small green 0 → large red 2) everywhere; tapping it opens a minimal menu with the full names (0 · Drobná … 2 · Těžká). It stays visible, read-only, in Game mode.
+- Inventory shows each item's catalog price with a coin dot, a load bar with pack and equipped-gear totals and the total value of the pack.
+- Resources use round −/+ buttons around the supply die with a small four-step level bar.
 
 ### Fixed
 - Opacity variants of theme colors (e.g. `bg-fl-primary/10`, `bg-fl-nav/95`) were never generated, leaving tints, borders and the bottom navigation background transparent; theme colors now expose RGB channels.

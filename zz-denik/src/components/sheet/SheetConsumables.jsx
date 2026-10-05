@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CookingPot, Crosshair, Fish, Flame, Leaf, PackagePlus, Utensils, Droplets, Target, Wine, Cigarette } from 'lucide-react';
+import { CookingPot, Crosshair, Fish, Flame, Leaf, Minus, PackagePlus, Plus, Utensils, Droplets, Target, Wine, Cigarette } from 'lucide-react';
 import Card from '../common/Card';
 import SectionHeader from '../common/SectionHeader';
 import { getTalentRank } from '../../utils/talents';
@@ -21,6 +21,8 @@ const PREY_OPTIONS = [
     { name: 'Divočák', units: 3 },
     { name: 'Jelen', units: 4 }
 ];
+
+const ROUND_BUTTON = 'flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-fl-border text-fl-primary transition-all hover:border-fl-primary active:scale-90 active:bg-fl-primary/20 disabled:opacity-30 disabled:active:scale-100';
 
 const SheetConsumables = ({ char, updateField, onRoll, innerRef }) => {
     const [cookAmount, setCookAmount] = useState(1);
@@ -156,10 +158,10 @@ const SheetConsumables = ({ char, updateField, onRoll, innerRef }) => {
                                     <p className="text-sm text-fl-text-muted">{rawFood} jednotek, vařit {rawFood > 0 ? Math.min(cookAmount, rawFood) : 0}</p>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <button type="button" onClick={() => updateField('consumables.rawFood', Math.max(0, rawFood - 1))} disabled={rawFood < 1} aria-label="Ubrat surovinu" className="h-11 w-11 rounded-lg border border-fl-border font-bold text-fl-primary disabled:opacity-30">-</button>
-                                    <button type="button" onClick={() => updateField('consumables.rawFood', rawFood + 1)} aria-label="Přidat surovinu" className="h-11 w-11 rounded-lg border border-fl-primary bg-fl-primary/10 font-bold text-fl-primary">+</button>
-                                    <button type="button" onClick={() => setCookAmount(value => Math.max(1, value - 1))} disabled={cookAmount <= 1} aria-label="Vařit méně surovin" className="h-11 w-11 rounded-lg border border-fl-border font-bold text-fl-primary disabled:opacity-30">-</button>
-                                    <button type="button" onClick={() => setCookAmount(value => Math.min(6, rawFood, value + 1))} disabled={cookAmount >= Math.min(6, rawFood)} aria-label="Vařit více surovin" className="h-11 w-11 rounded-lg border border-fl-primary bg-fl-primary/10 font-bold text-fl-primary disabled:opacity-30">+</button>
+                                    <button type="button" onClick={() => updateField('consumables.rawFood', Math.max(0, rawFood - 1))} disabled={rawFood < 1} aria-label="Ubrat surovinu" className={ROUND_BUTTON}><Minus size={18} strokeWidth={2.5} /></button>
+                                    <button type="button" onClick={() => updateField('consumables.rawFood', rawFood + 1)} aria-label="Přidat surovinu" className={`${ROUND_BUTTON} border-fl-primary/60 bg-fl-primary/10`}><Plus size={18} strokeWidth={2.5} /></button>
+                                    <button type="button" onClick={() => setCookAmount(value => Math.max(1, value - 1))} disabled={cookAmount <= 1} aria-label="Vařit méně surovin" className={ROUND_BUTTON}><Minus size={18} strokeWidth={2.5} /></button>
+                                    <button type="button" onClick={() => setCookAmount(value => Math.min(6, rawFood, value + 1))} disabled={cookAmount >= Math.min(6, rawFood)} aria-label="Vařit více surovin" className={`${ROUND_BUTTON} border-fl-primary/60 bg-fl-primary/10`}><Plus size={18} strokeWidth={2.5} /></button>
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -183,27 +185,51 @@ const SheetConsumables = ({ char, updateField, onRoll, innerRef }) => {
                 </div>
             )}
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 {RESOURCE_CONFIG.map(({ label, key, icon: Icon }) => {
                     const val = char.consumables?.[key];
                     const isEmpty = !val || val === 0;
                     const isMax = val === SUPPLY_DICE[SUPPLY_DICE.length - 1];
+                    const level = isEmpty ? 0 : SUPPLY_DICE.indexOf(val);
 
                     return (
-                        <div key={key} className="rounded-2xl border border-fl-paper bg-fl-paper-bright p-3 shadow-sm">
-                            <div className="flex items-center gap-2">
-                                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-fl-paper text-fl-primary"><Icon size={18} /></div>
-                                <div className="min-w-0">
-                                    <p className="text-[11px] font-bold uppercase tracking-wider text-fl-text-muted">{label}</p>
-                                    <p className={`text-lg font-black leading-none ${getColorClass(val)}`}>{getDisplayValue(val)}</p>
-                                </div>
+                        <div key={key} className="rounded-2xl border border-fl-border bg-fl-paper-bright p-2.5 shadow-sm">
+                            <div className="mb-1.5 flex items-center gap-1.5">
+                                <Icon size={14} className="shrink-0 text-fl-primary" aria-hidden="true" />
+                                <span className="truncate text-[11px] font-bold uppercase tracking-wider text-fl-text-muted">{label}</span>
                             </div>
-                            <div className="mt-3 grid grid-cols-2 gap-2">
-                                <button type="button" onClick={() => cycleDown(key)} disabled={isEmpty} data-game-action aria-label={`Znížit zdroj ${label}`} className={`flex h-11 items-center justify-center gap-2 rounded-xl border text-sm font-bold transition-colors ${isEmpty ? 'border-fl-border bg-fl-paper text-fl-text-muted opacity-50' : 'border-fl-border bg-fl-paper text-fl-surface hover:border-fl-primary hover:text-fl-primary'}`}>
-                                    <span className="text-lg leading-none">-</span><span>Ubrat</span>
+                            <div className="flex items-center justify-between gap-1">
+                                <button
+                                    type="button"
+                                    onClick={() => cycleDown(key)}
+                                    disabled={isEmpty}
+                                    data-game-action
+                                    aria-label={`Snížit zdroj ${label}`}
+                                    className={ROUND_BUTTON}
+                                >
+                                    <Minus size={18} strokeWidth={2.5} />
                                 </button>
-                                <button type="button" onClick={() => cycleUp(key)} disabled={isMax} data-game-action aria-label={`Zvýšit zdroj ${label}`} className={`flex h-11 items-center justify-center gap-2 rounded-xl border text-sm font-bold transition-colors ${isMax ? 'border-fl-border bg-fl-paper text-fl-text-muted opacity-50' : 'border-fl-primary bg-fl-primary/10 text-fl-primary hover:bg-fl-primary hover:text-white'}`}>
-                                    <span className="text-lg leading-none">+</span><span>Přidat</span>
+                                <div className="flex min-w-0 flex-col items-center">
+                                    {isEmpty ? (
+                                        <span className="flex h-5 items-center text-[10px] font-bold uppercase tracking-wide text-fl-text-muted">Prázdné</span>
+                                    ) : (
+                                        <span className={`font-serif text-xl font-bold leading-none ${getColorClass(val)}`}>{val}</span>
+                                    )}
+                                    <span className="mt-1 flex gap-0.5" aria-hidden="true">
+                                        {SUPPLY_DICE.filter(Boolean).map((die, index) => (
+                                            <span key={die} className={`h-1 w-2.5 rounded-full ${index < level ? 'bg-fl-primary' : 'bg-fl-border'}`} />
+                                        ))}
+                                    </span>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => cycleUp(key)}
+                                    disabled={isMax}
+                                    data-game-action
+                                    aria-label={`Zvýšit zdroj ${label}`}
+                                    className={`${ROUND_BUTTON} border-fl-primary/60 bg-fl-primary/10`}
+                                >
+                                    <Plus size={18} strokeWidth={2.5} />
                                 </button>
                             </div>
                         </div>

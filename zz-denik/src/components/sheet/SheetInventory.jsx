@@ -17,6 +17,30 @@ const getItemName = (item) => item?.Předmět || item?.name || '';
 
 const formatWeight = (value) => String(Math.round((Number(value) || 0) * 10) / 10).replace('.', ',');
 
+const COPPER_PER = { gold: 100, silver: 10, copper: 1 };
+const COIN_COLORS = { gold: 'bg-[#FFD700]', silver: 'bg-gray-400', copper: 'bg-[#9E6649]' };
+
+const priceToCopper = (price) => (price?.value ? price.value * (COPPER_PER[price.currency] || 0) : 0);
+
+// Měďáky → „1 zl 2 st 5 m“ (jen nenulové mince).
+const formatCoins = (copperTotal) => {
+    const total = Math.round(copperTotal);
+    const parts = [[Math.floor(total / 100), 'zl'], [Math.floor((total % 100) / 10), 'st'], [total % 10, 'm']]
+        .filter(([amount]) => amount > 0)
+        .map(([amount, unit]) => `${amount} ${unit}`);
+    return parts.length ? parts.join(' ') : '0';
+};
+
+const PriceTag = ({ price }) => {
+    if (!price?.value) return <span className="w-11 shrink-0" aria-hidden="true" />;
+    return (
+        <span className="flex w-11 shrink-0 items-center justify-end gap-1 text-xs font-bold tabular-nums text-fl-text-muted" title="Katalogová cena">
+            {String(price.value).replace('.', ',')}
+            <span className={`h-2.5 w-2.5 rounded-full ${COIN_COLORS[price.currency] || 'bg-gray-400'}`} aria-hidden="true" />
+        </span>
+    );
+};
+
 const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, handleRemoveInventorySlot, handleClearInventory, totalWeight = 0, encumbranceLimit = 0 }) => {
     const { allItems } = useCatalog();
     const [swapRequest, setSwapRequest] = useState(null);
@@ -110,6 +134,8 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, ha
     };
 
     const packWeight = char.inventory.reduce((sum, item) => sum + (item.name?.trim() ? Number(item.weight) || 0 : 0), 0);
+    const findCatalogItem = (name) => (name ? allItems.find((candidate) => candidate.Předmět === name) : null);
+    const packValue = char.inventory.reduce((sum, item) => sum + priceToCopper(findCatalogItem(item.name?.trim())?.price), 0);
     const loadRatio = encumbranceLimit > 0 ? totalWeight / encumbranceLimit : 0;
     const isOverencumbered = encumbranceLimit > 0 && totalWeight > encumbranceLimit;
 
@@ -132,13 +158,14 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, ha
                     </div>
                     <p className="mt-1.5 text-[11px] text-fl-text-muted">
                         Batoh {formatWeight(packWeight)} · nasazená výbava {formatWeight(Math.max(0, totalWeight - packWeight))}
+                        {packValue > 0 && <> · hodnota batohu {formatCoins(packValue)}</>}
                         {isOverencumbered && <span className="font-bold text-red-600 dark:text-red-400"> · přetížení</span>}
                     </p>
                 </div>
             )}
             <div className="space-y-2">
                 {char.inventory.map((item, index) => {
-                    const dbItem = item.name ? allItems.find((candidate) => candidate.Předmět === item.name) : null;
+                    const dbItem = findCatalogItem(item.name);
                     const isEquipable = isWeaponItem(dbItem) || isArmorItem(dbItem);
 
                     return (
@@ -157,7 +184,8 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, ha
                                 }}
                             />
                             </div>
-                            <WeightSelect compact value={item.weight} onChange={(value) => updateDeep('inventory', index, 'weight', value)} className="w-[5.75rem]" />
+                            <PriceTag price={dbItem?.price} />
+                            <WeightSelect value={item.weight} onChange={(value) => updateDeep('inventory', index, 'weight', value)} />
 
                             {isEquipable && (
                                 <button
