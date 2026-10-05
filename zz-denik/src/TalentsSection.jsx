@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Search, ChevronDown, Star, Shield, Zap } from 'lucide-react';
+import { Search, ChevronDown, Star, Shield, Zap, Users } from 'lucide-react';
 import { useCatalog } from './context/CatalogContext';
+import { KIN_TALENTS } from './data/kin_talents';
+import { confirmKinTalent } from './utils/kin';
 
 const TalentCard = ({ talent, isExpanded, onToggle, knownTalent, onLearnTalent }) => {
     const maxRank = talent.ranks?.length || 1;
@@ -21,12 +23,12 @@ const TalentCard = ({ talent, isExpanded, onToggle, knownTalent, onLearnTalent }
                 className="w-full min-h-14 p-3 flex items-center justify-between text-left bg-fl-paper-light border-b border-fl-paper transition-colors hover:bg-fl-paper active:bg-fl-paper"
             >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                    <div className={`p-2 rounded-full shrink-0 ${talent.profession ? 'bg-fl-primary text-white' : 'bg-fl-border text-fl-surface'}`} aria-hidden="true">
-                        {talent.profession ? <Shield size={16} /> : <Star size={16} />}
+                    <div className={`p-2 rounded-full shrink-0 ${talent.profession || talent.kin ? 'bg-fl-primary text-white' : 'bg-fl-border text-fl-surface'}`} aria-hidden="true">
+                        {talent.kin ? <Users size={16} /> : talent.profession ? <Shield size={16} /> : <Star size={16} />}
                     </div>
                     <div className="min-w-0">
                         <h4 className="font-bold text-fl-surface uppercase tracking-wide text-sm break-words">{talent.name}</h4>
-                        {talent.profession && <span className="text-[10px] font-mono text-fl-primary uppercase">{talent.profession}</span>}
+                        {(talent.profession || talent.kin) && <span className="text-[10px] font-mono text-fl-primary uppercase">{talent.profession || `Rodový – ${talent.kin}`}</span>}
                     </div>
                 </div>
                 <span className="text-fl-primary shrink-0 ml-2" aria-hidden="true">
@@ -86,10 +88,14 @@ const TalentCard = ({ talent, isExpanded, onToggle, knownTalent, onLearnTalent }
 
 const TalentsSection = ({ char, onLearnTalent }) => {
     const { talents: catalogTalents } = useCatalog();
-    const [activeTab, setActiveTab] = useState('profession'); // 'profession' | 'general'
+    const [activeTab, setActiveTab] = useState('profession'); // 'profession' | 'general' | 'kin'
     const [search, setSearch] = useState('');
     const [expanded, setExpanded] = useState({});
     const knownTalents = Array.isArray(char?.talents) ? char.talents : [];
+
+    const handleLearnTalent = async (talent) => {
+        if (await confirmKinTalent(char, talent)) onLearnTalent(talent);
+    };
 
     const toggleExpand = (id) => {
         setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
@@ -101,18 +107,21 @@ const TalentsSection = ({ char, onLearnTalent }) => {
 
         if (!lowerSearch) {
             // No search — show only the selected tab
+            if (activeTab === 'kin') return KIN_TALENTS;
             return activeTab === 'profession' ? catalogTalents.profession : catalogTalents.general;
         }
 
         // Search active — search across BOTH profession and general
         const allTalents = [
             ...(catalogTalents.profession || []).map(t => ({ ...t, _source: 'profession' })),
-            ...(catalogTalents.general || []).map(t => ({ ...t, _source: 'general' }))
+            ...(catalogTalents.general || []).map(t => ({ ...t, _source: 'general' })),
+            ...KIN_TALENTS.map(t => ({ ...t, _source: 'kin' }))
         ];
 
         return allTalents.filter(t =>
             t.name.toLowerCase().includes(lowerSearch) ||
             (t.profession && t.profession.toLowerCase().includes(lowerSearch)) ||
+            (t.kin && t.kin.toLowerCase().includes(lowerSearch)) ||
             t.ranks.some(r => r.description.toLowerCase().includes(lowerSearch))
         );
     }, [activeTab, catalogTalents, search]);
@@ -155,6 +164,15 @@ const TalentsSection = ({ char, onLearnTalent }) => {
                     >
                         <Star size={14} aria-hidden="true" /> Obecné
                     </button>
+                    <button
+                        onClick={() => setActiveTab('kin')}
+                        role="tab"
+                        aria-selected={activeTab === 'kin'}
+                        className={`min-h-11 flex-1 text-xs font-bold uppercase tracking-wider rounded-md transition-all flex items-center justify-center gap-2 active:opacity-80
+                        ${activeTab === 'kin' ? 'bg-fl-primary text-white shadow-md' : 'text-fl-border hover:text-white'}`}
+                    >
+                        <Users size={14} aria-hidden="true" /> Rodové
+                    </button>
                 </div>
 
                 {/* Search result count */}
@@ -175,7 +193,7 @@ const TalentsSection = ({ char, onLearnTalent }) => {
                             isExpanded={expanded[talent.id]}
                             onToggle={() => toggleExpand(talent.id)}
                             knownTalent={knownTalents.find(item => item.id === talent.id)}
-                            onLearnTalent={onLearnTalent}
+                            onLearnTalent={onLearnTalent ? handleLearnTalent : undefined}
                         />
                     ))
                 ) : (

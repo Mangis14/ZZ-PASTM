@@ -20,6 +20,8 @@ Mobilný a webový denník postavy pre stolovú RPG hru Forbidden Lands / Zapov�
 - Výpočet záťaže z maximálnej Sily a bonusov talentu Soumar.
 - Odstraňovanie použitých aj prázdnych slotov inventára a potvrdené vyčistenie celého inventára.
 - Prehľad zboží s viacnásobným výberom kategórií, vyhľadávaním, filtrami, radením a uložením posledného filtra.
+- Filter talentu Cesta mnoha věcí (stupne I.–III., body vôle, Duševní síla půlelfov).
+- Automatické priradenie rodového talentu podľa rodu a záložka Rodové v talentoch.
 - Kniha kúziel s kategóriami podľa školy mágie, viacnásobným výberom škôl, filtrami stupňa a naučených kúziel.
 - Vyhľadávanie medzi naučenými kúzlami priamo v Denníku.
 - Pridávanie viacerých talentov alebo kúziel bez zatvorenia výberového okna.

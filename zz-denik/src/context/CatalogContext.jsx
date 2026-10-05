@@ -58,6 +58,7 @@ function legacyItemFromApi(item) {
   return {
     ...raw,
     Category: item.category || raw.Category,
+    homebrew: Boolean(item.homebrew),
     Předmět: item.name || raw.Předmět,
     Cena: item.price?.original || raw.Cena || '',
     price: legacyPrice(item.price, raw.price),

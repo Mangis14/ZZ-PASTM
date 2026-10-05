@@ -198,8 +198,8 @@ const SheetAttributes = ({ char, updateField, onRoll, innerRef }) => {
             <div className="grid grid-cols-1 gap-2 min-[340px]:grid-cols-2 sm:grid-cols-4">
                 <AttributeCard label="Síla" shortLabel="SIL" value={char.attributes.strength} onChange={(value) => updateField('attributes.strength', value)} onRoll={onRoll} icon={Sword} />
                 <AttributeCard label="Obrat" shortLabel="OBR" value={char.attributes.agility} onChange={(value) => updateField('attributes.agility', value)} onRoll={onRoll} icon={Anchor} />
-                <AttributeCard label="Osobnost" shortLabel="OSO" value={char.attributes.empathy} onChange={(value) => updateField('attributes.empathy', value)} onRoll={onRoll} icon={Smile} />
                 <AttributeCard label="Bystrost" shortLabel="BYS" value={char.attributes.wits} onChange={(value) => updateField('attributes.wits', value)} onRoll={onRoll} icon={Brain} />
+                <AttributeCard label="Osobnost" shortLabel="OSO" value={char.attributes.empathy} onChange={(value) => updateField('attributes.empathy', value)} onRoll={onRoll} icon={Smile} />
             </div>
 
             <section className={`rounded-lg border p-3 ${
