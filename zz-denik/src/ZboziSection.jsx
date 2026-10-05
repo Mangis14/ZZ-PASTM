@@ -5,7 +5,9 @@ import SectionHeader from './components/common/SectionHeader';
 import MoneyInput from './components/common/MoneyInput';
 import { CATEGORY_ORDER, useCatalog } from './context/CatalogContext';
 import { registerBackHandler, hapticTick } from './native/platform';
+import { calculateBargain, copperToMoney } from './utils/commerce';
 import { parseWeight } from './utils/items';
+import { getTalentRank, isHalfElf } from './utils/talents';
 import { effectiveWillpower } from './utils/kin';
 
 const ALL_CATEGORY = 'Vše';
@@ -144,9 +146,15 @@ const PriceDisplay = ({ price, cena, size = 'sm' }) => {
 };
 
 // Cart Panel Component
-const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, clearCart, addItemToInventory }) => {
+const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, clearCart, addItemToInventory, char, onBargain }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [agreedPrice, setAgreedPrice] = useState({ gold: 0, silver: 0, copper: 0 });
+    const [bargainSpent, setBargainSpent] = useState(1);
+    const [bargain, setBargain] = useState(null);
+    const treasureRank = getTalentRank(char, 'kupec-cesta-pokladu');
+    const bargainTalentName = 'Cesta pokladu';
+    const availableWillpower = Math.max(0, Number(char?.willpower) || 0);
+    const halfElf = isHalfElf(char);
 
     // Systémové Späť zatvorí rozbalený košík namiesto opustenia sekcie
     useEffect(() => {
@@ -160,6 +168,36 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
 
     const totalPrice = formatPrice(totalCopper);
     const itemCount = cart.reduce((sum, item) => sum + item.qty, 0);
+    // Sleva končí na 80 % (4 účinné body); půlelfovi k tomu stačí 3 utracené.
+    const maxBargainSpent = Math.min(availableWillpower, halfElf ? 3 : 4);
+
+    useEffect(() => {
+        if (cart.length > 0) return;
+        setAgreedPrice({ gold: 0, silver: 0, copper: 0 });
+        setBargainSpent(1);
+        setBargain(null);
+        setIsOpen(false);
+    }, [cart.length]);
+
+    useEffect(() => {
+        if (!bargain) return;
+        const nextBargain = calculateBargain({
+            totalCopper,
+            spent: bargain.spent,
+            halfElf
+        });
+        setBargain(nextBargain);
+        setAgreedPrice(copperToMoney(nextBargain.discountedCopper));
+    }, [totalCopper]);
+
+    const applyBargain = () => {
+        if (bargain || treasureRank < 1 || bargainSpent < 1 || bargainSpent > maxBargainSpent) return;
+        const nextBargain = calculateBargain({ totalCopper, spent: bargainSpent, halfElf });
+        if (!onBargain?.(nextBargain.spent, nextBargain.discountPercent, bargainTalentName)) return;
+        setBargain(nextBargain);
+        setAgreedPrice(copperToMoney(nextBargain.discountedCopper));
+        hapticTick(20);
+    };
 
     const handleCheckout = () => {
         cart.forEach(item => {
@@ -258,6 +296,52 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
                                 <PriceDisplay price={totalPrice} size="lg" />
                             </div>
                         </div>
+
+                        {treasureRank > 0 && (
+                            <div className="rounded-lg border border-fl-primary/30 bg-fl-primary/10 p-3">
+                                <div className="mb-2 flex items-center justify-between gap-3">
+                                    <div>
+                                        <p className="text-xs font-bold uppercase tracking-wider text-fl-primary">Smlouvat — {bargainTalentName}</p>
+                                        <p className="text-xs text-fl-text-muted">
+                                            1 vůle = sleva 20 %, maximálně 80 %.
+                                            {halfElf ? ' Půlelf: první bod vůle se počítá za dva.' : ''}
+                                        </p>
+                                    </div>
+                                    <span className="shrink-0 rounded-full bg-fl-paper px-3 py-1 text-xs font-bold text-fl-primary">
+                                        Vůle {availableWillpower}
+                                    </span>
+                                </div>
+                                {bargain ? (
+                                    <div className="flex items-center justify-between gap-3 rounded-lg border border-green-700/30 bg-green-900/10 p-3 text-sm">
+                                        <span className="font-bold text-green-800 dark:text-green-300">
+                                            Sleva {bargain.discountPercent} % za {bargain.spent} {bargain.spent === 1 ? 'vůli' : 'vůle'}
+                                        </span>
+                                        <PriceDisplay price={formatPrice(bargain.discountedCopper)} size="lg" />
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max={maxBargainSpent}
+                                            value={Math.min(bargainSpent, Math.max(1, maxBargainSpent))}
+                                            onChange={event => setBargainSpent(Math.max(1, Math.min(maxBargainSpent, Number(event.target.value) || 1)))}
+                                            disabled={maxBargainSpent < 1}
+                                            aria-label="Vůle utracená za smlouvání"
+                                            className="min-h-12 w-20 rounded-lg border border-fl-border bg-fl-paper-bright px-3 text-center text-lg font-bold text-fl-surface outline-none focus:border-fl-primary disabled:opacity-40"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={applyBargain}
+                                            disabled={maxBargainSpent < 1}
+                                            className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-fl-primary px-3 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-fl-primary-hover disabled:cursor-not-allowed disabled:opacity-40"
+                                        >
+                                            <HandCoins size={17} /> Použít slevu
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
                         <div className="flex flex-col gap-1">
                             <label className="text-xs text-fl-text-muted font-bold uppercase">Dohodnutá cena:</label>
@@ -425,7 +509,7 @@ const ManyThingsFilter = ({ rank, wp, characterRank, willpower, psychicPower, wp
     );
 };
 
-const ZboziSection = ({ addItemToInventory, equipItem, manyThingsCharacterRank = 0, willpower = null, psychicPower = false }) => {
+const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain, manyThingsCharacterRank = 0, willpower = null, psychicPower = false }) => {
     const { itemsByCategory, allItems } = useCatalog();
     const [initialBrowseState] = useState(loadBrowseState);
     const [search, setSearch] = useState(initialBrowseState.search);
@@ -825,7 +909,7 @@ const ZboziSection = ({ addItemToInventory, equipItem, manyThingsCharacterRank =
                                 <Filter size={16} />
                                 <span className="ml-1 hidden text-[10px] font-bold uppercase sm:inline">Další</span>
                                 {activeFilterCount > 0 && (
-                                    <span className="absolute -top-1.5 -right-1.5 bg-red-600 border border-white text-white text-[9px] font-bold min-w-4 h-4 px-1 flex items-center justify-center rounded-full leading-none">
+                                    <span className="absolute -top-1.5 -right-1.5 bg-red-600 border border-white text-white text-[10px] font-bold min-w-4 h-4 px-1 flex items-center justify-center rounded-full leading-none">
                                         {activeFilterCount}
                                     </span>
                                 )}
@@ -1102,6 +1186,8 @@ const ZboziSection = ({ addItemToInventory, equipItem, manyThingsCharacterRank =
                 completelyRemoveCart={completelyRemoveCart}
                 clearCart={clearCart}
                 addItemToInventory={addItemToInventory}
+                char={char}
+                onBargain={onBargain}
             />
         </section>
     );

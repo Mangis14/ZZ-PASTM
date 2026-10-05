@@ -35,9 +35,15 @@ const Stepper = ({ value, onDecrement, onIncrement, decrementLabel, incrementLab
 
 const DiceRollerModal = ({ initialRoll, onClose }) => {
     const panelRef = useDialog(onClose);
-    const [counts, setCounts] = useState(() => {
-        return initialRoll ? { ...initialRoll, d8: 0, d10: 0, d12: 0 } : { base: 0, skill: 0, gear: 0, d8: 0, d10: 0, d12: 0 };
+    const getInitialCounts = (roll) => ({
+        base: Math.max(0, Number(roll?.base) || 0),
+        skill: Math.max(0, Number(roll?.skill) || 0),
+        gear: Math.max(0, Number(roll?.gear) || 0),
+        d8: Math.max(0, Number(roll?.d8) || 0),
+        d10: Math.max(0, Number(roll?.d10) || 0),
+        d12: Math.max(0, Number(roll?.d12) || 0)
     });
+    const [counts, setCounts] = useState(() => getInitialCounts(initialRoll));
     const [results, setResults] = useState(null);
     const [isRolling, setIsRolling] = useState(false);
     const [canPush, setCanPush] = useState(false);
@@ -75,7 +81,7 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
 
     React.useEffect(() => {
         if (initialRoll) {
-            executeRoll({ ...initialRoll, d8: 0, d10: 0, d12: 0 });
+            executeRoll(getInitialCounts(initialRoll));
         }
     }, [initialRoll]);
 
@@ -114,6 +120,12 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
     const countBanes = (type) => {
         if (!results || !results[type]) return 0;
         return results[type].filter(d => d.val === 1).length;
+    };
+
+    const resolveRoll = () => {
+        if (!results || !initialRoll?.onResolve) return;
+        initialRoll.onResolve(countSuccesses(), results);
+        onClose();
     };
 
     // Komponent pre zobrazenie kocky (podľa obrázka)
@@ -186,8 +198,13 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
                     <X size={24} />
                 </button>
                 <h3 className="font-serif text-2xl font-bold uppercase text-center mb-4 text-fl-surface border-b-2 border-fl-primary pb-2 flex items-center justify-center gap-2">
-                    <Dices aria-hidden="true" /> Hod Kostkami
+                    <Dices aria-hidden="true" /> {initialRoll?.title || 'Hod Kostkami'}
                 </h3>
+                {initialRoll?.description && (
+                    <p className="mb-4 rounded-lg border border-fl-border bg-fl-paper p-3 text-sm text-fl-surface-hover">
+                        {initialRoll.description}
+                    </p>
+                )}
 
                 <div className="grid grid-cols-3 gap-3 mb-5">
                     {[
@@ -280,6 +297,15 @@ const DiceRollerModal = ({ initialRoll, onClose }) => {
                         </div>
                     )}
                 </div>
+                {results && initialRoll?.onResolve && !isRolling && (
+                    <button
+                        type="button"
+                        onClick={resolveRoll}
+                        className="mt-4 flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-fl-primary font-bold uppercase tracking-wider text-white shadow-lg transition-colors hover:bg-fl-primary-hover active:scale-[0.98]"
+                    >
+                        <Sword size={18} /> {initialRoll.resolveLabel || `Použít ${countSuccesses()} úspěchů`}
+                    </button>
+                )}
             </div>
         </div>
     );

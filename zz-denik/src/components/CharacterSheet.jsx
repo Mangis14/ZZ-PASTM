@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Backpack, Flame, Gamepad2, LayoutDashboard, Maximize2, Minimize2, RotateCcw, Scroll, Settings2, Shield, Skull, Sparkles, Star, Sword, UserRound, Wand2 } from 'lucide-react';
+import { Backpack, Flame, Gamepad2, LayoutDashboard, Maximize2, Minimize2, RotateCcw, Scroll, Settings2, Shield, Skull, Sparkles, Star, Sunrise, Sword, UserRound, Wand2 } from 'lucide-react';
 import SheetTile from './common/SheetTile';
 
 // Imported Sections
@@ -68,7 +68,7 @@ const loadSheetLayout = (characterId) => {
     }
 };
 
-const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, removeInventorySlot, onRoll, refs, scrollToSection, setCurrentView, onModalStateChange, totalWeight, encumbranceLimit, isOverencumbered }) => {
+const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, removeInventorySlot, onRoll, refs, scrollToSection, setCurrentView, onModalStateChange, onApplyTalentAction, onResetFight, onAdvanceQuarterDay, onTalentRankChanged, onEndBerserking, onReceiveFearAttack, onCoupDeGrace, onOpenCriticalTable, onActivateBladeOption, onCombatAttack, totalWeight, encumbranceLimit, isOverencumbered }) => {
     const { talents: catalogTalents } = useCatalog();
     const [layout, setLayout] = useState(() => loadSheetLayout(char.id));
     const [customizing, setCustomizing] = useState(false);
@@ -215,8 +215,9 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
 
     const handleRemoveTalent = (index) => {
         const newTalents = [...(char.talents || [])];
-        newTalents.splice(index, 1);
+        const [removedTalent] = newTalents.splice(index, 1);
         updateField('talents', newTalents);
+        if (removedTalent?.id) onTalentRankChanged?.(removedTalent.id, 0);
     };
 
     const handleUpgradeTalent = (talent) => {
@@ -244,6 +245,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
             t.id === talent.id ? { ...t, rank: prevRank, description: rankData?.description || t.description } : t
         );
         updateField('talents', newTalents);
+        onTalentRankChanged?.(talent.id, prevRank);
     };
 
     const handleShowFullTalent = (talent) => {
@@ -282,7 +284,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
             danger: true
         });
         if (!confirmed) return;
-        updateField('inventory', char.inventory.map(() => ({ name: '', weight: 1 })));
+        updateField('inventory', char.inventory.map(() => ({ name: '', weight: 1, qty: 1 })));
     };
 
     const handleAddWeaponSlot = () => {
@@ -293,14 +295,15 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
         updateField('weapons', newWeapons);
     };
 
-    const filledInventory = (char.inventory || []).filter(item => item.name?.trim()).length;
+    const filledInventory = (char.inventory || []).reduce((sum, item) => sum + (item.name?.trim() ? Math.max(1, Number(item.qty) || 1) : 0), 0);
     const equippedWeapons = (char.weapons || []).filter(item => item.name?.trim()).length;
     const activeConditions = Object.values(char.conditions || {}).filter(Boolean).length;
     const attributes = Object.values(char.attributes || {});
     const damagedAttributes = attributes.filter(attribute => Number(attribute.current) < Number(attribute.max)).length;
     const depletedAttributes = attributes.filter(attribute => Number(attribute.max) > 0 && Number(attribute.current) <= 0).length;
     const developedSkills = Object.values(char.skills || {}).filter(value => Number(value) > 0).length;
-    const activeResources = Object.values(char.consumables || {}).filter(Boolean).length;
+    const activeResources = ['food', 'water', 'arrows', 'torches', 'alcohol', 'tobacco']
+        .filter(key => Boolean(char.consumables?.[key])).length;
     const criticalCount = (char.criticalInjuries || []).length;
     const mountCount = (char.mounts || []).length;
     const talentCount = (char.talents || []).length;
@@ -311,7 +314,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
 
     return (
         <div className={`grid grid-cols-1 items-start gap-3 lg:grid-cols-2 ${layout.gameMode ? 'sheet-game-mode' : ''} ${customizing ? 'select-none' : ''}`}>
-            <div className="order-[-2] grid grid-cols-2 gap-2 rounded-lg border border-fl-paper bg-fl-card p-2 shadow-sm min-[380px]:grid-cols-4 lg:col-span-2">
+            <div className="order-[-2] grid grid-cols-3 gap-2 rounded-lg border border-fl-paper bg-fl-card p-2 shadow-sm min-[520px]:grid-cols-5 lg:col-span-2">
                 <button
                     type="button"
                     onClick={applyPreferredOverview}
@@ -338,6 +341,16 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
                 >
                     {DEFAULT_TILE_ORDER.every(id => layout.collapsed[id]) ? <Maximize2 size={15} aria-hidden="true" /> : <Minimize2 size={15} aria-hidden="true" />}
                     {DEFAULT_TILE_ORDER.every(id => layout.collapsed[id]) ? 'Rozbalit vše' : 'Zbalit vše'}
+                </button>
+                <button
+                    type="button"
+                    onClick={() => onAdvanceQuarterDay?.()}
+                    title="Další čtvrtden"
+                    aria-label="Další čtvrtden"
+                    className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-md px-2 text-[10px] font-bold uppercase tracking-wide text-fl-text-muted transition-colors hover:bg-fl-paper hover:text-fl-primary active:bg-fl-paper"
+                >
+                    <Sunrise size={15} aria-hidden="true" />
+                    Další čtvrtden
                 </button>
                 <button
                     type="button"
@@ -381,7 +394,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
             </SheetTile>
 
             <SheetTile {...tileProps('criticals')} title="Kritická zranění" icon={Skull} summary={criticalCount === 0 ? 'Žádná kritická zranění' : `${criticalCount} aktivní zranění`} tone={criticalCount > 0 ? 'danger' : 'default'}>
-                <SheetCriticals char={char} updateField={updateField} updateDeep={updateDeep} />
+                <SheetCriticals char={char} updateField={updateField} updateDeep={updateDeep} onOpenCriticalTable={onOpenCriticalTable} />
             </SheetTile>
 
             <SheetTile {...tileProps('skills')} title="Dovednosti" icon={Star} summary={`${developedSkills} rozvinutých dovedností`} innerRef={refs.skills}>
@@ -389,11 +402,23 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
             </SheetTile>
 
             <SheetTile {...tileProps('combat')} title="Boj" icon={Sword} summary={`${equippedWeapons} zbraně · Zbroj ${char.armor.rating || 0} · Štít ${char.shield.rating || 0}`} innerRef={refs.combat}>
-                <SheetCombat char={char} updateDeep={updateDeep} handleAddWeaponSlot={handleAddWeaponSlot} addItemToInventory={addItemToInventory} />
+                <SheetCombat
+                    char={char}
+                    updateDeep={updateDeep}
+                    handleAddWeaponSlot={handleAddWeaponSlot}
+                    addItemToInventory={addItemToInventory}
+                    onResetFight={onResetFight}
+                    onEndBerserking={onEndBerserking}
+                    onReceiveFearAttack={onReceiveFearAttack}
+                    onCoupDeGrace={onCoupDeGrace}
+                    onActivateBladeOption={onActivateBladeOption}
+                    onCombatAttack={onCombatAttack}
+                    onRoll={onRoll}
+                />
             </SheetTile>
 
             <SheetTile {...tileProps('inventory')} title="Inventář" icon={Backpack} summary={`Zátěž ${totalWeight}/${encumbranceLimit} · ${filledInventory} předmětů · ${char.inventory.length} slotů`} innerRef={refs.inventory} tone={inventoryTone}>
-                <SheetInventory char={char} updateDeep={updateDeep} handleAddInventorySlot={handleAddInventorySlot} handleRemoveInventorySlot={removeInventorySlot} handleClearInventory={handleClearInventory} />
+                <SheetInventory char={char} updateDeep={updateDeep} handleAddInventorySlot={handleAddInventorySlot} handleRemoveInventorySlot={removeInventorySlot} handleClearInventory={handleClearInventory} totalWeight={totalWeight} encumbranceLimit={encumbranceLimit} addItemToInventory={addItemToInventory} />
             </SheetTile>
 
             <SheetTile {...tileProps('mounts')} title="Zvířata a sluhové" icon={Shield} summary={mountCount === 0 ? 'Žádná zvířata ani sluhové' : `${mountCount} záznamů`}>
@@ -401,18 +426,20 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
             </SheetTile>
 
             <SheetTile {...tileProps('resources')} title="Zdroje" icon={Flame} summary={`${activeResources} z 6 zdrojů aktivních`} innerRef={refs.consumables}>
-                <SheetConsumables char={char} updateField={updateField} />
+                <SheetConsumables char={char} updateField={updateField} onRoll={onRoll} />
             </SheetTile>
 
             <SheetTile {...tileProps('talents')} title="Talenty" icon={Star} summary={`${talentCount} naučených talentů`} innerRef={refs.talents}>
                 <TalentList
                     talents={Array.isArray(char.talents) ? char.talents : []}
+                    char={char}
                     onRemove={handleRemoveTalent}
                     onOpenPicker={() => setShowTalentPicker(true)}
                     onUpgrade={handleUpgradeTalent}
                     onDowngrade={handleDowngradeTalent}
                     onShowFullTalent={handleShowFullTalent}
                     onDetailOpenChange={setIsTalentDetailOpen}
+                    onApplyAction={onApplyTalentAction}
                 />
                 {showTalentPicker && (
                     <TalentPicker

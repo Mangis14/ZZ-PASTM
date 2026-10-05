@@ -1,11 +1,14 @@
 import React, { useMemo } from 'react';
-import { X, Info, Plus, Minus } from 'lucide-react';
+import { X, Info, Plus, Minus, Sparkles } from 'lucide-react';
 import { useCatalog } from '../../context/CatalogContext';
 import useDialog from '../../hooks/useDialog';
+import TalentActionModal from './TalentActionModal';
+import { getTalentActions } from '../../utils/talents';
 
-const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull }) => {
+const TalentDetailPopup = ({ talent, char, onClose, onUpgrade, onDowngrade, onShowFull, onApplyAction }) => {
     const panelRef = useDialog(onClose);
     const { talents: catalogTalents } = useCatalog();
+    const [showAction, setShowAction] = React.useState(false);
 
     // Find the full talent data to show all rank descriptions
     const fullTalent = useMemo(() => {
@@ -16,6 +19,9 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
     const maxRank = fullTalent ? fullTalent.ranks.length : talent.rank;
     const canUpgrade = talent.rank < maxRank;
     const canDowngrade = talent.rank > 1;
+    const talentActions = getTalentActions(talent);
+    const canUseAction = talentActions.length > 0;
+    const canUseWithoutWillpower = talentActions.some(action => action.requiresWillpower === false);
 
     return (
         <div
@@ -97,6 +103,20 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
                 </div>
 
                 {/* Actions */}
+                {canUseAction && (
+                    <div className="px-4 pb-4">
+                        <button
+                            type="button"
+                            onClick={() => setShowAction(true)}
+                            disabled={!canUseWithoutWillpower && (Number(char?.willpower) || 0) < 1}
+                            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border border-fl-primary bg-fl-primary font-bold uppercase tracking-wider text-white transition-colors hover:bg-fl-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                            <Sparkles size={16} aria-hidden="true" /> Použít talent
+                        </button>
+                    </div>
+                )}
+
+                {/* Actions */}
                 <div className="px-4 pb-4 flex gap-2">
                     <button
                         onClick={() => canDowngrade && onDowngrade(talent)}
@@ -132,6 +152,14 @@ const TalentDetailPopup = ({ talent, onClose, onUpgrade, onDowngrade, onShowFull
                     </div>
                 )}
             </div>
+            {showAction && (
+                <TalentActionModal
+                    talent={talent}
+                    char={char}
+                    onApply={onApplyAction}
+                    onClose={() => setShowAction(false)}
+                />
+            )}
         </div>
     );
 };

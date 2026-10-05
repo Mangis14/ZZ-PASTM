@@ -92,6 +92,46 @@ function groupApiItems(items = []) {
   return grouped;
 }
 
+function mergeTalentCatalog(importedTalents = {}, fallbackTalents = TALENTS_DATA) {
+  const normalizedName = (talent) => String(talent?.name || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLocaleLowerCase('cs')
+    .trim();
+
+  const mergeCategory = (category) => {
+    const imported = Array.isArray(importedTalents?.[category]) ? importedTalents[category] : [];
+    const fallback = Array.isArray(fallbackTalents?.[category]) ? fallbackTalents[category] : [];
+    const fallbackById = new Map(fallback.map((talent) => [talent.id, talent]));
+    const importedIds = new Set(imported.map((talent) => talent.id));
+    const importedNames = new Set(imported.map(normalizedName));
+
+    return [
+      ...imported.map((talent) => {
+        const localTalent = fallbackById.get(talent.id);
+        if (!localTalent) return talent;
+
+        return {
+          ...localTalent,
+          ...talent,
+          description: talent.description || localTalent.description,
+          ranks: Array.isArray(talent.ranks) && talent.ranks.length > 0
+            ? talent.ranks
+            : localTalent.ranks,
+        };
+      }),
+      ...fallback.filter((talent) => (
+        !importedIds.has(talent.id) && !importedNames.has(normalizedName(talent))
+      )),
+    ];
+  };
+
+  return {
+    profession: mergeCategory('profession'),
+    general: mergeCategory('general'),
+  };
+}
+
 function createCatalogFromApi(payload, extra = {}) {
   const itemsByCategory = groupApiItems(payload.items);
 
@@ -104,7 +144,7 @@ function createCatalogFromApi(payload, extra = {}) {
     generatedAt: payload.generatedAt || null,
     itemsByCategory,
     allItems: buildAllItems(itemsByCategory),
-    talents: payload.talents || TALENTS_DATA,
+    talents: mergeTalentCatalog(payload.talents),
     spells: payload.spells || SPELLS_DATA,
     professions: payload.professions || [],
     report: payload.report || null,

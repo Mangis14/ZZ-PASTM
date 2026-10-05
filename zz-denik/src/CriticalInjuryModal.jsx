@@ -1,16 +1,81 @@
-import React, { useState } from 'react';
-import { Skull, Activity, X, Sword, Hammer, Ghost, ShieldAlert, BookmarkPlus, Check } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Activity, BookmarkPlus, Check, Ghost, Hammer, RefreshCcw, ShieldAlert, Skull, Sword, X } from 'lucide-react';
 import { CRIT_TABLES } from './data/crit_tables';
 import useDialog from './hooks/useDialog';
 import { hapticTick } from './native/platform';
 
-const CriticalInjuryModal = ({ onClose, onSaveInjury }) => {
+const rollD66 = () => (Math.floor(Math.random() * 6) + 1) * 10 + Math.floor(Math.random() * 6) + 1;
+
+const CriticalInjuryModal = ({ char, onClose, onSaveInjury, onUseLuck }) => {
     const panelRef = useDialog(onClose);
     const [selectedType, setSelectedType] = useState(null);
     const [isRolling, setIsRolling] = useState(false);
-    const [loadingText, setLoadingText] = useState("");
     const [result, setResult] = useState(null);
+    const [choices, setChoices] = useState([]);
     const [savedToJournal, setSavedToJournal] = useState(false);
+    const [luckApplied, setLuckApplied] = useState(false);
+    const [resultCanUseSwap, setResultCanUseSwap] = useState(false);
+    const [manualSearch, setManualSearch] = useState('');
+
+    const luckyTalent = useMemo(
+        () => (Array.isArray(char?.talents) ? char.talents : []).find(talent => talent.id === 'stastlivec'),
+        [char?.talents]
+    );
+    const luckyRank = Number(luckyTalent?.rank || 0);
+    const luckAvailable = luckyRank > 0 && !char?.luckUsedThisQuarterDay;
+
+    const getInjury = (type, roll) => {
+        const injury = CRIT_TABLES[type]?.ranges.find(range => roll >= range.min && roll <= range.max);
+        return injury ? { roll, ...injury } : null;
+    };
+
+    const consumeLuck = () => {
+        if (luckApplied) return;
+        setLuckApplied(true);
+        onUseLuck?.();
+    };
+
+    const finishRoll = (useLuck) => {
+        const first = getInjury(selectedType, rollD66());
+        if (useLuck) {
+            const second = getInjury(selectedType, rollD66());
+            setChoices([first, second].filter(Boolean));
+            consumeLuck();
+        } else {
+            setResult(first);
+            setResultCanUseSwap(luckyRank >= 2 && luckAvailable);
+        }
+        setIsRolling(false);
+        hapticTick(40);
+    };
+
+    const handleRoll = (useLuck = false) => {
+        if (!selectedType || isRolling) return;
+        setIsRolling(true);
+        setResult(null);
+        setChoices([]);
+        setSavedToJournal(false);
+        window.setTimeout(() => finishRoll(useLuck), 700);
+    };
+
+    const selectResult = (injury, usesLuck = false) => {
+        setResult(injury);
+        setChoices([]);
+        setSavedToJournal(false);
+        setResultCanUseSwap(luckyRank >= 2 && (usesLuck || luckAvailable));
+        if (usesLuck) consumeLuck();
+    };
+
+    const swapDigits = () => {
+        if (!result || !resultCanUseSwap) return;
+        const swappedRoll = (result.roll % 10) * 10 + Math.floor(result.roll / 10);
+        const swapped = getInjury(selectedType, swappedRoll);
+        if (!swapped) return;
+        setResult(swapped);
+        setSavedToJournal(false);
+        setResultCanUseSwap(false);
+        consumeLuck();
+    };
 
     const handleSaveToJournal = () => {
         if (!result || !onSaveInjury || savedToJournal) return;
@@ -23,39 +88,20 @@ const CriticalInjuryModal = ({ onClose, onSaveInjury }) => {
         setSavedToJournal(true);
     };
 
-    const handleRoll = () => {
-        if (!selectedType) return;
-        setIsRolling(true);
-        setLoadingText("");
+    const resetRoll = () => {
         setResult(null);
+        setChoices([]);
+        setSelectedType(null);
         setSavedToJournal(false);
-
-        const text = "Obdržel si zranění...";
-        let i = 0;
-
-        // Typing effect
-        const typeInterval = setInterval(() => {
-            setLoadingText(text.substring(0, i + 1));
-            i++;
-            if (i > text.length) clearInterval(typeInterval);
-        }, 100);
-
-        setTimeout(() => {
-            // Roll d66 (11-66)
-            const d1 = Math.floor(Math.random() * 6) + 1;
-            const d2 = Math.floor(Math.random() * 6) + 1;
-            const roll = d1 * 10 + d2;
-
-            const table = CRIT_TABLES[selectedType];
-            // Find the range that includes the roll
-            // Ranges are like { min: 11, max: 12, ... }
-            const injury = table.ranges.find(r => roll >= r.min && roll <= r.max);
-
-            setResult({ roll, ...injury });
-            setIsRolling(false);
-            hapticTick(40);
-        }, 5000); // 5 seconds delay
+        setResultCanUseSwap(false);
+        setManualSearch('');
     };
+
+    const manualChoices = selectedType
+        ? CRIT_TABLES[selectedType].ranges.filter(injury =>
+            !manualSearch.trim() || injury.effect.toLocaleLowerCase('cs-CZ').includes(manualSearch.toLocaleLowerCase('cs-CZ').trim())
+        )
+        : [];
 
     const types = [
         { id: 'slash', label: 'Řezná', icon: Sword, color: 'text-red-600', border: 'border-red-600' },
@@ -65,126 +111,119 @@ const CriticalInjuryModal = ({ onClose, onSaveInjury }) => {
     ];
 
     return (
-        <div
-            className="fixed inset-0 z-50 flex items-end justify-center bg-black/90 backdrop-blur-sm animate-in fade-in duration-200 sm:items-center sm:p-4"
-            style={{ paddingTop: 'calc(var(--safe-top) + 1rem)' }}
-            onClick={onClose}
-        >
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/90 backdrop-blur-sm sm:items-center sm:p-4" style={{ paddingTop: 'calc(var(--safe-top) + 1rem)' }} onClick={onClose}>
             <div
                 ref={panelRef}
                 tabIndex={-1}
                 role="dialog"
                 aria-modal="true"
                 aria-label="Kritické zranění"
-                className="relative flex max-h-full min-h-[400px] w-full max-w-lg flex-col overflow-y-auto overscroll-contain rounded-t-3xl border-2 border-b-0 border-fl-primary bg-fl-card p-6 shadow-2xl outline-none animate-in fade-in slide-in-from-bottom-8 duration-300 sm:rounded-2xl sm:border-b-2 sm:slide-in-from-bottom-0 sm:zoom-in-95 sm:duration-200"
+                className="relative flex max-h-full min-h-[400px] w-full max-w-lg flex-col overflow-y-auto rounded-t-3xl border-2 border-b-0 border-fl-primary bg-fl-card p-6 shadow-2xl outline-none sm:rounded-2xl sm:border-b-2"
                 style={{ paddingBottom: 'max(1.5rem, var(--safe-bottom))' }}
-                onClick={e => e.stopPropagation()}
+                onClick={event => event.stopPropagation()}
             >
-                <div className="absolute left-1/2 top-2 h-1 w-10 -translate-x-1/2 rounded-full bg-fl-border sm:hidden" aria-hidden="true" />
-                <button
-                    onClick={onClose}
-                    aria-label="Zavřít"
-                    className="absolute right-2 top-2 flex h-12 w-12 items-center justify-center rounded-full text-fl-primary transition-colors hover:bg-fl-paper hover:text-red-600 active:bg-fl-paper"
-                >
+                <button onClick={onClose} aria-label="Zavřít" className="absolute right-2 top-2 flex h-12 w-12 items-center justify-center rounded-full text-fl-primary hover:bg-fl-paper">
                     <X size={24} />
                 </button>
-
-                <h3 className="font-serif text-2xl font-bold uppercase text-center mb-6 text-fl-surface border-b-2 border-fl-primary pb-2 flex items-center justify-center gap-2">
-                    <Skull className="text-red-800 dark:text-red-400" /> Kritické Zranění
+                <h3 className="mb-4 flex items-center justify-center gap-2 border-b-2 border-fl-primary pb-2 text-center font-serif text-2xl font-bold uppercase text-fl-surface">
+                    <Skull className="text-red-800 dark:text-red-400" /> Kritické zranění
                 </h3>
 
-                {!isRolling && !result && (
-                    <div className="flex-1 flex flex-col gap-6">
+                {luckyRank > 0 && (
+                    <div className={`mb-4 rounded-lg border p-3 text-sm ${luckAvailable ? 'border-fl-primary bg-fl-paper text-fl-surface' : 'border-fl-border bg-fl-paper/50 text-fl-text-muted'}`}>
+                        <strong>Šťastlivec {luckyRank}:</strong> {luckAvailable ? 'připraven k použití' : 'už byl tento čtvrtden použit'}
+                    </div>
+                )}
+
+                {!isRolling && !result && choices.length === 0 && (
+                    <div className="flex flex-col gap-4">
                         <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label="Typ zranění">
-                            {types.map(t => (
+                            {types.map(type => (
                                 <button
-                                    key={t.id}
-                                    onClick={() => setSelectedType(t.id)}
+                                    key={type.id}
+                                    onClick={() => setSelectedType(type.id)}
                                     role="radio"
-                                    aria-checked={selectedType === t.id}
-                                    className={`flex min-h-24 flex-col items-center justify-center gap-2 rounded-xl border-2 p-4 transition-all hover:bg-fl-paper hover:shadow-md active:scale-[0.97]
-                    ${selectedType === t.id ? `${t.border} bg-fl-paper shadow-lg` : 'border-fl-border bg-fl-paper-bright opacity-80 hover:opacity-100'}`}
+                                    aria-checked={selectedType === type.id}
+                                    className={`flex min-h-20 flex-col items-center justify-center gap-1 rounded-xl border-2 p-3 transition-all hover:bg-fl-paper active:scale-[0.97] ${selectedType === type.id ? `${type.border} bg-fl-paper shadow-lg` : 'border-fl-border bg-fl-paper-bright'}`}
                                 >
-                                    <t.icon size={32} className={t.color} aria-hidden="true" />
-                                    <span className={`font-bold uppercase tracking-wider ${t.color}`}>{t.label}</span>
+                                    <type.icon size={28} className={type.color} />
+                                    <span className={`font-bold uppercase tracking-wider ${type.color}`}>{type.label}</span>
                                 </button>
                             ))}
                         </div>
-
-                        <button
-                            onClick={handleRoll}
-                            disabled={!selectedType}
-                            className={`w-full min-h-14 rounded-xl font-bold uppercase tracking-widest text-lg shadow-lg transition-all
-                ${selectedType
-                                    ? 'bg-fl-primary text-white hover:bg-fl-primary-hover active:scale-[0.98]'
-                                    : 'bg-fl-border text-fl-text-muted cursor-not-allowed opacity-60'}`}
-                        >
-                            {selectedType ? 'Hodit na tabulku' : 'Nejdřív zvolte typ zranění'}
+                        <button onClick={() => handleRoll(false)} disabled={!selectedType} className="min-h-12 w-full rounded-xl bg-fl-nav font-bold uppercase tracking-wider text-white hover:bg-fl-nav-hover disabled:opacity-50">
+                            Hodit normálně
                         </button>
+                        {luckAvailable && luckyRank >= 1 && (
+                            <button onClick={() => handleRoll(true)} disabled={!selectedType} className="min-h-12 w-full rounded-xl bg-fl-primary font-bold uppercase tracking-wider text-white hover:bg-fl-primary-hover disabled:opacity-50">
+                                Použít štěstí: hodit 2x
+                            </button>
+                        )}
+                        {luckAvailable && luckyRank >= 3 && selectedType && (
+                            <div className="rounded-xl border border-fl-primary bg-fl-paper p-3">
+                                <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-fl-primary">Libovolný výběr</label>
+                                <input
+                                    type="search"
+                                    value={manualSearch}
+                                    onChange={event => setManualSearch(event.target.value)}
+                                    placeholder="Hledat zranění..."
+                                    className="mb-2 min-h-11 w-full rounded-lg border border-fl-border bg-fl-paper-bright px-3 text-fl-surface outline-none focus:border-fl-primary"
+                                />
+                                <div className="max-h-52 space-y-1 overflow-y-auto">
+                                    {manualChoices.map(injury => (
+                                        <button key={`${injury.min}-${injury.max}`} onClick={() => selectResult({ roll: injury.min, ...injury }, true)} className="w-full rounded-md border border-fl-border bg-fl-paper-bright p-2 text-left text-sm font-bold text-fl-surface hover:border-fl-primary">
+                                            {injury.effect} <span className="text-xs font-normal text-fl-text-muted">({injury.min}{injury.max !== injury.min ? `-${injury.max}` : ''})</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
                 {isRolling && (
-                    <div className="flex-1 flex flex-col items-center justify-center text-center animate-in fade-in duration-500" role="status">
-                        <Activity size={64} className="text-red-800 dark:text-red-400 animate-pulse mb-6" aria-hidden="true" />
-                        <h2 className="font-serif text-3xl font-bold text-fl-surface mb-2 min-h-[2.5rem]">
-                            {loadingText}
-                        </h2>
-                        <p className="text-fl-primary italic animate-pulse">Osud se rozhoduje...</p>
+                    <div className="flex flex-1 flex-col items-center justify-center py-16 text-center" role="status">
+                        <Activity size={64} className="mb-5 animate-pulse text-red-800 dark:text-red-400" />
+                        <h2 className="font-serif text-2xl font-bold text-fl-surface">Osud se rozhoduje...</h2>
+                    </div>
+                )}
+
+                {choices.length > 0 && (
+                    <div>
+                        <h4 className="mb-3 text-center font-bold uppercase tracking-wider text-fl-primary">Vyber výsledek</h4>
+                        <div className="grid gap-3 sm:grid-cols-2">
+                            {choices.map((choice, index) => (
+                                <button key={`${choice.roll}-${index}`} onClick={() => selectResult(choice, true)} className="rounded-xl border-2 border-fl-border bg-fl-paper-bright p-4 text-left hover:border-fl-primary">
+                                    <span className="block text-3xl font-black text-fl-surface">{choice.roll}</span>
+                                    <span className="font-serif font-bold text-red-800 dark:text-red-400">{choice.effect}</span>
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 )}
 
                 {result && (
-                    <div className="flex-1 flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-300">
-                        <div className="text-center border-b border-fl-border pb-4">
-                            <span className="text-4xl font-black text-fl-surface block mb-1">{result.roll}</span>
-                            <h2 className="font-serif text-2xl font-bold text-red-800 dark:text-red-400 uppercase">{result.effect}</h2>
+                    <div className="flex flex-1 flex-col gap-4">
+                        <div className="border-b border-fl-border pb-4 text-center">
+                            <span className="mb-1 block text-4xl font-black text-fl-surface">{result.roll}</span>
+                            <h2 className="font-serif text-2xl font-bold uppercase text-red-800 dark:text-red-400">{result.effect}</h2>
                         </div>
-
                         <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div className="bg-fl-paper p-3 rounded">
-                                <span className="block text-[10px] font-bold uppercase text-fl-primary mb-1">Smrtelnost</span>
-                                <span className={`font-bold ${result.lethal === 'Ne' ? 'text-green-700' : 'text-red-700'}`}>
-                                    {result.lethal}
-                                </span>
-                                {result.limit && <span className="text-xs block text-red-600">({result.limit})</span>}
-                            </div>
-                            <div className="bg-fl-paper p-3 rounded">
-                                <span className="block text-[10px] font-bold uppercase text-fl-primary mb-1">Léčení</span>
-                                <span className="font-bold text-fl-surface">{result.heal}</span>
-                            </div>
+                            <div className="rounded bg-fl-paper p-3"><span className="block text-[10px] font-bold uppercase text-fl-primary">Smrtelnost</span><strong>{result.lethal}</strong>{result.limit && <span className="block text-xs text-red-600">({result.limit})</span>}</div>
+                            <div className="rounded bg-fl-paper p-3"><span className="block text-[10px] font-bold uppercase text-fl-primary">Léčení</span><strong>{result.heal}</strong></div>
                         </div>
-
-                        {result.note && (
-                            <div className="bg-fl-paper-bright p-4 rounded border border-fl-border">
-                                <span className="block text-[10px] font-bold uppercase text-fl-primary mb-1">Efekt</span>
-                                <p className="text-fl-surface-hover font-serif italic">{result.note}</p>
-                            </div>
-                        )}
-
-                        <div className="mt-auto space-y-2">
-                            {onSaveInjury && (
-                                <button
-                                    onClick={handleSaveToJournal}
-                                    disabled={savedToJournal}
-                                    className={`flex w-full min-h-12 items-center justify-center gap-2 rounded-xl font-bold uppercase tracking-wider transition-all ${
-                                        savedToJournal
-                                            ? 'cursor-default border border-green-800/40 bg-green-900/15 text-green-700 dark:text-green-400'
-                                            : 'bg-fl-primary text-white hover:bg-fl-primary-hover active:scale-[0.98] shadow-md'
-                                    }`}
-                                >
-                                    {savedToJournal
-                                        ? <><Check size={17} aria-hidden="true" /> Zapsáno do deníku</>
-                                        : <><BookmarkPlus size={17} aria-hidden="true" /> Zapsat do deníku</>}
-                                </button>
-                            )}
-                            <button
-                                onClick={() => { setResult(null); setSelectedType(null); setSavedToJournal(false); }}
-                                className="w-full min-h-12 rounded-xl bg-fl-nav font-bold uppercase tracking-wider text-white transition-all hover:bg-fl-nav-hover active:scale-[0.98]"
-                            >
-                                Nový hod
+                        {result.note && <div className="rounded border border-fl-border bg-fl-paper-bright p-4 text-sm italic text-fl-surface-hover">{result.note}</div>}
+                        {resultCanUseSwap && (
+                            <button onClick={swapDigits} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-fl-primary bg-fl-paper font-bold uppercase tracking-wider text-fl-primary hover:bg-fl-border">
+                                <RefreshCcw size={17} /> Prohodit cifry kostky
                             </button>
-                        </div>
+                        )}
+                        {onSaveInjury && (
+                            <button onClick={handleSaveToJournal} disabled={savedToJournal} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-fl-primary font-bold uppercase tracking-wider text-white disabled:opacity-60">
+                                {savedToJournal ? <><Check size={17} /> Zapsáno do deníku</> : <><BookmarkPlus size={17} /> Zapsat do deníku</>}
+                            </button>
+                        )}
+                        <button onClick={resetRoll} className="min-h-12 w-full rounded-xl bg-fl-nav font-bold uppercase tracking-wider text-white hover:bg-fl-nav-hover">Nový hod</button>
                     </div>
                 )}
             </div>

@@ -1,9 +1,53 @@
 import React from 'react';
-import { Skull, Plus, X } from 'lucide-react';
+import { Dices, PenLine, Skull, Plus, X } from 'lucide-react';
 import Card from '../common/Card';
 import SectionHeader from '../common/SectionHeader';
+import AnchoredMenu, { useAnchoredMenu } from '../common/AnchoredMenu';
 
-const SheetCriticals = ({ char, updateField, updateDeep }) => {
+/* „+“ nabídne hod na tabulku kritických zranění, nebo vlastní zápis. */
+const AddInjuryButton = ({ onRoll, onCustom, className }) => {
+    const menu = useAnchoredMenu();
+    const choose = (action) => { menu.close(); action(); };
+
+    return (
+        <>
+            <button
+                type="button"
+                onClick={onRoll ? menu.open : onCustom}
+                data-game-action
+                aria-haspopup={onRoll ? 'dialog' : undefined}
+                aria-expanded={menu.isOpen}
+                aria-label="Přidat kritické zranění"
+                title="Přidat kritické zranění"
+                className={className}
+            >
+                <Plus size={16} />
+            </button>
+            {menu.isOpen && (
+                <AnchoredMenu anchorRect={menu.anchorRect} onClose={menu.close} label="Přidat kritické zranění" widthClass="w-60">
+                    <button type="button" onClick={() => choose(onRoll)} className={MENU_ITEM}>
+                        <Dices size={18} className="shrink-0 text-fl-primary" aria-hidden="true" />
+                        <span>
+                            <span className="block font-bold">Hodit na tabulku</span>
+                            <span className="block text-xs text-fl-text-muted">Otevře tabulky kritických zranění</span>
+                        </span>
+                    </button>
+                    <button type="button" onClick={() => choose(onCustom)} className={MENU_ITEM}>
+                        <PenLine size={18} className="shrink-0 text-fl-primary" aria-hidden="true" />
+                        <span>
+                            <span className="block font-bold">Přidat vlastní</span>
+                            <span className="block text-xs text-fl-text-muted">Prázdný řádek k ručnímu vyplnění</span>
+                        </span>
+                    </button>
+                </AnchoredMenu>
+            )}
+        </>
+    );
+};
+
+const MENU_ITEM = 'flex min-h-14 w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-fl-surface transition-colors hover:bg-fl-paper active:bg-fl-paper';
+
+const SheetCriticals = ({ char, updateField, updateDeep, onOpenCriticalTable }) => {
     const criticals = char.criticalInjuries || [];
 
     const handleAdd = () => {
@@ -25,9 +69,7 @@ const SheetCriticals = ({ char, updateField, updateDeep }) => {
                         <Skull size={18} />
                         <span className="text-xs font-bold uppercase tracking-widest">Žádná kritická zranění</span>
                     </div>
-                    <button onClick={handleAdd} aria-label="Přidat zranění" className="flex h-11 w-11 items-center justify-center border border-fl-border rounded-lg text-fl-primary hover:bg-fl-paper active:bg-fl-paper transition-colors" title="Přidat zranění">
-                        <Plus size={16} />
-                    </button>
+                    <AddInjuryButton onRoll={onOpenCriticalTable} onCustom={handleAdd} className="flex h-11 w-11 items-center justify-center border border-fl-border rounded-lg text-fl-primary hover:bg-fl-paper active:bg-fl-paper transition-colors" />
                 </div>
             </Card>
         );
@@ -37,9 +79,7 @@ const SheetCriticals = ({ char, updateField, updateDeep }) => {
         <Card>
             <div className="flex justify-between items-center mb-4">
                 <SectionHeader title="Kritická Zranění" icon={Skull} />
-                <button onClick={handleAdd} aria-label="Přidat zranění" className="flex h-11 w-11 items-center justify-center border border-fl-border rounded-lg text-fl-primary hover:bg-fl-paper active:bg-fl-paper transition-colors shadow-sm bg-fl-paper-bright">
-                    <Plus size={16} />
-                </button>
+                <AddInjuryButton onRoll={onOpenCriticalTable} onCustom={handleAdd} className="flex h-11 w-11 items-center justify-center border border-fl-border rounded-lg text-fl-primary hover:bg-fl-paper active:bg-fl-paper transition-colors shadow-sm bg-fl-paper-bright" />
             </div>
             
             <div className="space-y-3">

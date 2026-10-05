@@ -10,18 +10,31 @@
   color-scheme: light;
 
   --fl-bg: #e8dece;           /* Tan sand — accent areas, tab bars */
+  --fl-bg-rgb: 232 222 206;
   --fl-surface: #2c2419;      /* Dark espresso — primary text */
+  --fl-surface-rgb: 44 36 25;
   --fl-surface-hover: #4a3d2e; /* Dark brown — secondary text */
+  --fl-surface-hover-rgb: 74 61 46;
   --fl-text-muted: #756753;   /* Medium brown — muted text (AA na kartách) */
+  --fl-text-muted-rgb: 117 103 83;
   --fl-primary: #9c6b3c;      /* Rich amber leather — main accent */
+  --fl-primary-rgb: 156 107 60;
   --fl-primary-hover: #b38050; /* Warmer amber — hover accent */
+  --fl-primary-hover-rgb: 179 128 80;
   --fl-border: #cdbfa6;       /* Sandy tan — borders */
+  --fl-border-rgb: 205 191 166;
   --fl-paper: #e0d5c2;        /* Medium parchment */
+  --fl-paper-rgb: 224 213 194;
   --fl-paper-light: #ede5d5;  /* Light parchment */
+  --fl-paper-light-rgb: 237 229 213;
   --fl-paper-bright: #f7f1e6; /* Lightest cream — body bg */
+  --fl-paper-bright-rgb: 247 241 230;
   --fl-card: #fdfaf3;         /* Warm white — card surfaces */
+  --fl-card-rgb: 253 250 243;
   --fl-nav: #2e2318;          /* Dark leather — sidebars, nav */
+  --fl-nav-rgb: 46 35 24;
   --fl-nav-hover: #443628;    /* Lighter leather — hover on nav */
+  --fl-nav-hover-rgb: 68 54 40;
 
   /* Bezpečné zóny: env() funguje v moderných WebView (edge-to-edge),
      --safe-area-inset-* injektuje Capacitor SystemBars na Androide 15+.
@@ -50,18 +63,45 @@
   color-scheme: dark;
 
   --fl-bg: #0d1118;           /* Deep midnight — accent areas */
+  --fl-bg-rgb: 13 17 24;
   --fl-surface: #e4ddd0;      /* Warm cream — primary text */
+  --fl-surface-rgb: 228 221 208;
   --fl-surface-hover: #b8ad9c; /* Muted cream — secondary text */
+  --fl-surface-hover-rgb: 184 173 156;
   --fl-text-muted: #94897a;   /* Warm gray — muted text (AA na kartách) */
+  --fl-text-muted-rgb: 148 137 122;
   --fl-primary: #c99a44;      /* Golden amber — main accent */
+  --fl-primary-rgb: 201 154 68;
   --fl-primary-hover: #ddb055; /* Bright gold — hover accent */
+  --fl-primary-hover-rgb: 221 176 85;
   --fl-border: #252c38;       /* Dark blue-gray — borders */
+  --fl-border-rgb: 37 44 56;
   --fl-paper: #151a24;        /* Dark indigo — surfaces */
+  --fl-paper-rgb: 21 26 36;
   --fl-paper-light: #111620;  /* Deeper indigo — subtle bg */
+  --fl-paper-light-rgb: 17 22 32;
   --fl-paper-bright: #0d1118; /* Darkest — body bg (matches bg) */
+  --fl-paper-bright-rgb: 13 17 24;
   --fl-card: #1a2030;         /* Slate blue — card surfaces */
+  --fl-card-rgb: 26 32 48;
   --fl-nav: #0a0e16;          /* Deepest navy — sidebars, nav */
+  --fl-nav-rgb: 10 14 22;
   --fl-nav-hover: #1e2538;    /* Blue slate — hover on nav */
+  --fl-nav-hover-rgb: 30 37 56;
+}
+
+/* Tmavý režim: biely text na zlatém akcentu má kontrast jen 2,6 : 1.
+   Na zlatých plochách proto píšeme tmavým inkoustem (~7,5 : 1, WCAG AA). */
+.dark .bg-fl-primary.text-white,
+.dark .bg-fl-primary > .text-white,
+.dark .hover\:bg-fl-primary:hover.hover\:text-white:hover,
+.dark .active\:bg-fl-primary:active.active\:text-white:active {
+  color: #14100a;
+}
+
+.dark .bg-fl-primary .text-white\/75,
+.dark .bg-fl-primary .text-white\/80 {
+  color: rgb(20 16 10 / 0.75);
 }
 
 html {
@@ -140,6 +180,12 @@ body.fl-scroll-lock .fl-navigation-rail {
 /* Game mode keeps play actions available while preventing sheet editing. */
 .sheet-game-mode .sheet-tile-content button:not([data-game-action]) {
   display: none;
+}
+
+/* Zátěž předmětů zůstává v režimu Hra vidět, jen ji nejde měnit. */
+.sheet-game-mode .sheet-tile-content button[data-readonly-in-game] {
+  display: flex;
+  pointer-events: none;
 }
 
 .sheet-game-mode .sheet-tile-content input,

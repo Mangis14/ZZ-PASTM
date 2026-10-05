@@ -12,7 +12,7 @@ const formatDate = (value) => {
 
 const CountTile = ({ label, value }) => (
     <div className="bg-fl-paper-bright border border-fl-paper rounded p-2">
-        <div className="text-[9px] uppercase tracking-wider text-fl-text-muted font-bold">{label}</div>
+        <div className="text-[10px] uppercase tracking-wider text-fl-text-muted font-bold">{label}</div>
         <div className="text-lg font-serif font-bold text-fl-surface">{value}</div>
     </div>
 );
@@ -69,7 +69,7 @@ const collectChangeExamples = (diff) => {
 
 const DiffSummaryTile = ({ label, summary }) => (
     <div className="border border-fl-paper bg-fl-paper-bright rounded p-2 min-w-0">
-        <div className="text-[9px] uppercase tracking-wider text-fl-text-muted font-bold truncate">{label}</div>
+        <div className="text-[10px] uppercase tracking-wider text-fl-text-muted font-bold truncate">{label}</div>
         <div className="mt-1 flex items-center gap-2 text-[11px] text-fl-surface">
             <span className="font-bold text-green-800">+{summary?.added || 0}</span>
             <span className="font-bold text-fl-surface-hover">~{summary?.changed || 0}</span>
@@ -87,7 +87,7 @@ const ChangePreviewRow = ({ change }) => {
         <div className={`flex items-start gap-2 rounded border p-2 text-xs ${meta.className}`}>
             <Icon size={14} className="shrink-0 mt-0.5" />
             <div className="min-w-0">
-                <div className="font-bold uppercase text-[9px] tracking-wider">{meta.label} - {change.area}</div>
+                <div className="font-bold uppercase text-[10px] tracking-wider">{meta.label} - {change.area}</div>
                 <div className="truncate">
                     {change.name}
                     {change.group ? ` (${change.group})` : ''}
@@ -210,7 +210,7 @@ const CatalogStatusModal = ({ onClose }) => {
                                 </div>
                                 <div className="text-right shrink-0">
                                     <div className="font-serif text-lg font-bold text-fl-surface">{totalChanges}</div>
-                                    <div className="text-[9px] uppercase tracking-wider text-fl-text-muted font-bold">
+                                    <div className="text-[10px] uppercase tracking-wider text-fl-text-muted font-bold">
                                         {totalChanges === 1 ? 'zmena' : 'zmien'}
                                     </div>
                                 </div>

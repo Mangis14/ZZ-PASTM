@@ -48,17 +48,17 @@ const SpellDetailPopup = ({ spell, onClose, onShowFull }) => {
             <div className="space-y-3 p-4">
                 <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="rounded border border-fl-paper bg-fl-card p-2">
-                        <span className="block text-[9px] font-bold uppercase text-fl-primary">Vzdálenost</span>
+                        <span className="block text-[10px] font-bold uppercase text-fl-primary">Vzdálenost</span>
                         <span className="text-fl-surface">{spell.range}</span>
                     </div>
                     <div className="rounded border border-fl-paper bg-fl-card p-2">
-                        <span className="block text-[9px] font-bold uppercase text-fl-primary">Trvání</span>
+                        <span className="block text-[10px] font-bold uppercase text-fl-primary">Trvání</span>
                         <span className="text-fl-surface">{spell.duration}</span>
                     </div>
                 </div>
                 {spell.ingredient && (
                     <div className="rounded border border-fl-paper bg-fl-card p-2 text-xs">
-                        <span className="text-[9px] font-bold uppercase text-fl-primary">Pomůcka: </span>
+                        <span className="text-[10px] font-bold uppercase text-fl-primary">Pomůcka: </span>
                         <span className="text-fl-surface">{spell.ingredient}</span>
                     </div>
                 )}
