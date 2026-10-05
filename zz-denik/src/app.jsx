@@ -16,6 +16,8 @@ import { calculateAttackDamage, clearPreparedCombatEffects, parseCombatValue } f
 import { createPoisonInventoryItem } from './utils/poisons';
 import { getTalentRank } from './utils/talents';
 import { advanceStoredWeatherQuarterDay } from './utils/time';
+import { KIN_TALENTS } from './data/kin_talents';
+import { hasPsychicPower, syncKinTalents } from './utils/kin';
 
 /* Denník je domovská obrazovka a načítava sa hneď; ostatné sekcie
    a veľké modály sa doťahujú až pri prvom použití — skracuje to
@@ -93,7 +95,7 @@ const defaultCharacter = {
   notes: ''
 };
 
-const ALL_TALENTS = [...(TALENTS_DATA.profession || []), ...(TALENTS_DATA.general || [])];
+const ALL_TALENTS = [...(TALENTS_DATA.profession || []), ...(TALENTS_DATA.general || []), ...KIN_TALENTS];
 
 const THEME_META_COLORS = { light: '#fdfaf3', dark: '#1a2030' };
 
@@ -283,6 +285,15 @@ const App = () => {
           merged[k] = oldChar[k];
         }
       });
+      // Rodové talenty dřív nesly vymyšlené názvy a popisy – srovnáme je s Průvodcem hráče.
+      if (Array.isArray(merged.talents)) {
+        merged.talents = merged.talents.map(talent => {
+          const kinTalent = KIN_TALENTS.find(item => item.id === talent?.id);
+          return kinTalent
+            ? { ...talent, name: kinTalent.name, description: kinTalent.ranks[0].description }
+            : talent;
+        });
+      }
       return merged;
     };
 
@@ -308,6 +319,15 @@ const App = () => {
     }
     setIsLoaded(true);
   }, []);
+
+  // Rodový talent se postavě přiřazuje automaticky podle vyplněného rodu.
+  useEffect(() => {
+    if (!isLoaded) return;
+    setChar(prev => {
+      const talents = syncKinTalents(prev);
+      return talents === prev.talents ? prev : { ...prev, talents };
+    });
+  }, [isLoaded, char.kin, char.talents]);
 
   const savedCharacterCount = Object.keys(savedChars).length;
 
@@ -1195,6 +1215,10 @@ const App = () => {
   );
   const soumarRank = Number(soumarTalent?.rank || 0);
   const soumarEncumbranceBonus = soumarRank >= 3 ? 10 : soumarRank === 2 ? 5 : soumarRank === 1 ? 2 : 0;
+  const manyThingsTalent = (Array.isArray(char.talents) ? char.talents : []).find(talent =>
+    talent.id === 'path_of_many_things' || talent.name?.toLocaleLowerCase('cs-CZ') === 'cesta mnoha věcí'
+  );
+  const manyThingsRank = Number(manyThingsTalent?.rank || 0);
   const encumbranceLimit = (char.attributes.strength.max * 2) + soumarEncumbranceBonus;
   const isOverencumbered = totalWeight > encumbranceLimit;
 
@@ -1334,6 +1358,9 @@ const App = () => {
             equipItem={equipItemDirectly}
             char={char}
             onBargain={spendWillpowerForBargain}
+            manyThingsCharacterRank={manyThingsRank}
+            willpower={Number(char.willpower) || 0}
+            psychicPower={hasPsychicPower(char)}
           />
         ) : currentView === 'talents' ? (
           <TalentsSection char={char} onLearnTalent={learnTalent} />

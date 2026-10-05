@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Search, Filter, ArrowUpDown, ShoppingBag, ShoppingCart, Hammer, Clock, Star, Shield, Zap, Sword, Crosshair, Shirt, FlaskConical, HandCoins, Circle, X, Trash2, Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, Filter, ArrowUpDown, ShoppingBag, ShoppingCart, Hammer, Clock, Star, Shield, Zap, Sword, Crosshair, Shirt, FlaskConical, HandCoins, Circle, X, Trash2, Check, ChevronDown, ChevronUp, Backpack } from 'lucide-react';
 import Card from './components/common/Card';
 import SectionHeader from './components/common/SectionHeader';
 import MoneyInput from './components/common/MoneyInput';
@@ -8,6 +8,7 @@ import { registerBackHandler, hapticTick } from './native/platform';
 import { calculateBargain, copperToMoney } from './utils/commerce';
 import { parseWeight } from './utils/items';
 import { getTalentRank, isHalfElf } from './utils/talents';
+import { effectiveWillpower } from './utils/kin';
 
 const ALL_CATEGORY = 'Vše';
 const BROWSE_STATE_KEY = 'fl_goods_browse_state';
@@ -23,6 +24,8 @@ const DEFAULT_BROWSE_STATE = {
     damageFilter: [],
     timeFilter: [],
     handsFilter: [],
+    manyThingsRank: 0,
+    manyThingsWp: null,
     showFilters: false,
     sortOrder: 'asc'
 };
@@ -72,12 +75,48 @@ const QUICK_FILTER_KEYS = {
     'Služby': ['rarity', 'time']
 };
 
+/* Talent Cesta mnoha věcí (Kupec): z tlumoku lze vytáhnout zboží (od II. stupně
+   i zbraně), nikdy TĚŽKÝ předmět, za cenu max 1 stříbrný (III. stupeň 1 zlatý)
+   za každý utracený bod vůle. */
+const MANY_THINGS_RANKS = [1, 2, 3];
+const MANY_THINGS_MAX_WP = 10;
+const MANY_THINGS_RANK_LABELS = { 1: 'I.', 2: 'II.', 3: 'III.' };
+const MANY_THINGS_CATEGORIES = {
+    1: ['Zboží'],
+    2: ['Zboží', 'Zbraně nablízko', 'Střelné zbraně'],
+    3: ['Zboží', 'Zbraně nablízko', 'Střelné zbraně']
+};
+const MANY_THINGS_RANK_HINTS = {
+    1: 'Zboží, ne těžké, max 1 stříbrný za bod vůle',
+    2: 'Zboží a zbraně, ne těžké, max 1 stříbrný za bod vůle',
+    3: 'Zboží a zbraně, ne těžké, max 1 zlatý za bod vůle'
+};
+const PSYCHIC_POWER_HINTS = {
+    1: '1 VŮLE = až 2 stříbrné, 2 VŮLE = 3 stříbrné…',
+    2: '1 VŮLE = až 2 stříbrné, 2 VŮLE = 3 stříbrné…',
+    3: '1 VŮLE = až 2 zlaté, 2 VŮLE = 3 zlaté…'
+};
+
 const getCopperValue = (price) => {
     if (!price) return 0;
     let val = price.value;
     if (price.currency === 'gold') val *= 100;
     if (price.currency === 'silver') val *= 10;
     return val;
+};
+
+// Kolik bodů vůle stojí vytažení předmětu z tlumoku; null = pro daný stupeň nedostupné.
+// Půlelfovi (Duševní síla) se první utracený bod počítá za dva.
+const getManyThingsWpCost = (item, rank, psychicPower = false) => {
+    if (!rank || !MANY_THINGS_CATEGORIES[rank].includes(item.Category)) return null;
+    if (parseWeight(item.Váha) >= 2) return null;
+    const copper = getCopperValue(item.price);
+    if (!item.price || !(copper > 0)) return null;
+    const copperPerWp = rank >= 3 ? 100 : 10;
+    const neededWp = Math.ceil(copper / copperPerWp - 1e-9);
+    let cost = 1;
+    while (effectiveWillpower(cost, psychicPower) < neededWp) cost += 1;
+    return cost <= MANY_THINGS_MAX_WP ? cost : null;
 };
 
 const formatPrice = (copperTotal) => {
@@ -395,7 +434,83 @@ const FilterPillGroup = ({ label, icon: Icon, options, selectedValues, onToggle,
     );
 };
 
-const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain }) => {
+const pillClass = (isSelected) => `min-h-10 px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition-colors active:opacity-80 ${
+    isSelected
+        ? 'bg-fl-primary text-white border-fl-primary'
+        : 'bg-fl-paper-bright text-fl-surface border-fl-border hover:bg-fl-paper hover:border-fl-primary'
+}`;
+
+const ManyThingsFilter = ({ rank, wp, characterRank, willpower, psychicPower, wpOptions, onRankChange, onWpChange }) => {
+    const stopSwipePropagation = (e) => e.stopPropagation();
+    const swipeGuard = { onTouchStart: stopSwipePropagation, onTouchMove: stopSwipePropagation };
+
+    return (
+        <div className={`flex flex-col gap-2 rounded-lg border p-2.5 ${rank > 0 ? 'border-fl-primary bg-fl-primary/5' : 'border-fl-paper'}`}>
+            <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-fl-primary">
+                    <Backpack size={12} aria-hidden="true" />
+                    <span>Cesta mnoha věcí</span>
+                </div>
+                {characterRank > 0 && (
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-fl-text-muted">
+                        Tvůj stupeň: {MANY_THINGS_RANK_LABELS[characterRank]}
+                    </span>
+                )}
+            </div>
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1" role="group" aria-label="Stupeň talentu Cesta mnoha věcí" {...swipeGuard}>
+                <button type="button" onClick={() => onRankChange(0)} aria-pressed={rank === 0} className={pillClass(rank === 0)}>
+                    Vypnuto
+                </button>
+                {MANY_THINGS_RANKS.map(value => (
+                    <button
+                        key={value}
+                        type="button"
+                        onClick={() => onRankChange(value)}
+                        aria-pressed={rank === value}
+                        className={pillClass(rank === value)}
+                    >
+                        {MANY_THINGS_RANK_LABELS[value]} stupeň{value === characterRank ? ' ★' : ''}
+                    </button>
+                ))}
+            </div>
+            {rank > 0 && (
+                <>
+                    <p className="text-[11px] text-fl-text-muted">{MANY_THINGS_RANK_HINTS[rank]}.</p>
+                    {psychicPower && (
+                        <p className="text-[11px] text-fl-text-muted">
+                            <span className="font-bold text-fl-primary">Půlelf – Duševní síla:</span> první bod vůle se počítá za dva ({PSYCHIC_POWER_HINTS[rank]}).
+                        </p>
+                    )}
+                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-fl-primary">
+                        <Zap size={12} aria-hidden="true" />
+                        <span>Utratím vůle</span>
+                        {Number.isFinite(willpower) && (
+                            <span className="font-normal normal-case tracking-normal text-fl-text-muted">(máš {willpower})</span>
+                        )}
+                    </div>
+                    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1" role="group" aria-label="Počet bodů vůle" {...swipeGuard}>
+                        <button type="button" onClick={() => onWpChange(null)} aria-pressed={wp === null} className={pillClass(wp === null)}>
+                            Libovolně
+                        </button>
+                        {wpOptions.map(value => (
+                            <button
+                                key={value}
+                                type="button"
+                                onClick={() => onWpChange(value)}
+                                aria-pressed={wp === value}
+                                className={`${pillClass(wp === value)} min-w-10 ${Number.isFinite(willpower) && value > willpower && wp !== value ? 'opacity-50' : ''}`}
+                            >
+                                {value}
+                            </button>
+                        ))}
+                    </div>
+                </>
+            )}
+        </div>
+    );
+};
+
+const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain, manyThingsCharacterRank = 0, willpower = null, psychicPower = false }) => {
     const { itemsByCategory, allItems } = useCatalog();
     const [initialBrowseState] = useState(loadBrowseState);
     const [search, setSearch] = useState(initialBrowseState.search);
@@ -408,6 +523,8 @@ const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain }) => {
     const [damageFilter, setDamageFilter] = useState(initialBrowseState.damageFilter);
     const [timeFilter, setTimeFilter] = useState(initialBrowseState.timeFilter);
     const [handsFilter, setHandsFilter] = useState(initialBrowseState.handsFilter);
+    const [manyThingsRank, setManyThingsRank] = useState(initialBrowseState.manyThingsRank);
+    const [manyThingsWp, setManyThingsWp] = useState(initialBrowseState.manyThingsWp);
     const [expandedItems, setExpandedItems] = useState({});
     const [showCategories, setShowCategories] = useState(false);
     const [showFilters, setShowFilters] = useState(initialBrowseState.showFilters);
@@ -426,10 +543,12 @@ const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain }) => {
             damageFilter,
             timeFilter,
             handsFilter,
+            manyThingsRank,
+            manyThingsWp,
             showFilters,
             sortOrder
         }));
-    }, [search, selectedCategories, talentFilter, materialFilter, weightFilter, rarityFilter, zbrojFilter, damageFilter, timeFilter, handsFilter, showFilters, sortOrder]);
+    }, [search, selectedCategories, talentFilter, materialFilter, weightFilter, rarityFilter, zbrojFilter, damageFilter, timeFilter, handsFilter, manyThingsRank, manyThingsWp, showFilters, sortOrder]);
 
     const addToCart = (item) => {
         setCart(prev => {
@@ -547,7 +666,8 @@ const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain }) => {
                 if (s.includes('běžn')) return 1;
                 if (s.includes('neobvyk')) return 2;
                 if (s.includes('vzácn')) return 3;
-                return 0;
+                if (s.includes('epick')) return 4;
+                return 5;
             };
             return getRank(sA) - getRank(sB);
         });
@@ -590,7 +710,8 @@ const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain }) => {
         zbrojFilter.length +
         damageFilter.length +
         handsFilter.length +
-        timeFilter.length;
+        timeFilter.length +
+        (manyThingsRank > 0 ? 1 : 0);
 
     const resetFilters = () => {
         setTalentFilter([]);
@@ -601,6 +722,8 @@ const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain }) => {
         setDamageFilter([]);
         setHandsFilter([]);
         setTimeFilter([]);
+        setManyThingsRank(0);
+        setManyThingsWp(null);
     };
 
     const filteredData = useMemo(() => {
@@ -624,9 +747,12 @@ const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain }) => {
             const matchesHands = handsFilter.length === 0 || handsFilter.includes(item.Ruce);
             const matchesTime = timeFilter.length === 0 || timeFilter.includes(item.Čas);
             const matchesMaterial = materialFilter.length === 0 || materialFilter.some(category => materialMatchesCategory(item.Suroviny, category));
+            const manyThingsCost = getManyThingsWpCost(item, manyThingsRank, psychicPower);
+            const matchesManyThings = manyThingsRank === 0 ||
+                (manyThingsCost !== null && (manyThingsWp === null || manyThingsCost <= manyThingsWp));
 
             return matchesSearch && matchesTalent && matchesWeight && matchesRarity && matchesMaterial &&
-                   matchesZbroj && matchesDamage && matchesHands && matchesTime;
+                   matchesZbroj && matchesDamage && matchesHands && matchesTime && matchesManyThings;
         });
 
         data.sort((a, b) => {
@@ -636,7 +762,7 @@ const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain }) => {
         });
 
         return data;
-    }, [search, currentData, talentFilter, sortOrder, materialFilter, weightFilter, rarityFilter, zbrojFilter, damageFilter, handsFilter, timeFilter]);
+    }, [search, currentData, talentFilter, sortOrder, materialFilter, weightFilter, rarityFilter, zbrojFilter, damageFilter, handsFilter, timeFilter, manyThingsRank, manyThingsWp, psychicPower]);
 
     const filterGroups = [
         { key: 'talent', label: 'Talent', icon: Star, selectedValues: talentFilter, setter: setTalentFilter, options: talents },
@@ -655,11 +781,22 @@ const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain }) => {
     const quickKeys = new Set(selectedCategories.flatMap(category => QUICK_FILTER_KEYS[category] || QUICK_FILTER_KEYS[ALL_CATEGORY]));
     const quickFilterGroups = filterGroups.filter(group => quickKeys.has(group.key));
     const additionalFilterGroups = filterGroups.filter(group => !quickKeys.has(group.key));
-    const activeFilterChips = filterGroups.flatMap(group => group.selectedValues.map(value => ({
-        key: `${group.key}-${value}`,
-        label: value,
-        remove: () => group.setter(prev => prev.filter(item => item !== value))
-    })));
+    const activeFilterChips = [
+        ...(manyThingsRank > 0 ? [{
+            key: 'many-things',
+            label: `Cesta mnoha věcí ${MANY_THINGS_RANK_LABELS[manyThingsRank]}${manyThingsWp !== null ? ` · ${manyThingsWp} VŮLE` : ''}`,
+            remove: () => { setManyThingsRank(0); setManyThingsWp(null); }
+        }] : []),
+        ...filterGroups.flatMap(group => group.selectedValues.map(value => ({
+            key: `${group.key}-${value}`,
+            label: value,
+            remove: () => group.setter(prev => prev.filter(item => item !== value))
+        })))
+    ];
+    const showManyThingsFilter = manyThingsRank > 0 || selectedCategories.some(category =>
+        category === ALL_CATEGORY || MANY_THINGS_CATEGORIES[3].includes(category)
+    );
+    const manyThingsWpOptions = Array.from({ length: MANY_THINGS_MAX_WP }, (_, index) => index + 1);
     const categoryLabel = selectedCategories.includes(ALL_CATEGORY)
         ? ALL_CATEGORY
         : selectedCategories.join(', ');
@@ -781,6 +918,22 @@ const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain }) => {
                         )}
                     </div>
 
+                    {showManyThingsFilter && (
+                        <ManyThingsFilter
+                            rank={manyThingsRank}
+                            wp={manyThingsWp}
+                            characterRank={manyThingsCharacterRank}
+                            willpower={willpower}
+                            psychicPower={psychicPower}
+                            wpOptions={manyThingsWpOptions}
+                            onRankChange={(rank) => {
+                                setManyThingsRank(rank);
+                                if (rank === 0) setManyThingsWp(null);
+                            }}
+                            onWpChange={setManyThingsWp}
+                        />
+                    )}
+
                     {quickFilterGroups.length > 0 && (
                         <div className="space-y-4 border-t border-fl-paper pt-3">
                             {quickFilterGroups.map(group => (
@@ -889,10 +1042,16 @@ const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain }) => {
                                     <div className="flex items-baseline gap-2">
                                         <h3 className="font-bold text-fl-surface text-base truncate">{item.Předmět}</h3>
                                         <span className="text-[10px] uppercase text-fl-primary/90 font-bold shrink-0">{item.Category}</span>
+                                        {item.homebrew && (
+                                            <span className="rounded border border-fl-primary/40 px-1 text-[10px] font-bold uppercase text-fl-primary/90 shrink-0" title="Domácí pravidla (v tabulce označeno *)">Homebrew</span>
+                                        )}
                                     </div>
                                     <div className="text-[11px] text-fl-text-muted mt-0.5 flex gap-2">
                                         {item.Váha && item.Váha !== '–' && <span>Váha: {item.Váha}</span>}
                                         {item.Dostupnost && <span>• {item.Dostupnost}</span>}
+                                        {manyThingsRank > 0 && getManyThingsWpCost(item, manyThingsRank, psychicPower) !== null && (
+                                            <span className="font-bold text-fl-primary">• {getManyThingsWpCost(item, manyThingsRank, psychicPower)} VŮLE</span>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4 ml-2">

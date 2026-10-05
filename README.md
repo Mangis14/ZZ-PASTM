@@ -5,10 +5,14 @@ Mobilný a webový denník postavy pre stolovú RPG hru Forbidden Lands / Zapov�
 ![Stack](https://img.shields.io/badge/React%20%2B%20Vite%20%2B%20Capacitor-Android-green.svg)
 ![Main](https://img.shields.io/badge/main-aktu%C3%A1lny%20v%C3%BDvoj-blue.svg)
 
-> Aktuálna publikovaná verzia je `1.8.5`.
+> Aktuálna publikovaná verzia je `1.8.6`.
 
 ## Najnovšie funkcie
 
+- Filter talentu Cesta mnoha věcí v Zboží (stupne I.–III., počet bodov vôle, cena vo vôli pri každej položke).
+- Rodové talenty podľa Průvodce hráče sa priraďujú automaticky podľa rodu; záložka Rodové s upozornením pri inom rode.
+- Půlelf (Duševní síla): prvý utratený bod vôle sa počíta za dva.
+- Revízia katalógu Zboží podľa českého Průvodce hráče.
 - Kompletný responzívny overhaul Denníka s prehľadnými dlaždicami.
 - Personalizácia Denníka:
   - zbalenie a rozbalenie každej dlaždice,
@@ -20,7 +24,7 @@ Mobilný a webový denník postavy pre stolovú RPG hru Forbidden Lands / Zapov�
 - Opravené plynulé presúvanie dlaždíc bez nechceného označovania textu.
 - Android tlačidlo Späť najprv presunie stránku hore, potom sa vráti na Denník a na úvodnej obrazovke ponúkne úplné ukončenie aplikácie.
 - Spodná navigácia sa automaticky skryje pri každom otvorenom dialógu alebo module, aby neblokovala spodné tlačidlá.
-- Karty vlastností v poradí `SIL`, `OBR`, `OSO`, `BYS` s jasným zdravým, poškodeným a vyradeným stavom.
+- Karty vlastností v poradí `SIL`, `OBR`, `BYS`, `OSO` s jasným zdravým, poškodeným a vyradeným stavom.
 - Klikateľný horný panel s vlastnosťami, stavmi, vôľou, záťažou a farebným mešcom.
 - Kliknutie na horný indikátor otvorí a presunie používateľa na príslušnú dlaždicu.
 - Automatické otvorenie menu Nová postava, ak ešte nie je vytvorená žiadna postava.
@@ -116,7 +120,7 @@ Výsledné debug APK:
 zz-denik/android/app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Posledné publikované APK v koreňovom adresári je [`FL_1.8.5.apk`](FL_1.8.5.apk).
+Posledné publikované APK v koreňovom adresári je [`FL_1.8.6.apk`](FL_1.8.6.apk).
 
 ## Technológie
 
