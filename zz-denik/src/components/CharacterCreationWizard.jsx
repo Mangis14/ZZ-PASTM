@@ -806,15 +806,15 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
                           <p className="text-[11px] text-fl-text-muted mt-1 leading-relaxed">{attr.desc}</p>
                         </div>
                         <div className="text-right">
-                          <div className="text-[9px] font-bold text-fl-primary uppercase">Rozsah</div>
+                          <div className="text-[10px] font-bold text-fl-primary uppercase">Rozsah</div>
                           <div className="text-xs font-bold tabular-nums">{lim.min} - {lim.max}</div>
                         </div>
                       </div>
 
                       {/* Badges for Key attribute */}
                       <div className="flex gap-1.5 my-2">
-                        {isKin && <span className="px-1.5 py-0.5 bg-fl-primary/10 text-fl-primary text-[9px] font-bold uppercase rounded border border-fl-primary/20">Klíč rasy</span>}
-                        {isProf && <span className="px-1.5 py-0.5 bg-blue-900/10 text-blue-400 text-[9px] font-bold uppercase rounded border border-blue-900/20">Klíč povolání</span>}
+                        {isKin && <span className="px-1.5 py-0.5 bg-fl-primary/10 text-fl-primary text-[10px] font-bold uppercase rounded border border-fl-primary/20">Klíč rasy</span>}
+                        {isProf && <span className="px-1.5 py-0.5 bg-blue-900/10 text-blue-400 text-[10px] font-bold uppercase rounded border border-blue-900/20">Klíč povolání</span>}
                       </div>
 
                       <div className="flex items-center justify-between border-t border-fl-border/40 pt-3">
@@ -1231,7 +1231,7 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
                 {/* Starting Money */}
                 <div className="grid grid-cols-3 gap-2">
                   <div>
-                    <label className="block text-[9px] font-bold text-fl-primary uppercase">Zlaťáky</label>
+                    <label className="block text-[10px] font-bold text-fl-primary uppercase">Zlaťáky</label>
                     <input
                       type="number"
                     inputMode="numeric"
@@ -1241,7 +1241,7 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
                     />
                   </div>
                   <div>
-                    <label className="block text-[9px] font-bold text-fl-primary uppercase">Stříbrňáky</label>
+                    <label className="block text-[10px] font-bold text-fl-primary uppercase">Stříbrňáky</label>
                     <input
                       type="number"
                     inputMode="numeric"
@@ -1251,7 +1251,7 @@ export default function CharacterCreationWizard({ onComplete, onClose, showToast
                     />
                   </div>
                   <div>
-                    <label className="block text-[9px] font-bold text-fl-primary uppercase">Měďáky</label>
+                    <label className="block text-[10px] font-bold text-fl-primary uppercase">Měďáky</label>
                     <input
                       type="number"
                     inputMode="numeric"

@@ -6,7 +6,7 @@ import ItemAutocomplete from '../common/ItemAutocomplete';
 import SectionHeader from '../common/SectionHeader';
 import WeightSelect from '../common/WeightSelect';
 import { useCatalog } from '../../context/CatalogContext';
-import { parseWeight } from '../../utils/items';
+import { getWeaponRange, parseWeight } from '../../utils/items';
 
 const weaponCategories = new Set(['Zbraně nablízko', 'Střelné zbraně', 'Zbraně na dálku']);
 
@@ -15,7 +15,9 @@ const isArmorItem = (item) => item?.Category === 'Zbroj';
 
 const getItemName = (item) => item?.Předmět || item?.name || '';
 
-const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, handleRemoveInventorySlot, handleClearInventory }) => {
+const formatWeight = (value) => String(Math.round((Number(value) || 0) * 10) / 10).replace('.', ',');
+
+const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, handleRemoveInventorySlot, handleClearInventory, totalWeight = 0, encumbranceLimit = 0 }) => {
     const { allItems } = useCatalog();
     const [swapRequest, setSwapRequest] = useState(null);
 
@@ -25,12 +27,11 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, ha
     };
 
     const doEquipWeapon = (dbItem, targetIndex) => {
-        const range = dbItem.Dosah || dbItem.Ruce?.match(/\((.*?)\)/)?.[1] || dbItem.Ruce || '';
-
         updateDeep('weapons', targetIndex, 'name', getItemName(dbItem));
         updateDeep('weapons', targetIndex, 'bonus', dbItem.Bonus || '');
+        updateDeep('weapons', targetIndex, 'bonusMax', dbItem.Bonus || '');
         updateDeep('weapons', targetIndex, 'damage', dbItem.Zranění || '');
-        updateDeep('weapons', targetIndex, 'range', range);
+        updateDeep('weapons', targetIndex, 'range', dbItem.Dosah || getWeaponRange(dbItem));
         updateDeep('weapons', targetIndex, 'note', dbItem.Vlastnosti || '');
         updateDeep('weapons', targetIndex, 'weight', dbItem.Váha !== undefined ? parseWeight(dbItem.Váha) : 1);
     };
@@ -39,6 +40,7 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, ha
         updateDeep(targetSlot, null, 'name', getItemName(dbItem));
         updateDeep(targetSlot, null, 'bonus', dbItem.Bonus || '');
         updateDeep(targetSlot, null, 'rating', dbItem.Zbroj || '');
+        updateDeep(targetSlot, null, 'ratingMax', dbItem.Zbroj || '');
         updateDeep(targetSlot, null, 'weight', dbItem.Váha !== undefined ? parseWeight(dbItem.Váha) : 1);
     };
 
@@ -107,24 +109,43 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, ha
         setSwapRequest(null);
     };
 
+    const packWeight = char.inventory.reduce((sum, item) => sum + (item.name?.trim() ? Number(item.weight) || 0 : 0), 0);
+    const loadRatio = encumbranceLimit > 0 ? totalWeight / encumbranceLimit : 0;
+    const isOverencumbered = encumbranceLimit > 0 && totalWeight > encumbranceLimit;
+
     return (
         <Card innerRef={innerRef}>
             <SectionHeader title="Vybavení" icon={Backpack} />
-            <div className="grid grid-cols-[1fr_auto_auto_auto] gap-1.5 text-[10px] font-bold uppercase text-fl-primary mb-2 px-1">
-                <span>Předmět</span>
-                <span className="text-center w-14">Váha</span>
-                <span className="w-10" />
-                <span className="w-10" />
-            </div>
+            {encumbranceLimit > 0 && (
+                <div className="mb-3 rounded-xl border border-fl-border bg-fl-paper/40 p-3">
+                    <div className="mb-1.5 flex items-baseline justify-between gap-2 text-xs">
+                        <span className="font-bold uppercase tracking-wide text-fl-primary">Zátěž</span>
+                        <span className={`font-serif text-base font-bold tabular-nums ${isOverencumbered ? 'text-red-600 dark:text-red-400' : 'text-fl-surface'}`}>
+                            {formatWeight(totalWeight)} / {encumbranceLimit}
+                        </span>
+                    </div>
+                    <div className="h-2 overflow-hidden rounded-full bg-fl-paper" aria-hidden="true">
+                        <div
+                            className={`h-full rounded-full transition-all ${isOverencumbered ? 'bg-red-600' : loadRatio > 0.8 ? 'bg-amber-500' : 'bg-fl-primary'}`}
+                            style={{ width: `${Math.min(100, loadRatio * 100)}%` }}
+                        />
+                    </div>
+                    <p className="mt-1.5 text-[11px] text-fl-text-muted">
+                        Batoh {formatWeight(packWeight)} · nasazená výbava {formatWeight(Math.max(0, totalWeight - packWeight))}
+                        {isOverencumbered && <span className="font-bold text-red-600 dark:text-red-400"> · přetížení</span>}
+                    </p>
+                </div>
+            )}
             <div className="space-y-2">
                 {char.inventory.map((item, index) => {
                     const dbItem = item.name ? allItems.find((candidate) => candidate.Předmět === item.name) : null;
                     const isEquipable = isWeaponItem(dbItem) || isArmorItem(dbItem);
 
                     return (
-                        <div key={index} className="grid grid-cols-[1fr_auto_auto_auto] gap-1.5 items-center bg-fl-paper-bright p-1 rounded border border-fl-paper hover:border-fl-primary/50 transition-colors group">
+                        <div key={index} className="flex items-center gap-1 rounded-lg border border-fl-border bg-fl-paper-bright p-1 transition-colors hover:border-fl-primary/50">
+                            <div className="min-w-0 flex-1">
                             <ItemAutocomplete
-                                className="bg-transparent font-bold text-fl-surface w-full focus:outline-none placeholder:text-fl-border px-1"
+                                className="min-h-10 w-full bg-transparent px-2 text-sm font-bold text-fl-surface placeholder:font-normal placeholder:text-fl-text-muted focus:outline-none"
                                 placeholder="Předmět..."
                                 value={item.name}
                                 onChange={(value) => updateDeep('inventory', index, 'name', value)}
@@ -135,27 +156,26 @@ const SheetInventory = ({ char, updateDeep, innerRef, handleAddInventorySlot, ha
                                     }
                                 }}
                             />
-                            <WeightSelect value={item.weight} onChange={(value) => updateDeep('inventory', index, 'weight', value)} />
-
-                            <div className="w-10 flex justify-center">
-                                {isEquipable && (
-                                    <button
-                                        type="button"
-                                        onClick={() => handleEquip(dbItem, index)}
-                                        aria-label={`Nasadit ${item.name}`}
-                                        className="flex h-10 w-10 items-center justify-center text-fl-primary hover:text-white bg-fl-primary/10 hover:bg-fl-primary active:bg-fl-primary active:text-white transition-colors rounded-lg shadow-sm"
-                                        title="Nasadiť"
-                                    >
-                                        <ArrowUpRight size={15} strokeWidth={2.5} />
-                                    </button>
-                                )}
                             </div>
+                            <WeightSelect compact value={item.weight} onChange={(value) => updateDeep('inventory', index, 'weight', value)} className="w-[5.75rem]" />
+
+                            {isEquipable && (
+                                <button
+                                    type="button"
+                                    onClick={() => handleEquip(dbItem, index)}
+                                    aria-label={`Nasadit ${item.name}`}
+                                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-fl-primary/10 text-fl-primary shadow-sm transition-colors hover:bg-fl-primary hover:text-white active:bg-fl-primary active:text-white"
+                                    title="Nasadit"
+                                >
+                                    <ArrowUpRight size={15} strokeWidth={2.5} />
+                                </button>
+                            )}
 
                             <button
                                 type="button"
                                 onClick={() => handleRemoveInventorySlot(index)}
                                 aria-label={`Odstranit slot ${item.name || index + 1}`}
-                                className="flex h-10 w-10 items-center justify-center rounded-lg text-fl-text-muted transition-colors hover:bg-red-900/20 hover:text-red-700 active:bg-red-900/20"
+                                className="flex h-10 w-9 shrink-0 items-center justify-center rounded-lg text-fl-text-muted transition-colors hover:bg-red-900/20 hover:text-red-700 active:bg-red-900/20"
                                 title="Odstranit slot"
                             >
                                 <X size={15} />

@@ -909,7 +909,7 @@ const ZboziSection = ({ addItemToInventory, equipItem, char, onBargain, manyThin
                                 <Filter size={16} />
                                 <span className="ml-1 hidden text-[10px] font-bold uppercase sm:inline">Další</span>
                                 {activeFilterCount > 0 && (
-                                    <span className="absolute -top-1.5 -right-1.5 bg-red-600 border border-white text-white text-[9px] font-bold min-w-4 h-4 px-1 flex items-center justify-center rounded-full leading-none">
+                                    <span className="absolute -top-1.5 -right-1.5 bg-red-600 border border-white text-white text-[10px] font-bold min-w-4 h-4 px-1 flex items-center justify-center rounded-full leading-none">
                                         {activeFilterCount}
                                     </span>
                                 )}

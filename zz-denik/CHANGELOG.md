@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Combat: armor, helmet, shield and weapon slots are phone-friendly cards with readable inputs; armor rating, shield bonus and weapon bonus are shown as current/MAX with a −/+ stepper (damage lowers the current value, the maximum stays for repairs).
+- Equipping from the inventory or goods stores the maximum value and a proper weapon range (Paže, Krátká, Střední, Dlouhá) instead of "Blízká" or the full property text.
+- Inventory shows each item's load as a readable value (½ lehká, 1 norm.…) plus a load bar with pack and equipped-gear totals.
+
+### Fixed
+- Opacity variants of theme colors (e.g. `bg-fl-primary/10`, `bg-fl-nav/95`) were never generated, leaving tints, borders and the bottom navigation background transparent; theme colors now expose RGB channels.
+- Dark mode text on gold buttons uses dark ink for WCAG AA contrast; inactive talent tabs and the gold coin label are readable; no text is smaller than 10 px.
+
 ## [1.8.6] - 2026-10-05
 
 ### Added

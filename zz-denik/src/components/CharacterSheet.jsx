@@ -418,7 +418,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
             </SheetTile>
 
             <SheetTile {...tileProps('inventory')} title="Inventář" icon={Backpack} summary={`Zátěž ${totalWeight}/${encumbranceLimit} · ${filledInventory} předmětů · ${char.inventory.length} slotů`} innerRef={refs.inventory} tone={inventoryTone}>
-                <SheetInventory char={char} updateDeep={updateDeep} handleAddInventorySlot={handleAddInventorySlot} handleRemoveInventorySlot={removeInventorySlot} handleClearInventory={handleClearInventory} />
+                <SheetInventory char={char} updateDeep={updateDeep} handleAddInventorySlot={handleAddInventorySlot} handleRemoveInventorySlot={removeInventorySlot} handleClearInventory={handleClearInventory} totalWeight={totalWeight} encumbranceLimit={encumbranceLimit} />
             </SheetTile>
 
             <SheetTile {...tileProps('mounts')} title="Zvířata a sluhové" icon={Shield} summary={mountCount === 0 ? 'Žádná zvířata ani sluhové' : `${mountCount} záznamů`}>

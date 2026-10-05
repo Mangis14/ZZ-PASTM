@@ -18,6 +18,7 @@ import { getTalentRank } from './utils/talents';
 import { advanceStoredWeatherQuarterDay } from './utils/time';
 import { KIN_TALENTS } from './data/kin_talents';
 import { hasPsychicPower, syncKinTalents } from './utils/kin';
+import { getWeaponRange } from './utils/items';
 
 /* Denník je domovská obrazovka a načítava sa hneď; ostatné sekcie
    a veľké modály sa doťahujú až pri prvom použití — skracuje to
@@ -626,6 +627,7 @@ const App = () => {
           name: item.Předmět,
           bonus: item.Bonus || '',
           rating: item.Zbroj || '',
+          ratingMax: item.Zbroj || '',
           weight: parseWeightLocal(item.Váha)
         }
       }));
@@ -636,8 +638,9 @@ const App = () => {
       const weaponObj = {
         name: item.Předmět,
         bonus: item.Bonus || '',
+        bonusMax: item.Bonus || '',
         damage: item.Zranění || '',
-        range: item.Category === 'Střelné zbraně' ? (item.Vlastnosti || 'Střední') : 'Blízká',
+        range: getWeaponRange(item),
         note: item.Vlastnosti || '',
         weight: parseWeightLocal(item.Váha)
       };

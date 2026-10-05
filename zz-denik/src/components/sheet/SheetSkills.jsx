@@ -14,7 +14,7 @@ const SkillRow = ({ label, value, onChange, onRoll, attr, rollDisabled = false, 
             title={rollDisabled ? disabledReason : `Hodit na dovednost ${label}`}
         >
             {label} <span className="text-[10px] font-normal text-fl-primary ml-1">({attr})</span>
-            {rollDisabled && <span className="ml-2 text-[9px] font-bold uppercase text-red-700 dark:text-red-400">blokováno</span>}
+            {rollDisabled && <span className="ml-2 text-[10px] font-bold uppercase text-red-700 dark:text-red-400">blokováno</span>}
         </button>
         <div className="flex items-center">
             <button

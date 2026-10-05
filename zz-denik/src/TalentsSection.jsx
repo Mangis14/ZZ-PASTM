@@ -151,7 +151,7 @@ const TalentsSection = ({ char, onLearnTalent }) => {
                         role="tab"
                         aria-selected={activeTab === 'profession'}
                         className={`min-h-11 flex-1 text-xs font-bold uppercase tracking-wider rounded-md transition-all flex items-center justify-center gap-2 active:opacity-80
-                        ${activeTab === 'profession' ? 'bg-fl-primary text-white shadow-md' : 'text-fl-border hover:text-white'}`}
+                        ${activeTab === 'profession' ? 'bg-fl-primary text-white shadow-md' : 'text-white/70 hover:text-white'}`}
                     >
                         <Shield size={14} aria-hidden="true" /> Povolání
                     </button>
@@ -160,7 +160,7 @@ const TalentsSection = ({ char, onLearnTalent }) => {
                         role="tab"
                         aria-selected={activeTab === 'general'}
                         className={`min-h-11 flex-1 text-xs font-bold uppercase tracking-wider rounded-md transition-all flex items-center justify-center gap-2 active:opacity-80
-                        ${activeTab === 'general' ? 'bg-fl-primary text-white shadow-md' : 'text-fl-border hover:text-white'}`}
+                        ${activeTab === 'general' ? 'bg-fl-primary text-white shadow-md' : 'text-white/70 hover:text-white'}`}
                     >
                         <Star size={14} aria-hidden="true" /> Obecné
                     </button>
@@ -169,7 +169,7 @@ const TalentsSection = ({ char, onLearnTalent }) => {
                         role="tab"
                         aria-selected={activeTab === 'kin'}
                         className={`min-h-11 flex-1 text-xs font-bold uppercase tracking-wider rounded-md transition-all flex items-center justify-center gap-2 active:opacity-80
-                        ${activeTab === 'kin' ? 'bg-fl-primary text-white shadow-md' : 'text-fl-border hover:text-white'}`}
+                        ${activeTab === 'kin' ? 'bg-fl-primary text-white shadow-md' : 'text-white/70 hover:text-white'}`}
                     >
                         <Users size={14} aria-hidden="true" /> Rodové
                     </button>

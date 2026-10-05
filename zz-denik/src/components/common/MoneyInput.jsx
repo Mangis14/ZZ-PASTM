@@ -39,7 +39,7 @@ const MoneyInput = ({ money, onChange }) => {
                                 className="h-10 w-9 shrink-0 flex items-center justify-center text-fl-primary hover:text-white hover:bg-fl-primary active:bg-fl-primary active:text-white font-bold transition-colors"
                             >+</button>
                         </div>
-                        <span className={`text-[10px] uppercase font-bold mt-1 ${c === 'gold' ? 'text-amber-600 dark:text-[#FFD700]' : c === 'silver' ? 'text-slate-500 dark:text-slate-400' : 'text-[#9E6649]'}`}>
+                        <span className={`text-[10px] uppercase font-bold mt-1 ${c === 'gold' ? 'text-amber-800 dark:text-[#FFD700]' : c === 'silver' ? 'text-slate-500 dark:text-slate-400' : 'text-[#9E6649]'}`}>
                             {c === 'gold' ? 'ZL (Zlaté)' : c === 'silver' ? 'ST (Stříbrné)' : 'MĚ (Měděné)'}
                         </span>
                     </div>

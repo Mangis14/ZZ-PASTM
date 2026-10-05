@@ -119,14 +119,14 @@ const SheetMounts = ({ char, updateField }) => {
                                         />
                                     </div>
                                     <div className={`flex-1 flex flex-col items-center justify-center p-1 rounded border ${overencumbered ? 'bg-red-900/20 border-red-800 text-red-500' : 'bg-fl-paper-bright border-fl-surface-hover text-fl-primary'}`}>
-                                        <span className="uppercase text-[9px] font-bold opacity-70">Zátěž</span>
+                                        <span className="uppercase text-[10px] font-bold opacity-70">Zátěž</span>
                                         <span className="font-bold text-sm tracking-wider">{w} / {mount.encumbranceLimit}</span>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Mount Inventory */}
-                            <div className="grid grid-cols-[1fr_auto_auto] gap-2 text-[9px] font-bold uppercase text-fl-primary mb-2 px-1">
+                            <div className="grid grid-cols-[1fr_auto_auto] gap-2 text-[10px] font-bold uppercase text-fl-primary mb-2 px-1">
                                 <span>Náklad</span>
                                 <span className="text-center w-14">Váha</span>
                                 <span className="w-6"></span>

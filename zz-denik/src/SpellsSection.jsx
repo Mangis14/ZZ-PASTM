@@ -34,11 +34,11 @@ const SpellCard = ({ spell, isExpanded, onToggle, knownSpell, onLearnSpell }) =>
             <div className="bg-fl-card p-4">
                 <div className="mb-3 grid grid-cols-2 gap-2 text-xs">
                     <div className="rounded border border-fl-paper bg-fl-paper-bright p-2">
-                        <span className="block text-[9px] font-bold uppercase text-fl-primary">Dosah</span>
+                        <span className="block text-[10px] font-bold uppercase text-fl-primary">Dosah</span>
                         {spell.range}
                     </div>
                     <div className="rounded border border-fl-paper bg-fl-paper-bright p-2">
-                        <span className="block text-[9px] font-bold uppercase text-fl-primary">Trvání</span>
+                        <span className="block text-[10px] font-bold uppercase text-fl-primary">Trvání</span>
                         {spell.duration}
                     </div>
                 </div>
@@ -149,7 +149,7 @@ const SpellsSection = ({ char, onLearnSpell }) => {
                                     }`}
                                 >
                                     <span className="truncate text-[10px] font-bold uppercase tracking-wide">{school}</span>
-                                    <span className={`shrink-0 text-[9px] font-black ${selected ? 'text-white/80' : 'text-fl-primary'}`}>{catalogSpells[school].length}</span>
+                                    <span className={`shrink-0 text-[10px] font-black ${selected ? 'text-white/80' : 'text-fl-primary'}`}>{catalogSpells[school].length}</span>
                                 </button>
                             );
                         })}
@@ -185,7 +185,7 @@ const SpellsSection = ({ char, onLearnSpell }) => {
                                     type="button"
                                     onClick={() => setKnownFilter(value)}
                                     aria-pressed={knownFilter === value}
-                                    className={`h-9 rounded border px-1 text-[9px] font-bold uppercase ${knownFilter === value ? 'border-fl-primary bg-fl-primary text-white' : 'border-fl-border bg-fl-paper-light text-fl-surface'}`}
+                                    className={`h-9 rounded border px-1 text-[10px] font-bold uppercase ${knownFilter === value ? 'border-fl-primary bg-fl-primary text-white' : 'border-fl-border bg-fl-paper-light text-fl-surface'}`}
                                 >
                                     {label}
                                 </button>

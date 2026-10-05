@@ -65,7 +65,7 @@ const ItemAutocomplete = ({ value, onChange, onSelect, placeholder, className })
                             onClick={() => handleSelect(item)}
                         >
                             <span className="font-bold">{item.Předmět}</span>
-                            <span className="opacity-70 text-[9px]">{item.Váha !== '–' ? item.Váha : '0'}</span>
+                            <span className="opacity-70 text-[10px]">{item.Váha !== '–' ? item.Váha : '0'}</span>
                         </div>
                     ))}
                 </div>
