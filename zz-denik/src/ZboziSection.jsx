@@ -151,10 +151,8 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
     const [agreedPrice, setAgreedPrice] = useState({ gold: 0, silver: 0, copper: 0 });
     const [bargainSpent, setBargainSpent] = useState(1);
     const [bargain, setBargain] = useState(null);
-    const localGoldRank = getTalentRank(char, 'path_of_gold');
-    const importedTreasureRank = getTalentRank(char, 'kupec-cesta-pokladu');
-    const pathOfGoldRank = Math.max(localGoldRank, importedTreasureRank);
-    const bargainTalentName = importedTreasureRank > 0 ? 'Cesta pokladu' : 'Cesta zlata';
+    const treasureRank = getTalentRank(char, 'kupec-cesta-pokladu');
+    const bargainTalentName = 'Cesta pokladu';
     const availableWillpower = Math.max(0, Number(char?.willpower) || 0);
     const halfElf = isHalfElf(char);
 
@@ -170,7 +168,8 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
 
     const totalPrice = formatPrice(totalCopper);
     const itemCount = cart.reduce((sum, item) => sum + item.qty, 0);
-    const maxBargainSpent = Math.min(availableWillpower, halfElf ? 2 : 4);
+    // Sleva končí na 80 % (4 účinné body); půlelfovi k tomu stačí 3 utracené.
+    const maxBargainSpent = Math.min(availableWillpower, halfElf ? 3 : 4);
 
     useEffect(() => {
         if (cart.length > 0) return;
@@ -192,7 +191,7 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
     }, [totalCopper]);
 
     const applyBargain = () => {
-        if (bargain || pathOfGoldRank < 1 || bargainSpent < 1 || bargainSpent > maxBargainSpent) return;
+        if (bargain || treasureRank < 1 || bargainSpent < 1 || bargainSpent > maxBargainSpent) return;
         const nextBargain = calculateBargain({ totalCopper, spent: bargainSpent, halfElf });
         if (!onBargain?.(nextBargain.spent, nextBargain.discountPercent, bargainTalentName)) return;
         setBargain(nextBargain);
@@ -298,14 +297,14 @@ const CartPanel = ({ cart, removeFromCart, incrementCart, completelyRemoveCart, 
                             </div>
                         </div>
 
-                        {pathOfGoldRank > 0 && (
+                        {treasureRank > 0 && (
                             <div className="rounded-lg border border-fl-primary/30 bg-fl-primary/10 p-3">
                                 <div className="mb-2 flex items-center justify-between gap-3">
                                     <div>
                                         <p className="text-xs font-bold uppercase tracking-wider text-fl-primary">Smlouvat — {bargainTalentName}</p>
                                         <p className="text-xs text-fl-text-muted">
                                             1 vůle = sleva 20 %, maximálně 80 %.
-                                            {halfElf ? ' Půlelf má dvojnásobný účinek.' : ''}
+                                            {halfElf ? ' Půlelf: první bod vůle se počítá za dva.' : ''}
                                         </p>
                                     </div>
                                     <span className="shrink-0 rounded-full bg-fl-paper px-3 py-1 text-xs font-bold text-fl-primary">

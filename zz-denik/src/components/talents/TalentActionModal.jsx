@@ -277,7 +277,7 @@ const TalentActionModal = ({ talent, char, onClose, onApply }) => {
                             <div className="text-sm text-fl-surface-hover">
                                 Zbývá: <strong>{availableWillpower - spent}</strong>
                                 {halfElf && action.useEffectiveWillpower !== false && (
-                                    <span className="block text-xs text-fl-primary">Půlelf: účinek {effectiveWillpower} vůle</span>
+                                    <span className="block text-xs text-fl-primary">Půlelf (Duševní síla): účinek {effectiveWillpower} vůle</span>
                                 )}
                             </div>
                         </div>

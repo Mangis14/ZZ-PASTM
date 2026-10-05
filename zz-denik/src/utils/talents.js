@@ -1,15 +1,12 @@
-export const isHalfElf = (char) => {
-    const kin = String(char?.kin || '')
-        .toLocaleLowerCase('cs-CZ')
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .trim();
-    return kin.includes('pulelf') || kin.includes('poloelf');
-};
+import { effectiveWillpower, hasPsychicPower } from './kin';
 
+// Půlelf (Duševní síla) – rozpoznání rodu i talentu sdílí utils/kin.
+export const isHalfElf = hasPsychicPower;
+
+// Průvodce hráče: první utracený bod vůle se půlelfovi počítá za dva (2 za tři…).
 export const getEffectiveWillpower = (char, spent) => {
     const safeSpent = Math.max(0, Number(spent) || 0);
-    return safeSpent * (isHalfElf(char) ? 2 : 1);
+    return effectiveWillpower(safeSpent, hasPsychicPower(char));
 };
 
 const normalizeTalentId = (talentId) => String(talentId || '')
