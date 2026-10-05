@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Raw materials listed in both material tables (Železná ruda, Železo, Stříbro, Zlato) appear only once; multi-paragraph table cells no longer glue words together.
 - Kin talent names and descriptions now follow the Czech Player's Guide (Hlava žulová, Nepolapitelný, Instinkt lovce, Nezlomný, Duševní síla…); existing characters are updated on load.
 - Availability filter orders Epická after Vzácná.
+- Cesta zlata was removed from the rules and replaced by Cesta pokladu (synced from the Google Drive talents document); characters with Cesta zlata are migrated to Cesta pokladu on load, keeping their rank.
 
 ### Changed
 - Attribute cards are ordered Síla, Obratnost, Bystrost, Osobnost, including the tile summary.
