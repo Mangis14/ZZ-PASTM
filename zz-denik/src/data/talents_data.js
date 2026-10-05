@@ -115,13 +115,14 @@ export const TALENTS_DATA = {
             ]
         },
         {
-            id: 'path_of_gold',
-            name: 'Cesta zlata',
+            // Cesta zlata byla v pravidlech nahrazena Cestou pokladu.
+            id: 'kupec-cesta-pokladu',
+            name: 'Cesta pokladu',
             profession: 'Kupec',
             ranks: [
-                { rank: 1, description: 'Sleva 1/5 za každý bod VŮLE (max 4 body).' },
-                { rank: 2, description: '1 VŮLE: Rozpoznáš cennosti v místnosti.' },
-                { rank: 3, description: '1 VŮLE: Najdeš 1 zlaťák po kapsách.' }
+                { rank: 1, description: 'Při nákupu nějakého předmětu můžeš utracením bodů vůle automaticky usmlouvat cenu. Cena se sníží o jednu pětinu za každý utracený bod vůle. Maximálně můžeš utratit 4 body vůle, čímž cenu snížíš na jednu pětinu.' },
+                { rank: 2, description: 'Utracením jednoho bodu vůle automaticky uspěješ při hodu na dostupnost pro neobvyklý předmět, za dva body pro vzácný předmět. Můžeš si napřed hodit a body utratit, teprve když neuspěješ.' },
+                { rank: 3, description: 'Když prohledáváš místnost, můžeš v ní utracením bodu vůle najít všechny tajné dveře a skryté poklady.' }
             ]
         },
         // LOVEC
