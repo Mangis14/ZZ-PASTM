@@ -265,8 +265,19 @@ const App = () => {
         }
       });
       // Rodové talenty dřív nesly vymyšlené názvy a popisy – srovnáme je s Průvodcem hráče.
+      // Cesta zlata byla z pravidel odstraněna; postavy ji mají jako Cestu pokladu.
       if (Array.isArray(merged.talents)) {
         merged.talents = merged.talents.map(talent => {
+          if (talent?.id === 'path_of_gold') {
+            const treasure = ALL_TALENTS.find(item => item.id === 'kupec-cesta-pokladu');
+            const rank = Math.max(1, Math.min(3, Number(talent.rank) || 1));
+            return {
+              ...talent,
+              id: 'kupec-cesta-pokladu',
+              name: 'Cesta pokladu',
+              description: treasure?.ranks?.[rank - 1]?.description || talent.description
+            };
+          }
           const kinTalent = KIN_TALENTS.find(item => item.id === talent?.id);
           return kinTalent
             ? { ...talent, name: kinTalent.name, description: kinTalent.ranks[0].description }
