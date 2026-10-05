@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
 - Item load is a compact four-dot indicator (small green 0 → large red 2) everywhere; tapping it opens a minimal menu with the full names (0 · Drobná … 2 · Těžká). It stays visible, read-only, in Game mode.
 - Inventory shows each item's catalog price with a coin dot, a load bar with pack and equipped-gear totals and the total value of the pack.
 - Resources use round −/+ buttons around the supply die with a small four-step level bar.
+- Inventory slots hold stacks: a quantity counter (1×, 2×…) with a small −/+ menu; a stack carries at most load 2 (e.g. 4× light, 2× normal, 1× heavy, up to 20 tiny items). Load, pack value and item counts scale with quantity, changing the weight trims an oversized stack, items bought in Goods join an existing stack and equipping takes one piece from it.
+- The critical injuries "+" asks whether to roll on the critical injury tables or add a custom entry.
+- Smaller, round attribute and resource steppers that keep clear of the values; two-digit attributes use a smaller numeral.
 
 ### Fixed
 - Opacity variants of theme colors (e.g. `bg-fl-primary/10`, `bg-fl-nav/95`) were never generated, leaving tints, borders and the bottom navigation background transparent; theme colors now expose RGB channels.

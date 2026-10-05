@@ -1,7 +1,6 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import React from 'react';
 import { Check } from 'lucide-react';
-import useDialog from '../../hooks/useDialog';
+import AnchoredMenu, { useAnchoredMenu } from './AnchoredMenu';
 
 export const WEIGHT_OPTIONS = [
     { value: 0, short: '0', label: 'Drobná' },
@@ -42,86 +41,45 @@ export const WeightDots = ({ value }) => {
     );
 };
 
-const WeightMenu = ({ anchorRect, value, onSelect, onClose }) => {
-    const panelRef = useDialog(onClose);
-    const menuRef = useRef(null);
-    const [position, setPosition] = useState({ top: anchorRect.bottom + 6, left: Math.max(12, anchorRect.right - 192) });
-
-    // Menu drží u tlačítka; když se pod něj nevejde, otevře se nahoru.
-    useLayoutEffect(() => {
-        const menu = menuRef.current;
-        if (!menu) return;
-        const { height, width } = menu.getBoundingClientRect();
-        const spaceBelow = window.innerHeight - anchorRect.bottom;
-        const preferredTop = spaceBelow < height + 96 ? anchorRect.top - height - 6 : anchorRect.bottom + 6;
-        const top = Math.min(window.innerHeight - height - 12, Math.max(12, preferredTop));
-        const left = Math.min(window.innerWidth - width - 12, Math.max(12, anchorRect.right - width));
-        setPosition({ top, left });
-    }, [anchorRect]);
-
-    return createPortal(
-        <div className="fixed inset-0 z-[9000]" onClick={onClose}>
-            <div
-                ref={(node) => { menuRef.current = node; panelRef.current = node; }}
-                tabIndex={-1}
-                role="dialog"
-                aria-modal="true"
-                aria-label="Zátěž předmětu"
-                className="fixed w-48 overflow-hidden rounded-xl border border-fl-border bg-fl-card p-1 shadow-2xl outline-none animate-in fade-in zoom-in-95 duration-150"
-                style={{ top: position.top, left: position.left }}
-                onClick={(event) => event.stopPropagation()}
-            >
-                {WEIGHT_OPTIONS.map(option => {
-                    const isSelected = option.value === Number(value);
-                    return (
-                        <button
-                            key={option.value}
-                            type="button"
-                            onClick={() => onSelect(option.value)}
-                            aria-pressed={isSelected}
-                            className={`flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-left text-sm transition-colors active:bg-fl-paper ${
-                                isSelected ? 'bg-fl-primary/10 font-bold text-fl-primary' : 'text-fl-surface hover:bg-fl-paper'
-                            }`}
-                        >
-                            <span className="w-11 shrink-0"><WeightDots value={option.value} /></span>
-                            <span className="flex-1 whitespace-nowrap"><span className="tabular-nums">{option.short}</span> · {option.label}</span>
-                            {isSelected && <Check size={14} aria-hidden="true" />}
-                        </button>
-                    );
-                })}
-            </div>
-        </div>,
-        document.body
-    );
-};
-
 /* Minimalistická zátěž předmětu: čtyři tečky, plný popis až v menu. */
 const WeightSelect = ({ value, onChange, className = '' }) => {
-    const buttonRef = useRef(null);
-    const [anchorRect, setAnchorRect] = useState(null);
+    const menu = useAnchoredMenu();
 
     return (
         <>
             <button
-                ref={buttonRef}
                 type="button"
-                onClick={() => setAnchorRect(buttonRef.current?.getBoundingClientRect() || null)}
+                onClick={menu.open}
                 data-readonly-in-game
                 aria-haspopup="dialog"
-                aria-expanded={Boolean(anchorRect)}
+                aria-expanded={menu.isOpen}
                 aria-label={`Zátěž ${weightLabel(value)}, změnit`}
                 title={`Zátěž ${weightLabel(value)}`}
                 className={`flex h-10 shrink-0 items-center justify-center rounded-lg px-2 transition-colors hover:bg-fl-paper active:bg-fl-paper ${className}`}
             >
                 <WeightDots value={value} />
             </button>
-            {anchorRect && (
-                <WeightMenu
-                    anchorRect={anchorRect}
-                    value={value}
-                    onSelect={(next) => { onChange(next); setAnchorRect(null); }}
-                    onClose={() => setAnchorRect(null)}
-                />
+            {menu.isOpen && (
+                <AnchoredMenu anchorRect={menu.anchorRect} onClose={menu.close} label="Zátěž předmětu">
+                    {WEIGHT_OPTIONS.map(option => {
+                        const isSelected = option.value === Number(value);
+                        return (
+                            <button
+                                key={option.value}
+                                type="button"
+                                onClick={() => { onChange(option.value); menu.close(); }}
+                                aria-pressed={isSelected}
+                                className={`flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-left text-sm transition-colors active:bg-fl-paper ${
+                                    isSelected ? 'bg-fl-primary/10 font-bold text-fl-primary' : 'text-fl-surface hover:bg-fl-paper'
+                                }`}
+                            >
+                                <span className="w-11 shrink-0"><WeightDots value={option.value} /></span>
+                                <span className="flex-1 whitespace-nowrap"><span className="tabular-nums">{option.short}</span> · {option.label}</span>
+                                {isSelected && <Check size={14} aria-hidden="true" />}
+                            </button>
+                        );
+                    })}
+                </AnchoredMenu>
             )}
         </>
     );

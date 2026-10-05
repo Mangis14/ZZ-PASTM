@@ -22,7 +22,7 @@ const PREY_OPTIONS = [
     { name: 'Jelen', units: 4 }
 ];
 
-const ROUND_BUTTON = 'flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-fl-border text-fl-primary transition-all hover:border-fl-primary active:scale-90 active:bg-fl-primary/20 disabled:opacity-30 disabled:active:scale-100';
+const ROUND_BUTTON = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-fl-border text-fl-primary transition-all hover:border-fl-primary active:scale-90 active:bg-fl-primary/20 disabled:opacity-30 disabled:active:scale-100';
 
 const SheetConsumables = ({ char, updateField, onRoll, innerRef }) => {
     const [cookAmount, setCookAmount] = useState(1);
@@ -158,10 +158,10 @@ const SheetConsumables = ({ char, updateField, onRoll, innerRef }) => {
                                     <p className="text-sm text-fl-text-muted">{rawFood} jednotek, vařit {rawFood > 0 ? Math.min(cookAmount, rawFood) : 0}</p>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <button type="button" onClick={() => updateField('consumables.rawFood', Math.max(0, rawFood - 1))} disabled={rawFood < 1} aria-label="Ubrat surovinu" className={ROUND_BUTTON}><Minus size={18} strokeWidth={2.5} /></button>
-                                    <button type="button" onClick={() => updateField('consumables.rawFood', rawFood + 1)} aria-label="Přidat surovinu" className={`${ROUND_BUTTON} border-fl-primary/60 bg-fl-primary/10`}><Plus size={18} strokeWidth={2.5} /></button>
-                                    <button type="button" onClick={() => setCookAmount(value => Math.max(1, value - 1))} disabled={cookAmount <= 1} aria-label="Vařit méně surovin" className={ROUND_BUTTON}><Minus size={18} strokeWidth={2.5} /></button>
-                                    <button type="button" onClick={() => setCookAmount(value => Math.min(6, rawFood, value + 1))} disabled={cookAmount >= Math.min(6, rawFood)} aria-label="Vařit více surovin" className={`${ROUND_BUTTON} border-fl-primary/60 bg-fl-primary/10`}><Plus size={18} strokeWidth={2.5} /></button>
+                                    <button type="button" onClick={() => updateField('consumables.rawFood', Math.max(0, rawFood - 1))} disabled={rawFood < 1} aria-label="Ubrat surovinu" className={ROUND_BUTTON}><Minus size={15} strokeWidth={2.5} /></button>
+                                    <button type="button" onClick={() => updateField('consumables.rawFood', rawFood + 1)} aria-label="Přidat surovinu" className={`${ROUND_BUTTON} border-fl-primary/60 bg-fl-primary/10`}><Plus size={15} strokeWidth={2.5} /></button>
+                                    <button type="button" onClick={() => setCookAmount(value => Math.max(1, value - 1))} disabled={cookAmount <= 1} aria-label="Vařit méně surovin" className={ROUND_BUTTON}><Minus size={15} strokeWidth={2.5} /></button>
+                                    <button type="button" onClick={() => setCookAmount(value => Math.min(6, rawFood, value + 1))} disabled={cookAmount >= Math.min(6, rawFood)} aria-label="Vařit více surovin" className={`${ROUND_BUTTON} border-fl-primary/60 bg-fl-primary/10`}><Plus size={15} strokeWidth={2.5} /></button>
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -207,11 +207,11 @@ const SheetConsumables = ({ char, updateField, onRoll, innerRef }) => {
                                     aria-label={`Snížit zdroj ${label}`}
                                     className={ROUND_BUTTON}
                                 >
-                                    <Minus size={18} strokeWidth={2.5} />
+                                    <Minus size={15} strokeWidth={2.5} />
                                 </button>
                                 <div className="flex min-w-0 flex-col items-center">
                                     {isEmpty ? (
-                                        <span className="flex h-5 items-center text-[10px] font-bold uppercase tracking-wide text-fl-text-muted">Prázdné</span>
+                                        <span className="font-serif text-xl font-bold leading-none text-fl-text-muted" title="Prázdné">–<span className="sr-only">Prázdné</span></span>
                                     ) : (
                                         <span className={`font-serif text-xl font-bold leading-none ${getColorClass(val)}`}>{val}</span>
                                     )}
@@ -229,7 +229,7 @@ const SheetConsumables = ({ char, updateField, onRoll, innerRef }) => {
                                     aria-label={`Zvýšit zdroj ${label}`}
                                     className={`${ROUND_BUTTON} border-fl-primary/60 bg-fl-primary/10`}
                                 >
-                                    <Plus size={18} strokeWidth={2.5} />
+                                    <Plus size={15} strokeWidth={2.5} />
                                 </button>
                             </div>
                         </div>

@@ -18,7 +18,7 @@ import { getTalentRank } from './utils/talents';
 import { advanceStoredWeatherQuarterDay } from './utils/time';
 import { KIN_TALENTS } from './data/kin_talents';
 import { hasPsychicPower, syncKinTalents } from './utils/kin';
-import { getWeaponRange } from './utils/items';
+import { getWeaponRange, itemQty, maxStack, stackWeight } from './utils/items';
 
 /* Denník je domovská obrazovka a načítava sa hneď; ostatné sekcie
    a veľké modály sa doťahujú až pri prvom použití — skracuje to
@@ -590,6 +590,14 @@ const App = () => {
     setChar(prev => {
       const newInv = [...prev.inventory];
       const parsedWeight = item.weight !== undefined && item.weight !== null && !isNaN(Number(item.weight)) ? Number(item.weight) : 0;
+      // Stejný předmět se přidá do existujícího stohu, pokud se do něj vejde.
+      const stackIndex = newInv.findIndex(i => i.name === item.name && Number(i.weight) === parsedWeight && itemQty(i) < maxStack(parsedWeight));
+      if (stackIndex !== -1) {
+        const qty = itemQty(newInv[stackIndex]) + 1;
+        newInv[stackIndex] = { ...newInv[stackIndex], qty };
+        showToast(`Přidáno: ${item.name} (${qty} ks)`);
+        return { ...prev, inventory: newInv };
+      }
       // Find first empty slot
       const emptyIndex = newInv.findIndex(i => !i.name);
       if (emptyIndex !== -1) {
@@ -1219,7 +1227,8 @@ const App = () => {
 
   const totalWeight = useMemo(() => {
     let w = 0;
-    ['weapons', 'inventory'].forEach(k => char[k].forEach(i => { if (i.name) w += (i.weight || 0); }));
+    char.weapons.forEach(i => { if (i.name) w += (i.weight || 0); });
+    char.inventory.forEach(i => { w += stackWeight(i); });
     ['armor', 'helmet', 'shield'].forEach(k => { if (char[k].name) w += (char[k].weight || 0); });
     return w;
   }, [char]);
@@ -1360,6 +1369,7 @@ const App = () => {
             onEndBerserking={endBerserking}
             onReceiveFearAttack={receiveFearAttack}
             onCoupDeGrace={performCoupDeGrace}
+            onOpenCriticalTable={() => setShowCritModal(true)}
             onActivateBladeOption={activateBladeCombatOption}
             onCombatAttack={performCombatAttack}
             totalWeight={totalWeight}

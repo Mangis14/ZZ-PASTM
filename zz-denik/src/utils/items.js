@@ -30,3 +30,17 @@ export const getWeaponRange = (item) => {
     if (handsRange) return handsRange.charAt(0).toUpperCase() + handsRange.slice(1);
     return item?.Category === 'Střelné zbraně' ? 'Krátká' : 'Paže';
 };
+
+/* Stohování v inventáři: jeden slot unese nejvýš zátěž 2 (např. 4× lehká,
+   2× normální, 1× těžká); drobné předměty bez zátěže max. 20 kusů. */
+export const MAX_STACK_WEIGHT = 2;
+export const MAX_TINY_STACK = 20;
+
+export const itemQty = (item) => Math.max(1, Math.floor(Number(item?.qty) || 1));
+
+export const maxStack = (weight) => {
+    const unit = Number(weight) || 0;
+    return unit > 0 ? Math.max(1, Math.floor(MAX_STACK_WEIGHT / unit)) : MAX_TINY_STACK;
+};
+
+export const stackWeight = (item) => (item?.name?.trim() ? (Number(item.weight) || 0) * itemQty(item) : 0);

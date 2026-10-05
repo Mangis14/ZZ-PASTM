@@ -24,11 +24,11 @@ const StepButton = ({ onClick, label, compact = false, disabled = false, gameAct
         disabled={disabled}
         aria-label={label}
         data-game-action={gameAction || undefined}
-        className={`flex shrink-0 items-center justify-center rounded-md border border-fl-primary/30 bg-fl-primary/10 font-bold text-fl-primary transition-colors hover:border-fl-primary/60 hover:bg-fl-primary/25 active:bg-fl-primary/40 disabled:cursor-not-allowed disabled:opacity-30 ${
-            compact ? 'h-7 w-7' : 'h-10 w-10'
+        className={`flex shrink-0 items-center justify-center rounded-full border border-fl-primary/30 bg-fl-primary/10 font-bold text-fl-primary transition-all hover:border-fl-primary/60 hover:bg-fl-primary/25 active:scale-90 active:bg-fl-primary/40 disabled:cursor-not-allowed disabled:opacity-30 ${
+            compact ? 'h-7 w-7' : 'h-8 w-8'
         }`}
     >
-        {label.startsWith('Snížit') ? <Minus size={compact ? 13 : 17} /> : <Plus size={compact ? 13 : 17} />}
+        {label.startsWith('Snížit') ? <Minus size={compact ? 13 : 15} strokeWidth={2.5} /> : <Plus size={compact ? 13 : 15} strokeWidth={2.5} />}
     </button>
 );
 
@@ -86,8 +86,8 @@ const AttributeCard = ({ label, shortLabel, value, onChange, onRoll, icon: Icon 
                 </button>
             </div>
 
-            <div className="px-3 py-3">
-                <div className="flex items-center justify-between gap-2">
+            <div className="px-2 py-3">
+                <div className="flex items-center justify-between gap-1">
                     <StepButton
                         label={`Snížit aktuální hodnotu ${label}`}
                         onClick={() => onChange({ ...value, current: Math.max(0, current - 1) })}
@@ -95,7 +95,7 @@ const AttributeCard = ({ label, shortLabel, value, onChange, onRoll, icon: Icon 
                         gameAction
                     />
                     <div className="min-w-0 text-center">
-                        <div className={`font-serif text-4xl font-bold leading-none tabular-nums ${
+                        <div className={`font-serif font-bold leading-none tabular-nums ${max >= 10 ? 'text-3xl' : 'text-4xl'} ${
                             isDepleted ? 'text-red-700 dark:text-red-400' : isDamaged ? 'text-amber-700 dark:text-amber-400' : 'text-fl-surface'
                         }`}>
                             {current}

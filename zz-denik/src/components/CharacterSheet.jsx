@@ -68,7 +68,7 @@ const loadSheetLayout = (characterId) => {
     }
 };
 
-const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, removeInventorySlot, onRoll, refs, scrollToSection, setCurrentView, onModalStateChange, onApplyTalentAction, onResetFight, onAdvanceQuarterDay, onTalentRankChanged, onEndBerserking, onReceiveFearAttack, onCoupDeGrace, onActivateBladeOption, onCombatAttack, totalWeight, encumbranceLimit, isOverencumbered }) => {
+const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, removeInventorySlot, onRoll, refs, scrollToSection, setCurrentView, onModalStateChange, onApplyTalentAction, onResetFight, onAdvanceQuarterDay, onTalentRankChanged, onEndBerserking, onReceiveFearAttack, onCoupDeGrace, onOpenCriticalTable, onActivateBladeOption, onCombatAttack, totalWeight, encumbranceLimit, isOverencumbered }) => {
     const { talents: catalogTalents } = useCatalog();
     const [layout, setLayout] = useState(() => loadSheetLayout(char.id));
     const [customizing, setCustomizing] = useState(false);
@@ -284,7 +284,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
             danger: true
         });
         if (!confirmed) return;
-        updateField('inventory', char.inventory.map(() => ({ name: '', weight: 1 })));
+        updateField('inventory', char.inventory.map(() => ({ name: '', weight: 1, qty: 1 })));
     };
 
     const handleAddWeaponSlot = () => {
@@ -295,7 +295,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
         updateField('weapons', newWeapons);
     };
 
-    const filledInventory = (char.inventory || []).filter(item => item.name?.trim()).length;
+    const filledInventory = (char.inventory || []).reduce((sum, item) => sum + (item.name?.trim() ? Math.max(1, Number(item.qty) || 1) : 0), 0);
     const equippedWeapons = (char.weapons || []).filter(item => item.name?.trim()).length;
     const activeConditions = Object.values(char.conditions || {}).filter(Boolean).length;
     const attributes = Object.values(char.attributes || {});
@@ -394,7 +394,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
             </SheetTile>
 
             <SheetTile {...tileProps('criticals')} title="Kritická zranění" icon={Skull} summary={criticalCount === 0 ? 'Žádná kritická zranění' : `${criticalCount} aktivní zranění`} tone={criticalCount > 0 ? 'danger' : 'default'}>
-                <SheetCriticals char={char} updateField={updateField} updateDeep={updateDeep} />
+                <SheetCriticals char={char} updateField={updateField} updateDeep={updateDeep} onOpenCriticalTable={onOpenCriticalTable} />
             </SheetTile>
 
             <SheetTile {...tileProps('skills')} title="Dovednosti" icon={Star} summary={`${developedSkills} rozvinutých dovedností`} innerRef={refs.skills}>
@@ -418,7 +418,7 @@ const CharacterSheet = ({ char, updateField, updateDeep, addItemToInventory, rem
             </SheetTile>
 
             <SheetTile {...tileProps('inventory')} title="Inventář" icon={Backpack} summary={`Zátěž ${totalWeight}/${encumbranceLimit} · ${filledInventory} předmětů · ${char.inventory.length} slotů`} innerRef={refs.inventory} tone={inventoryTone}>
-                <SheetInventory char={char} updateDeep={updateDeep} handleAddInventorySlot={handleAddInventorySlot} handleRemoveInventorySlot={removeInventorySlot} handleClearInventory={handleClearInventory} totalWeight={totalWeight} encumbranceLimit={encumbranceLimit} />
+                <SheetInventory char={char} updateDeep={updateDeep} handleAddInventorySlot={handleAddInventorySlot} handleRemoveInventorySlot={removeInventorySlot} handleClearInventory={handleClearInventory} totalWeight={totalWeight} encumbranceLimit={encumbranceLimit} addItemToInventory={addItemToInventory} />
             </SheetTile>
 
             <SheetTile {...tileProps('mounts')} title="Zvířata a sluhové" icon={Shield} summary={mountCount === 0 ? 'Žádná zvířata ani sluhové' : `${mountCount} záznamů`}>
