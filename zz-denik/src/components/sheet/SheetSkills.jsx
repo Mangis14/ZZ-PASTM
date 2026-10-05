@@ -3,16 +3,18 @@ import { Save } from 'lucide-react';
 import Card from '../common/Card';
 import SectionHeader from '../common/SectionHeader';
 
-const SkillRow = ({ label, value, onChange, onRoll, attr }) => (
+const SkillRow = ({ label, value, onChange, onRoll, attr, rollDisabled = false, disabledReason = '' }) => (
     <div className="flex min-h-11 items-center justify-between gap-2 border-b border-fl-border group hover:bg-fl-paper-bright">
         <button
             type="button"
             data-game-action
-            className="min-w-0 flex-1 self-stretch py-1 text-left text-sm font-bold text-fl-surface-hover transition-colors hover:text-fl-primary active:text-fl-primary"
+            disabled={rollDisabled}
+            className="min-w-0 flex-1 self-stretch py-1 text-left text-sm font-bold text-fl-surface-hover transition-colors hover:text-fl-primary active:text-fl-primary disabled:cursor-not-allowed disabled:text-red-700 disabled:opacity-60 dark:disabled:text-red-400"
             onClick={onRoll}
-            title={`Hodit na dovednost ${label}`}
+            title={rollDisabled ? disabledReason : `Hodit na dovednost ${label}`}
         >
             {label} <span className="text-[10px] font-normal text-fl-primary ml-1">({attr})</span>
+            {rollDisabled && <span className="ml-2 text-[9px] font-bold uppercase text-red-700 dark:text-red-400">blokováno</span>}
         </button>
         <div className="flex items-center">
             <button
@@ -39,6 +41,8 @@ const SkillRow = ({ label, value, onChange, onRoll, attr }) => (
 );
 
 const SheetSkills = ({ char, updateField, onRoll, innerRef }) => {
+    const manipulationBlocked = Boolean(char.talentState?.isBerserking);
+
     return (
         <Card innerRef={innerRef}>
             <SectionHeader title="Dovednosti" icon={Save} />
@@ -60,6 +64,8 @@ const SheetSkills = ({ char, updateField, onRoll, innerRef }) => {
                                     value={char.skills[key]} 
                                     onChange={(v) => updateField(`skills.${key}`, v)}
                                     onRoll={() => onRoll && onRoll(char.attributes[group.baseKey].current, char.skills[key] || 0, 0)}
+                                    rollDisabled={key === 'manipulation' && manipulationBlocked}
+                                    disabledReason="Během běsnění nelze používat Manipulaci."
                                 />
                             ))}
                         </div>

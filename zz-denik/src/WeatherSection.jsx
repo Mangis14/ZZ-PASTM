@@ -41,21 +41,20 @@ const WeatherSection = () => {
         }
     }, [state]);
 
+    useEffect(() => {
+        const handleWeatherStateUpdate = (event) => {
+            setState(prev => ({ ...prev, ...(event.detail || {}), isLoaded: true }));
+        };
+        window.addEventListener('fl:weather-state-updated', handleWeatherStateUpdate);
+        return () => window.removeEventListener('fl:weather-state-updated', handleWeatherStateUpdate);
+    }, []);
+
     const updateState = (updates) => setState(prev => ({ ...prev, ...updates }));
 
     const rollWeather = () => {
         const roll = rollD66();
         const duration = rollD6();
         updateState({ weatherRoll: roll, weatherDuration: duration });
-    };
-
-    const nextQuarterDay = () => {
-        const nextIndex = (state.quarterDayIndex + 1) % 4;
-        const newDuration = Math.max(0, state.weatherDuration - 1);
-        updateState({
-            quarterDayIndex: nextIndex,
-            weatherDuration: newDuration
-        });
     };
 
     const currentSeason = SEASON_TYPES.find(s => s.id === state.season) || SEASON_TYPES[1];
@@ -113,12 +112,6 @@ const WeatherSection = () => {
                             {currentQuarterDay.label}
                         </div>
 
-                        <button
-                            onClick={nextQuarterDay}
-                            className="min-h-12 bg-fl-nav text-white px-4 rounded-lg hover:bg-fl-nav-hover active:scale-[0.97] transition-all font-bold text-xs uppercase"
-                        >
-                            Další čtvrt-den
-                        </button>
                     </div>
                 </div>
             </Card>

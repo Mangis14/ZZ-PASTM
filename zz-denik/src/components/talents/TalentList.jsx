@@ -3,7 +3,7 @@ import { X, Star } from 'lucide-react';
 import TalentDetailPopup from './TalentDetailPopup';
 import { confirmAction } from '../common/ConfirmDialog';
 
-const TalentList = ({ talents, onRemove, onOpenPicker, onUpgrade, onDowngrade, onShowFullTalent, onDetailOpenChange }) => {
+const TalentList = ({ talents, char, onRemove, onOpenPicker, onUpgrade, onDowngrade, onShowFullTalent, onDetailOpenChange, onApplyAction }) => {
     const [selectedTalentId, setSelectedTalentId] = useState(null);
 
     const selectedTalent = useMemo(() => {
@@ -82,9 +82,11 @@ const TalentList = ({ talents, onRemove, onOpenPicker, onUpgrade, onDowngrade, o
             {selectedTalent && (
                 <TalentDetailPopup
                     talent={selectedTalent}
+                    char={char}
                     onClose={() => setSelectedTalentId(null)}
                     onUpgrade={handleUpgrade}
                     onDowngrade={handleDowngrade}
+                    onApplyAction={onApplyAction}
                     onShowFull={(t) => {
                         setSelectedTalentId(null);
                         onShowFullTalent(t);

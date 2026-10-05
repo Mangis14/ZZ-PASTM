@@ -12,6 +12,10 @@ import CharacterSheet from './components/CharacterSheet';
 import useDialog from './hooks/useDialog';
 import { registerBackHandler, syncSystemBars, exitApp, isNativePlatform } from './native/platform';
 import { TALENTS_DATA } from './data/talents_data';
+import { calculateAttackDamage, clearPreparedCombatEffects, parseCombatValue } from './utils/combat';
+import { createPoisonInventoryItem } from './utils/poisons';
+import { getTalentRank } from './utils/talents';
+import { advanceStoredWeatherQuarterDay } from './utils/time';
 
 /* Denník je domovská obrazovka a načítava sa hneď; ostatné sekcie
    a veľké modály sa doťahujú až pri prvom použití — skracuje to
@@ -63,10 +67,26 @@ const defaultCharacter = {
   helmet: { name: '', bonus: '', rating: '', weight: 1 },
   shield: { name: '', bonus: '', rating: '', weight: 1 },
   inventory: Array(10).fill({ name: '', weight: 1 }),
-  consumables: { food: 0, water: 0, arrows: 0, torches: 0, alcohol: 0, tobacco: 0 },
+  consumables: { food: 0, water: 0, arrows: 0, torches: 0, alcohol: 0, tobacco: 0, rawFood: 0 },
   money: { gold: 0, silver: 0, copper: 0 },
   experience: 0,
   willpower: 0,
+  talentState: {
+    isBerserking: false,
+    berserkerUsedThisFight: false,
+    painResistUsesThisFight: 0,
+    fearWillpowerUsedThisFight: false,
+    cookMealUsedThisQuarterDay: false,
+    bonusCombatActions: 0,
+    bonusCombatActionTalentId: '',
+    extraAttackReady: false,
+    ignoreArmorNextMelee: false,
+    pendingAttackBonus: 0,
+    pendingAttackBonusLabel: '',
+    pendingAttackTalentId: '',
+    lastAttackSummary: ''
+  },
+  luckUsedThisQuarterDay: false,
   timeOfDay: 0, // 0=Ráno, 1=Den, 2=Večer, 3=Noc
   criticalInjuries: [], // Array of { description, lethal, healingTime }
   mounts: [], // Array of { name, encumbranceLimit, inventory: [] }
@@ -167,6 +187,7 @@ const App = () => {
   const [currentView, setCurrentViewRaw] = useState('sheet');
   const toastTimer = useRef(null);
   const exitConfirmOpen = useRef(false);
+  const strengthTriggerOpen = useRef(false);
 
   const [isDarkMode, setIsDarkMode] = useState(getInitialDarkMode);
 
@@ -427,15 +448,110 @@ const App = () => {
     showToast(`Postava ${mergedChar.name || 'Bezejmenný'} importována!`);
   };
 
-  const updateField = (path, value) => {
+  const setFieldValue = (path, value) => {
     setChar(prev => {
-      const newChar = { ...prev };
       const parts = path.split('.');
+      const newChar = { ...prev };
       let current = newChar;
-      for (let i = 0; i < parts.length - 1; i++) current = current[parts[i]];
+      let source = prev;
+      for (let i = 0; i < parts.length - 1; i++) {
+        const key = parts[i];
+        const nextSource = source?.[key];
+        current[key] = Array.isArray(nextSource) ? [...nextSource] : { ...(nextSource || {}) };
+        current = current[key];
+        source = nextSource;
+      }
       current[parts[parts.length - 1]] = value;
       return newChar;
     });
+  };
+
+  const updateField = async (path, value) => {
+    const changesStrength = path === 'attributes.strength' || path === 'attributes.strength.current';
+    const previousStrength = Number(char.attributes?.strength?.current) || 0;
+    const nextStrength = path === 'attributes.strength'
+      ? Number(value?.current) || 0
+      : path === 'attributes.strength.current'
+        ? Number(value) || 0
+        : previousStrength;
+
+    if (!changesStrength || previousStrength <= 0 || nextStrength !== 0 || strengthTriggerOpen.current) {
+      setFieldValue(path, value);
+      return;
+    }
+
+    strengthTriggerOpen.current = true;
+    try {
+      const berserkerRank = getTalentRank(char, 'berserker');
+      const painResistantRank = getTalentRank(char, 'odolny_proti_bolesti');
+      const talentState = char.talentState || {};
+
+      if (berserkerRank > 0 && !talentState.berserkerUsedThisFight) {
+        const activateBerserker = await confirmAction({
+          title: 'Aktivovat běsnění Berserkra?',
+          message: `Síla klesla na 0. Obnovíš si ${berserkerRank} bod${berserkerRank === 1 ? '' : 'y'} Síly, získáš +1 ke zranění zblízka a nebudeš moci používat Manipulaci.`,
+          confirmLabel: 'Aktivovat',
+          cancelLabel: painResistantRank > 0 ? 'Jiná možnost' : 'Zůstat vyřazen'
+        });
+
+        if (activateBerserker) {
+          setChar(prev => {
+            const max = Number(prev.attributes?.strength?.max) || berserkerRank;
+            return {
+              ...prev,
+              attributes: {
+                ...prev.attributes,
+                strength: {
+                  ...(path === 'attributes.strength' ? value : prev.attributes.strength),
+                  current: Math.min(max, berserkerRank)
+                }
+              },
+              talentState: {
+                ...prev.talentState,
+                isBerserking: true,
+                berserkerUsedThisFight: true
+              }
+            };
+          });
+          showToast(`Berserker aktivován: Síla obnovena na ${berserkerRank}.`, 'info');
+          return;
+        }
+      }
+
+      const painUses = Math.max(0, Number(talentState.painResistUsesThisFight) || 0);
+      const canUsePainResistance = painResistantRank > 0 && (painResistantRank >= 2 || painUses < 1);
+      if (canUsePainResistance) {
+        const activatePainResistance = await confirmAction({
+          title: 'Použít Odolnost proti bolesti?',
+          message: 'Síla zůstane na 1 místo vyřazení.',
+          confirmLabel: 'Zůstat na 1 Síle',
+          cancelLabel: 'Zůstat vyřazen'
+        });
+
+        if (activatePainResistance) {
+          setChar(prev => ({
+            ...prev,
+            attributes: {
+              ...prev.attributes,
+              strength: {
+                ...(path === 'attributes.strength' ? value : prev.attributes.strength),
+                current: 1
+              }
+            },
+            talentState: {
+              ...prev.talentState,
+              painResistUsesThisFight: (Number(prev.talentState?.painResistUsesThisFight) || 0) + 1
+            }
+          }));
+          showToast('Odolnost proti bolesti tě udržela na 1 Síle.', 'info');
+          return;
+        }
+      }
+
+      setFieldValue(path, value);
+    } finally {
+      strengthTriggerOpen.current = false;
+    }
   };
 
   const addItemToInventory = (item) => {
@@ -616,6 +732,426 @@ const App = () => {
     showToast('Zranění zapsáno do deníku');
   };
 
+  const markLuckUsed = () => {
+    setChar(prev => ({ ...prev, luckUsedThisQuarterDay: true }));
+  };
+
+  const advanceQuarterDay = () => {
+    const nextTimeOfDay = ((Number(char.timeOfDay) || 0) + 1) % 4;
+    setChar(prev => ({
+      ...prev,
+      timeOfDay: nextTimeOfDay,
+      luckUsedThisQuarterDay: false,
+      talentState: {
+        ...clearPreparedCombatEffects(prev.talentState),
+        cookMealUsedThisQuarterDay: false
+      }
+    }));
+    advanceStoredWeatherQuarterDay(nextTimeOfDay);
+    showToast('Začal nový čtvrtden. Čtvrtdenní použití a připravené efekty byly obnoveny.', 'info');
+  };
+
+  const resetFight = () => {
+    setChar(prev => ({
+      ...prev,
+      talentState: {
+        ...clearPreparedCombatEffects(prev.talentState),
+        isBerserking: false,
+        berserkerUsedThisFight: false,
+        painResistUsesThisFight: 0,
+        fearWillpowerUsedThisFight: false
+      }
+    }));
+    showToast('Začal nový boj. Bojové talenty jsou znovu připravené.', 'info');
+  };
+
+  const endBerserking = () => {
+    setChar(prev => ({
+      ...prev,
+      talentState: { ...prev.talentState, isBerserking: false }
+    }));
+    showToast('Běsnění ukončeno.', 'info');
+  };
+
+  const receiveFearAttack = () => {
+    setChar(prev => {
+      const fearlessRank = getTalentRank(prev, 'nebojacny');
+      const alreadyGainedWillpower = Boolean(prev.talentState?.fearWillpowerUsedThisFight);
+
+      if (fearlessRank >= 4 && !alreadyGainedWillpower) {
+        showToast('Nebojácný: za první útok strachem získáváš 1 bod vůle.', 'info');
+        return {
+          ...prev,
+          willpower: (Number(prev.willpower) || 0) + 1,
+          talentState: { ...prev.talentState, fearWillpowerUsedThisFight: true }
+        };
+      }
+
+      showToast(
+        fearlessRank >= 1
+          ? 'Útok strachem zaznamenán. Můžeš hodit obranu pomocí Osobnosti.'
+          : 'Útok strachem zaznamenán.',
+        'info'
+      );
+      return prev;
+    });
+  };
+
+  const performCoupDeGrace = async () => {
+    const coldBloodedRank = getTalentRank(char, 'chladnokrevny');
+
+    const finishCoupDeGrace = (requiresCost) => {
+      setChar(prev => {
+        if (requiresCost && (Number(prev.willpower) || 0) < 1) {
+          showToast('Rána z milosti vyžaduje 1 bod vůle.', 'error');
+          return prev;
+        }
+
+        const empathy = prev.attributes?.empathy || { current: 0, max: 0 };
+        const currentEmpathy = Number(empathy.current) || 0;
+        const maxEmpathy = Number(empathy.max) || 0;
+        const nextEmpathy = coldBloodedRank >= 3
+          ? Math.min(maxEmpathy, currentEmpathy + 1)
+          : requiresCost
+            ? Math.max(0, currentEmpathy - 1)
+            : currentEmpathy;
+
+        showToast(
+          coldBloodedRank >= 3
+            ? 'Chladnokrevný: rána z milosti obnovila 1 bod Osobnosti.'
+            : 'Rána z milosti provedena.',
+          'info'
+        );
+
+        return {
+          ...prev,
+          willpower: requiresCost ? (Number(prev.willpower) || 0) - 1 : prev.willpower,
+          attributes: {
+            ...prev.attributes,
+            empathy: { ...empathy, current: nextEmpathy }
+          }
+        };
+      });
+    };
+
+    if (coldBloodedRank < 1) {
+      if ((Number(char.willpower) || 0) < 1) {
+        showToast('Rána z milosti vyžaduje 1 bod vůle.', 'error');
+        return;
+      }
+      startRoll(Number(char.attributes?.empathy?.current) || 0, 0, 0, {
+        title: 'Rána z milosti',
+        description: 'Potřebuješ alespoň jeden úspěch. Při úspěchu utratíš 1 vůli a utrpíš 1 zranění Osobnosti.',
+        resolveLabel: 'Vyhodnotit ránu z milosti',
+        onResolve: (successes) => {
+          if (successes < 1) {
+            showToast('Rána z milosti se nezdařila.', 'error');
+            return;
+          }
+          finishCoupDeGrace(true);
+        }
+      });
+      return;
+    }
+
+    const requiresCost = coldBloodedRank === 1;
+    const confirmed = await confirmAction({
+      title: 'Provést ránu z milosti?',
+      message: requiresCost
+        ? 'Chladnokrevný umožní automatický úspěch. Akce utratí 1 vůli a způsobí 1 zranění Osobnosti.'
+        : coldBloodedRank >= 3
+          ? 'Akce je automatická, bez ceny, a obnoví 1 bod Osobnosti.'
+          : 'Akce je automatická, bez ceny a bez zranění Osobnosti.',
+      confirmLabel: 'Provést',
+      cancelLabel: 'Zrušit',
+      danger: true
+    });
+    if (confirmed) finishCoupDeGrace(requiresCost);
+  };
+
+  const clearForgottenTalentEffects = (talentId, nextRank = 0) => {
+    setChar(prev => {
+      const talentState = prev.talentState || {};
+      const clearsPendingAttack = talentState.pendingAttackTalentId === talentId;
+      const clearsBonusActions = talentState.bonusCombatActionTalentId === talentId;
+      const clearsBladeRankOne = talentId === 'path_of_the_blade' && nextRank < 1;
+      const clearsBladeRankTwo = talentId === 'path_of_the_blade' && nextRank < 2;
+
+      if (!clearsPendingAttack && !clearsBonusActions && !clearsBladeRankOne && !clearsBladeRankTwo) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        talentState: {
+          ...talentState,
+          ...(clearsPendingAttack
+            ? { pendingAttackBonus: 0, pendingAttackBonusLabel: '', pendingAttackTalentId: '' }
+            : {}),
+          ...(clearsBonusActions
+            ? { bonusCombatActions: 0, bonusCombatActionTalentId: '' }
+            : {}),
+          ...(clearsBladeRankOne ? { ignoreArmorNextMelee: false } : {}),
+          ...(clearsBladeRankTwo ? { extraAttackReady: false } : {})
+        }
+      };
+    });
+  };
+
+  const activateBladeCombatOption = (option) => {
+    const bladeRank = getTalentRank(char, 'path_of_the_blade');
+    const requiredRank = option === 'ignore-armor' ? 1 : 2;
+    if (bladeRank < requiredRank) return;
+    if ((Number(char.willpower) || 0) < 1) {
+      showToast('Na použití Cesty ostří potřebuješ 1 bod vůle.', 'error');
+      return;
+    }
+
+    setChar(prev => ({
+      ...prev,
+      willpower: Math.max(0, (Number(prev.willpower) || 0) - 1),
+      talentState: {
+        ...prev.talentState,
+        ...(option === 'ignore-armor'
+          ? { ignoreArmorNextMelee: true }
+          : { extraAttackReady: true })
+      }
+    }));
+    showToast(
+      option === 'ignore-armor'
+        ? 'Cesta ostří: příští útok zblízka ignoruje zbroj.'
+        : 'Cesta ostří: útok navíc je připraven.',
+      'info'
+    );
+  };
+
+  const performCombatAttack = ({ weaponIndex, type }) => {
+    const weapon = char.weapons?.[weaponIndex];
+    if (!weapon?.name?.trim()) {
+      showToast('Nejdřív vyber vybavenou zbraň.', 'error');
+      return;
+    }
+
+    const melee = type !== 'ranged';
+    const talentState = char.talentState || {};
+    const ignoreArmor = melee && Boolean(talentState.ignoreArmorNextMelee);
+    const pendingBonus = Math.max(0, Number(talentState.pendingAttackBonus) || 0);
+    const pendingLabel = talentState.pendingAttackBonusLabel || '';
+    const berserkerBonus = melee && talentState.isBerserking ? 1 : 0;
+    const usesExtraAttack = Boolean(talentState.extraAttackReady);
+    const usesBonusAction = !usesExtraAttack && (Number(talentState.bonusCombatActions) || 0) > 0;
+    const attributeKey = melee ? 'strength' : 'agility';
+    const skillKey = melee ? 'melee' : 'marksmanship';
+
+    setChar(prev => ({
+      ...prev,
+      talentState: {
+        ...prev.talentState,
+        ignoreArmorNextMelee: ignoreArmor ? false : prev.talentState?.ignoreArmorNextMelee,
+        pendingAttackBonus: 0,
+        pendingAttackBonusLabel: '',
+        pendingAttackTalentId: '',
+        extraAttackReady: usesExtraAttack ? false : prev.talentState?.extraAttackReady,
+        bonusCombatActions: usesBonusAction
+          ? Math.max(0, (Number(prev.talentState?.bonusCombatActions) || 0) - 1)
+          : Number(prev.talentState?.bonusCombatActions) || 0
+      }
+    }));
+
+    startRoll(
+      Number(char.attributes?.[attributeKey]?.current) || 0,
+      Number(char.skills?.[skillKey]) || 0,
+      Math.max(0, parseCombatValue(weapon.bonus)),
+      {
+        title: `${melee ? 'Útok zblízka' : 'Střelecký útok'}: ${weapon.name}`,
+        description: [
+          ignoreArmor ? 'Útok ignoruje zbroj.' : '',
+          pendingBonus ? `${pendingLabel || 'Talent'}: +${pendingBonus} ke zranění.` : '',
+          berserkerBonus ? 'Běsnění: +1 ke zranění.' : '',
+          usesExtraAttack ? 'Spotřebovává připravený útok navíc.' : usesBonusAction ? 'Spotřebovává bonusovou bojovou akci.' : ''
+        ].filter(Boolean).join(' '),
+        resolveLabel: 'Vyhodnotit útok',
+        onResolve: (successes) => {
+          const damage = calculateAttackDamage({
+            successes,
+            weaponDamage: weapon.damage,
+            pendingBonus,
+            berserkerBonus
+          });
+          const summary = successes < 1
+            ? `${weapon.name}: útok minul.`
+            : `${weapon.name}: ${successes} úspěchů, zranění ${damage}${ignoreArmor ? ', ignoruje zbroj' : ''}.`;
+          setChar(prev => ({
+            ...prev,
+            talentState: { ...prev.talentState, lastAttackSummary: summary }
+          }));
+          showToast(summary, successes < 1 ? 'error' : 'info');
+        }
+      }
+    );
+  };
+
+  const applyTalentAction = (action) => {
+    if (action?.type === 'poison-roll') {
+      const rank = Math.max(1, Math.min(3, Number(action.rank) || 1));
+      const usesHealing = action.skill === 'healing';
+      const skillKey = usesHealing ? 'healing' : 'crafting';
+      const attributeKey = usesHealing ? 'empathy' : 'strength';
+      const skillBonus = rank === 2 ? 1 : 0;
+
+      startRoll(
+        Number(char.attributes?.[attributeKey]?.current) || 0,
+        (Number(char.skills?.[skillKey]) || 0) + skillBonus,
+        0,
+        {
+          d8: rank >= 3 ? 1 : 0,
+          title: 'Výroba jedu',
+          description: `Hod na ${usesHealing ? 'Léčení' : 'Řemesla'}. První úspěch vytvoří jed o účinnosti 3, každý další ji zvýší o 1.`,
+          resolveLabel: 'Dokončit výrobu',
+          onResolve: (successes) => {
+            if (successes < 1) {
+              showToast('Výroba jedu se nezdařila.', 'error');
+              return;
+            }
+            const potency = 3 + Math.max(0, successes - 1);
+            addItemToInventory(createPoisonInventoryItem({ type: action.poisonType, potency }));
+          }
+        }
+      );
+      return;
+    }
+
+    setChar(prev => {
+      const spent = Math.max(0, Number(action?.spent) || 0);
+      if (spent < 1 || spent > (Number(prev.willpower) || 0)) {
+        showToast('Na použití talentu nemáš dost vůle.', 'error');
+        return prev;
+      }
+
+      if (action.type === 'money') {
+        const currency = action.currency === 'gold' ? 'gold' : 'silver';
+        const amount = Math.max(0, Number(action.amount) || 0);
+        showToast(`${action.actionLabel || 'Talent'} přidal ${amount} ${currency === 'gold' ? 'zlatých' : 'stříbrných'}.`);
+        return {
+          ...prev,
+          willpower: prev.willpower - spent,
+          money: { ...prev.money, [currency]: (Number(prev.money?.[currency]) || 0) + amount }
+        };
+      }
+
+      if (action.type === 'item' && action.item?.name) {
+        const inventory = [...prev.inventory];
+        const entry = { name: action.item.name, weight: Number(action.item.weight) || 0 };
+        const emptyIndex = inventory.findIndex(item => !item.name);
+        if (emptyIndex >= 0) inventory[emptyIndex] = entry;
+        else inventory.push(entry);
+        showToast(`${action.actionLabel || 'Talent'} našel: ${entry.name}`);
+        return { ...prev, willpower: prev.willpower - spent, inventory };
+      }
+
+      if (action.type === 'poison') {
+        const inventory = [...prev.inventory];
+        const entry = createPoisonInventoryItem({
+          type: action.poisonType,
+          potency: action.amount,
+          quickApply: Boolean(action.quickApply)
+        });
+        const emptyIndex = inventory.findIndex(item => !item.name);
+        if (emptyIndex >= 0) inventory[emptyIndex] = entry;
+        else inventory.push(entry);
+        showToast(`${action.actionLabel || 'Talent'} vytvořil: ${entry.name}`);
+        return { ...prev, willpower: prev.willpower - spent, inventory };
+      }
+
+      if (action.type === 'heal') {
+        let remaining = Math.max(0, Number(action.amount) || 0);
+        const attributes = { ...prev.attributes };
+        let healed = 0;
+
+        Object.entries(action.healing || {}).forEach(([key, requested]) => {
+          if (!attributes[key] || remaining <= 0) return;
+          const current = Number(attributes[key].current) || 0;
+          const max = Number(attributes[key].max) || 0;
+          const amount = Math.min(
+            remaining,
+            Math.max(0, Number(requested) || 0),
+            Math.max(0, max - current)
+          );
+          if (amount <= 0) return;
+          attributes[key] = { ...attributes[key], current: current + amount };
+          remaining -= amount;
+          healed += amount;
+        });
+
+        if (healed < 1) {
+          showToast('Nebyl vybrán žádný bod vlastnosti k obnovení.', 'error');
+          return prev;
+        }
+
+        showToast(`${action.actionLabel || 'Talent'} obnovil ${healed} bodů vlastnosti.`);
+        return { ...prev, willpower: prev.willpower - spent, attributes };
+      }
+
+      if (action.type === 'effect') {
+        const amount = Math.max(0, Number(action.amount) || 0);
+        const attackBonusActions = new Set([
+          'blade-damage',
+          'knight-damage',
+          'arrow-damage',
+          'dexterity-damage',
+          'shadows-damage',
+          'hound-damage',
+          'killer-damage'
+        ]);
+
+        if (attackBonusActions.has(action.actionId)) {
+          showToast(`${action.actionLabel || 'Talent'} připravil +${amount} ke zranění příštího útoku.`, 'info');
+          return {
+            ...prev,
+            willpower: prev.willpower - spent,
+            talentState: {
+              ...prev.talentState,
+              pendingAttackBonus: (Number(prev.talentState?.pendingAttackBonus) || 0) + amount,
+              pendingAttackBonusLabel: action.actionLabel || 'Talent',
+              pendingAttackTalentId: action.talentId || ''
+            }
+          };
+        }
+
+        if (action.actionId === 'fate-actions') {
+          showToast(`Zpomalení času přidalo ${amount} bojových akcí.`, 'info');
+          return {
+            ...prev,
+            willpower: prev.willpower - spent,
+            talentState: {
+              ...prev.talentState,
+              bonusCombatActions: (Number(prev.talentState?.bonusCombatActions) || 0) + amount,
+              bonusCombatActionTalentId: action.talentId || ''
+            }
+          };
+        }
+
+        const result = action.resultLabel ? `: ${amount} ${action.resultLabel}` : '';
+        showToast(`${action.actionLabel || 'Talent'}${result}.`, 'info');
+        return { ...prev, willpower: prev.willpower - spent };
+      }
+
+      return prev;
+    });
+  };
+
+  const spendWillpowerForBargain = (spent, discountPercent, talentName = 'Cesta zlata') => {
+    const safeSpent = Math.max(1, Math.min(4, Number(spent) || 0));
+    if (safeSpent > (Number(char.willpower) || 0)) {
+      showToast('Na smlouvání nemáš dost vůle.', 'error');
+      return false;
+    }
+
+    setChar(prev => ({ ...prev, willpower: Math.max(0, (Number(prev.willpower) || 0) - safeSpent) }));
+    showToast(`${talentName}: cena snížena o ${discountPercent} %.`, 'info');
+    return true;
+  };
+
   const updateDeep = (section, index, field, value) => {
     setChar(prev => {
       if (index === null) { // For armor, helmet, shield which are objects, not arrays
@@ -671,8 +1207,8 @@ const App = () => {
     );
   }
 
-  const startRoll = (base = 0, skill = 0, gear = 0) => {
-    setInitialDice({ base, skill, gear });
+  const startRoll = (base = 0, skill = 0, gear = 0, options = {}) => {
+    setInitialDice({ base, skill, gear, ...options });
     setShowDiceModal(true);
   };
 
@@ -696,8 +1232,10 @@ const App = () => {
         {showDiceModal && <DiceRollerModal initialRoll={initialDice} onClose={() => setShowDiceModal(false)} />}
         {showCritModal && (
           <CriticalInjuryModal
+            char={char}
             onClose={() => setShowCritModal(false)}
             onSaveInjury={char.id ? saveCriticalInjury : null}
+            onUseLuck={markLuckUsed}
           />
         )}
         {showDataModal && (
@@ -777,12 +1315,26 @@ const App = () => {
             scrollToSection={scrollToSection}
             setCurrentView={setCurrentView}
             onModalStateChange={setIsSheetModalOpen}
+            onApplyTalentAction={applyTalentAction}
+            onResetFight={resetFight}
+            onAdvanceQuarterDay={advanceQuarterDay}
+            onTalentRankChanged={clearForgottenTalentEffects}
+            onEndBerserking={endBerserking}
+            onReceiveFearAttack={receiveFearAttack}
+            onCoupDeGrace={performCoupDeGrace}
+            onActivateBladeOption={activateBladeCombatOption}
+            onCombatAttack={performCombatAttack}
             totalWeight={totalWeight}
             encumbranceLimit={encumbranceLimit}
             isOverencumbered={isOverencumbered}
           />
         ) : currentView === 'zbozi' ? (
-          <ZboziSection addItemToInventory={addItemToInventory} equipItem={equipItemDirectly} />
+          <ZboziSection
+            addItemToInventory={addItemToInventory}
+            equipItem={equipItemDirectly}
+            char={char}
+            onBargain={spendWillpowerForBargain}
+          />
         ) : currentView === 'talents' ? (
           <TalentsSection char={char} onLearnTalent={learnTalent} />
         ) : currentView === 'spells' ? (
